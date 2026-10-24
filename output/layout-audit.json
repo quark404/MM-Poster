@@ -1,0 +1,882 @@
+[
+  {
+    "text": "VISUAL GROUNDING × IDENTITY-CONSISTENT REASONING",
+    "x": 26,
+    "y": 15,
+    "width": 560,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "RoboPIN",
+    "x": 24,
+    "y": 31,
+    "width": 580,
+    "height": 47.34277777777777,
+    "size_pt": 110
+  },
+  {
+    "text": "ACM MM 2026\nLOGO PLACEHOLDER",
+    "x": 641,
+    "y": 31,
+    "width": 76,
+    "height": 15.494,
+    "size_pt": 18
+  },
+  {
+    "text": "TIANJIN UNIVERSITY\nLOGO PLACEHOLDER",
+    "x": 736,
+    "y": 31,
+    "width": 76,
+    "height": 15.494,
+    "size_pt": 18
+  },
+  {
+    "text": "Grounded Embodied Reasoning\nvia Pinned Chain-of-Thought",
+    "x": 26,
+    "y": 79,
+    "width": 789,
+    "height": 39.41233333333332,
+    "size_pt": 49
+  },
+  {
+    "text": "Yaoting Huang* · Yifu Yuan*† · Linqi Han · Chengwen Li · Shuoheng Zhang",
+    "x": 26,
+    "y": 125,
+    "width": 789,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Xianze Yao · Hongyao Tang · Yan Zheng · Jianye Hao†",
+    "x": 26,
+    "y": 138,
+    "width": 789,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Tianjin University   |   ACM Multimedia 2026 · Rio de Janeiro, Brazil",
+    "x": 26,
+    "y": 154,
+    "width": 789,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "4B",
+    "x": 36,
+    "y": 193,
+    "width": 166,
+    "height": 22.38022222222222,
+    "size_pt": 52
+  },
+  {
+    "text": "model parameters",
+    "x": 36,
+    "y": 221,
+    "width": 166,
+    "height": 9.468555555555554,
+    "size_pt": 22
+  },
+  {
+    "text": "170K",
+    "x": 237,
+    "y": 193,
+    "width": 166,
+    "height": 22.38022222222222,
+    "size_pt": 52
+  },
+  {
+    "text": "PinCoT reasoning samples",
+    "x": 237,
+    "y": 221,
+    "width": 166,
+    "height": 9.468555555555554,
+    "size_pt": 22
+  },
+  {
+    "text": "14",
+    "x": 438,
+    "y": 193,
+    "width": 166,
+    "height": 22.38022222222222,
+    "size_pt": 52
+  },
+  {
+    "text": "evaluation benchmarks",
+    "x": 438,
+    "y": 221,
+    "width": 166,
+    "height": 9.468555555555554,
+    "size_pt": 22
+  },
+  {
+    "text": "+35.4 pp",
+    "x": 639,
+    "y": 193,
+    "width": 166,
+    "height": 22.38022222222222,
+    "size_pt": 52
+  },
+  {
+    "text": "CrossPoint vs. Mimo-7B",
+    "x": 639,
+    "y": 221,
+    "width": 166,
+    "height": 9.468555555555554,
+    "size_pt": 22
+  },
+  {
+    "text": "01",
+    "x": 42,
+    "y": 269.2,
+    "width": 15,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "One entity. One persistent identity.",
+    "x": 63,
+    "y": 268,
+    "width": 739,
+    "height": 14.20283333333333,
+    "size_pt": 33
+  },
+  {
+    "text": "Why visual reasoning drifts",
+    "x": 42,
+    "y": 294,
+    "width": 373,
+    "height": 13.342055555555554,
+    "size_pt": 31
+  },
+  {
+    "text": "Text CoT",
+    "x": 52,
+    "y": 319,
+    "width": 353,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "Implicit references can switch objects.",
+    "x": 52,
+    "y": 336,
+    "width": 353,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "Coordinate CoT",
+    "x": 52,
+    "y": 363,
+    "width": 353,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "A location alone does not track identity.",
+    "x": 52,
+    "y": 380,
+    "width": 353,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "PinCoT / ours",
+    "x": 52,
+    "y": 407,
+    "width": 353,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "Ground once; reuse the same entity ID.",
+    "x": 52,
+    "y": 424,
+    "width": 353,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "VIEW 0",
+    "x": 446,
+    "y": 294,
+    "width": 157,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "VIEW 1",
+    "x": 632,
+    "y": 294,
+    "width": 157,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "obj_01",
+    "x": 454,
+    "y": 317,
+    "width": 68,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "obj_01",
+    "x": 640,
+    "y": 317,
+    "width": 68,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "Same microwave → same obj_01",
+    "x": 446,
+    "y": 434,
+    "width": 348,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "Name + ID + view + point = reasoning anchor",
+    "x": 446,
+    "y": 450,
+    "width": 348,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "02",
+    "x": 42,
+    "y": 504.2,
+    "width": 15,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "From data to RoboPIN",
+    "x": 63,
+    "y": 503,
+    "width": 331,
+    "height": 14.20283333333333,
+    "size_pt": 33
+  },
+  {
+    "text": "Automated PIN-170K construction",
+    "x": 42,
+    "y": 529,
+    "width": 352,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "1",
+    "x": 50,
+    "y": 552,
+    "width": 23,
+    "height": 12.481277777777777,
+    "size_pt": 29
+  },
+  {
+    "text": "Semantic parsing",
+    "x": 73,
+    "y": 551,
+    "width": 313,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "Qwen3-VL-32B extracts task-relevant entities.",
+    "x": 73,
+    "y": 567,
+    "width": 313,
+    "height": 9.468555555555554,
+    "size_pt": 22
+  },
+  {
+    "text": "2",
+    "x": 50,
+    "y": 595,
+    "width": 23,
+    "height": 12.481277777777777,
+    "size_pt": 29
+  },
+  {
+    "text": "Point grounding",
+    "x": 73,
+    "y": 594,
+    "width": 313,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "Florence-2 + SAM 2.1; reverse verification.",
+    "x": 73,
+    "y": 610,
+    "width": 313,
+    "height": 9.468555555555554,
+    "size_pt": 22
+  },
+  {
+    "text": "3",
+    "x": 50,
+    "y": 638,
+    "width": 23,
+    "height": 12.481277777777777,
+    "size_pt": 29
+  },
+  {
+    "text": "PinCoT generation",
+    "x": 73,
+    "y": 637,
+    "width": 313,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "Grounded traces + rule-based quality filtering.",
+    "x": 73,
+    "y": 653,
+    "width": 313,
+    "height": 9.468555555555554,
+    "size_pt": 22
+  },
+  {
+    "text": "Three-stage post-training",
+    "x": 42,
+    "y": 687,
+    "width": 352,
+    "height": 12.050888888888887,
+    "size_pt": 28
+  },
+  {
+    "text": "SFT",
+    "x": 46,
+    "y": 712,
+    "width": 100,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Embodied\nknowledge",
+    "x": 46,
+    "y": 729,
+    "width": 100,
+    "height": 16.298333333333332,
+    "size_pt": 22
+  },
+  {
+    "text": "CoT-SFT",
+    "x": 168,
+    "y": 712,
+    "width": 100,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Structured\nreasoning",
+    "x": 168,
+    "y": 729,
+    "width": 100,
+    "height": 16.298333333333332,
+    "size_pt": 22
+  },
+  {
+    "text": "RFT / GRPO",
+    "x": 290,
+    "y": 712,
+    "width": 100,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Process\nalignment",
+    "x": 290,
+    "y": 729,
+    "width": 100,
+    "height": 16.298333333333332,
+    "size_pt": 22
+  },
+  {
+    "text": "03",
+    "x": 447,
+    "y": 504.2,
+    "width": 15,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "Benchmark highlights",
+    "x": 468,
+    "y": 503,
+    "width": 331,
+    "height": 14.20283333333333,
+    "size_pt": 33
+  },
+  {
+    "text": "RoboPIN 4B vs. Mimo-Embodied 7B",
+    "x": 447,
+    "y": 529,
+    "width": 352,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "Benchmark",
+    "x": 453,
+    "y": 556,
+    "width": 145,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "7B",
+    "x": 601,
+    "y": 556,
+    "width": 54,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "4B / ours",
+    "x": 662,
+    "y": 556,
+    "width": 61,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "Δ pp",
+    "x": 737,
+    "y": 556,
+    "width": 57,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "EmbSpatial",
+    "x": 453,
+    "y": 578,
+    "width": 148,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "76.2",
+    "x": 601,
+    "y": 578,
+    "width": 54,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "83.1",
+    "x": 662,
+    "y": 578,
+    "width": 61,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "+6.9",
+    "x": 737,
+    "y": 578,
+    "width": 57,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "RoboSpatial",
+    "x": 453,
+    "y": 600,
+    "width": 148,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "61.8",
+    "x": 601,
+    "y": 600,
+    "width": 54,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "66.6",
+    "x": 662,
+    "y": 600,
+    "width": 61,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "+4.8",
+    "x": 737,
+    "y": 600,
+    "width": 57,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "CrossPoint",
+    "x": 453,
+    "y": 622,
+    "width": 148,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "36.8",
+    "x": 601,
+    "y": 622,
+    "width": 54,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "72.2",
+    "x": 662,
+    "y": 622,
+    "width": 61,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "+35.4",
+    "x": 737,
+    "y": 622,
+    "width": 57,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "BLINK · multi-view",
+    "x": 453,
+    "y": 644,
+    "width": 148,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "26.3",
+    "x": 601,
+    "y": 644,
+    "width": 54,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "72.9",
+    "x": 662,
+    "y": 644,
+    "width": 61,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "+46.6",
+    "x": 737,
+    "y": 644,
+    "width": 57,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "RoboRefit",
+    "x": 453,
+    "y": 666,
+    "width": 148,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "82.3",
+    "x": 601,
+    "y": 666,
+    "width": 54,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "89.0",
+    "x": 662,
+    "y": 666,
+    "width": 61,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "+6.7",
+    "x": 737,
+    "y": 666,
+    "width": 57,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "RoboAfford",
+    "x": 453,
+    "y": 688,
+    "width": 148,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "69.8",
+    "x": 601,
+    "y": 688,
+    "width": 54,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "72.8",
+    "x": 662,
+    "y": 688,
+    "width": 61,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "+3.0",
+    "x": 737,
+    "y": 688,
+    "width": 57,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Strong cross-view correspondence\nwith a smaller parameter budget.",
+    "x": 447,
+    "y": 716,
+    "width": 352,
+    "height": 24.101777777777773,
+    "size_pt": 28
+  },
+  {
+    "text": "Selected results, Tables 1–2; Δ is percentage points.",
+    "x": 447,
+    "y": 752,
+    "width": 352,
+    "height": 9.038166666666665,
+    "size_pt": 21
+  },
+  {
+    "text": "04",
+    "x": 42,
+    "y": 804.2,
+    "width": 15,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "Why process rewards help",
+    "x": 63,
+    "y": 803,
+    "width": 331,
+    "height": 14.20283333333333,
+    "size_pt": 33
+  },
+  {
+    "text": "Reward the process and the answer.",
+    "x": 42,
+    "y": 830,
+    "width": 352,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "Format + consistency + pin + accuracy",
+    "x": 50,
+    "y": 857,
+    "width": 336,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Cross-step identity coverage · EmbSpatial",
+    "x": 42,
+    "y": 897,
+    "width": 352,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "w/o RFT",
+    "x": 42,
+    "y": 921,
+    "width": 85,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "18.8%",
+    "x": 341,
+    "y": 920,
+    "width": 53,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "RoboPIN",
+    "x": 42,
+    "y": 946,
+    "width": 85,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "99.9%",
+    "x": 341,
+    "y": 945,
+    "width": 53,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "RFT enforces persistent ID reuse, beyond\nlocalizing anchors correctly.",
+    "x": 42,
+    "y": 974,
+    "width": 352,
+    "height": 23.240999999999996,
+    "size_pt": 27
+  },
+  {
+    "text": "Anchor correctness: 89.1%   |   Table 7",
+    "x": 42,
+    "y": 1015,
+    "width": 352,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "05",
+    "x": 447,
+    "y": 804.2,
+    "width": 15,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "Zero-shot robot transfer",
+    "x": 468,
+    "y": 803,
+    "width": 331,
+    "height": 14.20283333333333,
+    "size_pt": 33
+  },
+  {
+    "text": "xArm · static + wrist RGB cameras",
+    "x": 447,
+    "y": 830,
+    "width": 352,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "Successful executions / 20 per task",
+    "x": 447,
+    "y": 966,
+    "width": 352,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "20 / 20",
+    "x": 447,
+    "y": 984,
+    "width": 108,
+    "height": 15.063611111111108,
+    "size_pt": 35
+  },
+  {
+    "text": "Spatial",
+    "x": 447,
+    "y": 1005,
+    "width": 108,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "14 / 20",
+    "x": 569,
+    "y": 984,
+    "width": 108,
+    "height": 15.063611111111108,
+    "size_pt": 35
+  },
+  {
+    "text": "Multi-view",
+    "x": 569,
+    "y": 1005,
+    "width": 108,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "11 / 20",
+    "x": 691,
+    "y": 984,
+    "width": 108,
+    "height": 15.063611111111108,
+    "size_pt": 35
+  },
+  {
+    "text": "Long-horizon",
+    "x": 691,
+    "y": 1005,
+    "width": 108,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "Paper Figure 3 and Table 3",
+    "x": 447,
+    "y": 1025,
+    "width": 352,
+    "height": 9.038166666666665,
+    "size_pt": 21
+  },
+  {
+    "text": "Ground every step. Preserve every identity.",
+    "x": 42,
+    "y": 1068,
+    "width": 619,
+    "height": 15.494,
+    "size_pt": 36
+  },
+  {
+    "text": "PinCoT makes visual evidence trackable across reasoning steps\nand viewpoints, supporting reliable embodied decisions.",
+    "x": 42,
+    "y": 1090,
+    "width": 619,
+    "height": 23.240999999999996,
+    "size_pt": 27
+  },
+  {
+    "text": "Contact: quark404@tju.edu.cn   |   yuanyf@tju.edu.cn",
+    "x": 42,
+    "y": 1124,
+    "width": 619,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "* Equal contribution   † Corresponding authors: Yifu Yuan, Jianye Hao",
+    "x": 42,
+    "y": 1141,
+    "width": 619,
+    "height": 9.038166666666665,
+    "size_pt": 21
+  },
+  {
+    "text": "PAPER / CODE\nQR PLACEHOLDER",
+    "x": 723,
+    "y": 1090,
+    "width": 66,
+    "height": 31.11499999999999,
+    "size_pt": 21
+  }
+]

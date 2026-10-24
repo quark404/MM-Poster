@@ -1,0 +1,645 @@
+               RoboPIN: Grounded Embodied Reasoning via Pinned
+                              Chain-of-Thought
+                  Yaoting Huang∗                                                Linqi Han                               Chengwen Li
+                    Yifu Yuan∗†                                         Tianjin University                            Tianjin University
+                 Tianjin University                                       Tianjin, China                                Tianjin, China
+                   Tianjin, China                                 202200111062@mail.sdu.edu.cn                      chengwen@tju.edu.cn
+                quark404@tju.edu.cn
+                 yuanyf@tju.edu.cn
+
+                Shuoheng Zhang                                                 Xianze Yao                              Hongyao Tang
+                Tianjin University                                        Tianjin University                          Tianjin University
+                  Tianjin, China                                            Tianjin, China                              Tianjin, China
+              2024244119@tju.edu.cn                                     xianzeyao@tju.edu.cn                        tanghyyy@gmail.com
+
+                                                   Yan Zheng                                      Jianye Hao†
+                                              Tianjin University                                 Tianjin University
+                                                Tianjin, China                                     Tianjin, China
+                                             yanzheng@tju.edu.cn                              jianye.hao@tju.edu.cn
+
+
+
+
+Figure 1: Comparison of three chain-of-thought paradigms for embodied reasoning. Text CoT relies on ambiguous textual
+entity references. Coord CoT embeds coordinates but lacks identity tracking, causing reasoning-answer disconnection. PinCoT
+(ours) pins each reasoning step to visual evidence, ensuring identity-level traceability to the final answer.
+Abstract                                                                                current vision-language models rely on text-only or coordinate-
+Embodied reasoning requires models to perceive task-relevant ob-                        augmented chain-of-thought, where entity references remain im-
+jects and spaces in physical environments and maintain consis-                          plicit and ambiguous. This may cause the reasoning process to
+tent visual grounding throughout multi-step reasoning. However,                         decouple from visual evidence, entity references to drift across
+                                                                                        steps, and a causal disconnection between the reasoning trajec-
+∗ Both authors contributed equally to this research.
+† Corresponding Author: yuanyf@tju.edu.cn, jianye.hao@tju.edu.cn
+                                                                                        tory and the final answer, with these problems further amplified
+                                                                                        in multi-view scenarios due to cross-view appearance changes. To
+                                                                                        address these issues, we propose Pinned Chain-of-Thought (Pin-
+                                                                                        CoT), a structured reasoning paradigm that pins every reasoning
+This work is licensed under a Creative Commons Attribution 4.0 International License.
+                                                                                        step to visual evidence. PinCoT introduces the concept of reason-
+MM ’26, Rio de Janeiro, Brazil
+© 2026 Copyright held by the owner/author(s).                                           ing anchor, which binds each task-relevant entity to a structured
+ACM ISBN 979-8-4007-2213-4/2026/11                                                      visual anchor with entity name, unique identity, view index, and
+https://doi.org/10.1145/3767308.3835509
+MM ’26, November 10–14, 2026, Rio de Janeiro, Brazil                                                                           Yaoting Huang et al.
+
+
+spatial grounding, enabling consistent entity tracking across rea-         to detect this disconnection because the underlying causal chain is
+soning steps and views. We build a fully automated data generation         broken. These issues are further amplified in multi-view settings,
+pipeline to construct PIN-170K, a high-quality PinCoT-formatted            these problems are further amplified because the same object un-
+reasoning dataset. We then train RoboPIN through three-stage post-         dergoes appearance changes across viewpoints [9, 12, 40, 44]. We
+training that progressively injects embodied knowledge, structured         unify these issues as the reasoning consistency problem in embodied
+reasoning ability, and process-supervised alignment, with rewards          reasoning, spanning cross-step and cross-view consistency. The
+that directly constrain both anchor localization and identity con-         root cause is the lack of a unified reasoning anchor mechanism to
+sistency during reasoning. On 14 benchmarks covering embodied              persistently bind visual evidence throughout reasoning.
+spatial reasoning, multi-view reasoning, and pointing, RoboPIN                 To address these issues, we propose Pinned Chain-of-Thought
+with only 4B parameters surpasses 7B level open-source embodied            (PinCoT ), a structured reasoning paradigm that “pins” every rea-
+models on average, achieving a 12% average improvement over                soning step onto visual evidence. The core of PinCoT is the rea-
+the strongest 7B baseline, Mimo-Embodied. Further analysis shows           soning anchor: each task-relevant entity is bound to a structured
+that PinCoT improves grounding accuracy and cross-step identity            visual anchor with a name, unique identity, view index, and spa-
+consistency, validating the effectiveness of process supervision.          tial grounding. During reasoning, an entity is introduced with a
+                                                                           full tag establishing its localization and identity upon first appear-
+CCS Concepts                                                               ance; subsequent steps refer to the same entity via its ID. This
+• Computing methodologies → Scene understanding; Spatial                   enables identity-consistent reasoning, which extends to multi-view
+and physical reasoning.                                                    settings where the same object shares its ID across different view-
+                                                                           points. Unlike coordinate-embedding methods such as Shikra [3],
+Keywords                                                                   region-grounding approaches such as Ferret [45], and visual chain-
+                                                                           of-thought methods such as VoCoT [15], PinCoT does not perform
+Embodied Reasoning, Spatial Reasoning, Multi-view Reasoning
+                                                                           static grounding external to the reasoning process, but rather treats
+ACM Reference Format:                                                      these visual references as persistently trackable anchors within
+Yaoting Huang, Yifu Yuan, Linqi Han, Chengwen Li, Shuoheng Zhang,          the reasoning chain. To obtain supervision in the PinCoT for-
+Xianze Yao, Hongyao Tang, Yan Zheng, and Jianye Hao. 2026. RoboPIN:        mat [31, 51], we build a fully automated pipeline and use it to
+Grounded Embodied Reasoning via Pinned Chain-of-Thought. In Proceed-       construct the PIN-170K reasoning dataset, as shown in Figure 2.
+ings of the 34th ACM International Conference on Multimedia (MM ’26),      The pipeline transforms multimodal data into PinCoT-format rea-
+November 10–14, 2026, Rio de Janeiro, Brazil. ACM, New York, NY, USA,
+                                                                           soning supervision through three stages: semantic parsing, precise
+10 pages. https://doi.org/10.1145/3767308.3835509
+                                                                           point grounding, and reasoning chain generation, incorporating
+                                                                           dedicated quality assurance throughout the process.
+1    Introduction                                                              Building on this framework and data, we train RoboPIN through
+Embodied reasoning is a core capability for physical-world intelli-        SFT, CoT-SFT, and RFT three-stage post-training, which respec-
+gent systems [4, 30, 37, 41, 50]. Tasks such as spatial reasoning, fine-   tively inject embodied knowledge, structured reasoning ability,
+grained pointing, and long-horizon planning require models to per-         and process-supervised alignment [48]. The RFT stage employs
+ceive task-relevant objects and spatial regions in complex environ-        a composite reward function that simultaneously supervises the
+ments, while maintaining tight coupling between reasoning steps            reasoning process and the final answer [18], effectively mitigating
+and visual evidence throughout multi-step inference [2, 5, 6, 34, 46].     reference drift across reasoning steps.
+    Despite the necessity of this tight coupling, current Vision-              Extensive experiments show that RoboPIN achieves best average
+Language Models (VLMs) struggle to maintain it in embodied                 performance across 14 benchmarks covering embodied spatial rea-
+tasks. [10, 13, 34]. Although chain-of-thought reasoning has evolved       soning, multi-view reasoning, and pointing tasks [10, 12, 13, 29, 34,
+from text to multimodal and visually grounded forms [22, 53], ex-          40]. Further analysis confirms that PinCoT substantially improves
+isting methods still lack reasoning consistency. Multimodal chain-         the localization accuracy of reasoning anchors and cross-step iden-
+of-thought methods [21, 31, 49, 54] incorporate visual informa-            tity consistency, validating the effectiveness of process supervision
+tion into reasoning, but reasoning steps remain largely textual            on reasoning quality. The main contributions are as follows:
+and lack explicit spatial grounding. Coordinate-augmented ap-              • We propose PinCoT, introducing the reasoning anchor concept
+proaches [3, 15, 17] go further by embedding coordinates or bound-            that converts implicit visual attention during reasoning into ex-
+ing boxes into reasoning chains, yet these spatial references are             plicit, trackable structured visual anchors, achieving cross-step
+isolated and lack explicit identity tracking across steps. As shown in        and cross-view reasoning consistency.
+Figure 1, this leads to two core problems. First, reasoning decou-         • We build a fully automated, high-quality data generation pipeline
+ples from visual evidence: entity references are implicit textual             and construct the PIN-170K dataset, enabling large-scale genera-
+descriptions that cannot ensure each step looks at the correct target,        tion of PinCoT-format reasoning supervision.
+and cross-step entity references are prone to drift, especially when       • We train RoboPIN with three-stage post-training and process-
+multiple same-category instances exist. Second, reasoning-to-                 supervised rewards that jointly optimize reasoning process qual-
+answer misalignment: when intermediate steps contain reference                ity and answer correctness. Impressively, with only 4B parame-
+drift, the final answer loses reliable visual grounding. Consequently,        ters, RoboPIN achieves best average performance across 14 bench-
+a model might correctly analyze object A initially, but silently shift        marks spanning embodied spatial reasoning, pointing, and multi-
+its attention and point to object B in the end. Current paradigms fail        view reasoning, outperforming 7B level open-source embodied
+RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought                                            MM ’26, November 10–14, 2026, Rio de Janeiro, Brazil
+
+
+
+         [Data Source]                [Stage1: Semantic Parsing]                [Stage2: Point Grounding]               [Stage3: Thinking & Filtering]
+
+            Multi-view reasoning
+             Q: How does the
+                                                    Q: Is the
+             camera move between                    cloth on the                                                                     Qwen3-VL-32B
+             images?                                right side of   Candidate                                 Reasoning
+                                                    the pot?         Entities                                   anchor      PinCoT Gen
+            Embodied Reasoning
+                                                                                 Florence-2    SAM2.1                                   Rule based
+              Q: Is the pot under
+              the robotic arm?
+                                                                                                                                          Filter
+                                             Qwen3-VL-32B                               Bbox/Point
+            Embodied Pointing
+                                             entity list:
+             Q: Point out the                                                     Reverse Verification                         Pin-170K
+             Notebook in the image.          pot, cloth
+
+
+      Q: How did the camera rotate               RoboPIN (PinCoT)
+      from first to second image?
+                                           I need to determine ... The first image shows
+                                           <obj name="microwave" id="obj_01" img_idx="0" point="[634, 576]">                          shift to right
+                                           The second image shows the same tracked obj_01 as
+                                           <obj name="microwave" id="obj_01" img_idx="1" point="[844, 706]">
+                                           From image 1 to image2, the x-coordinate of obj_01 increased from 634
+                                           to 844, which indicates a shift to the right. For this task, the
+                                           apparent motion of the same object is opposite to the camera motion, so
+                                                                                                                              <answer> movement left
+                                           this coordinate change supports a camera movement toward left.
+                                                                                                                                     </answer>
+
+
+Figure 2: Overview of RoboPIN. Our framework enables grounded embodied reasoning through PinCoT, which pins every
+reasoning step onto visual evidence with identity-tracked anchors.
+
+
+  models with a 12% average improvement over the strongest 7B                     current models highly susceptible to cross-step reference drift. Our
+  baseline Mimo-Embodied [14].                                                    work addresses this limitation by introducing the reasoning anchor.
+                                                                                  By representing grounded entities as persistent, identity-bound
+2 Related Work                                                                    anchors, we make intermediate references trackable across steps.
+
+2.1 Embodied Spatial Reasoning
+Spatial understanding is essential for embodied agents to bridge
+                                                                                  3     Method
+the “seeing-to-doing” gap. [48]. To act reliably in physical environ-             This section presents the complete framework of RoboPIN. Sec-
+ments, a model must not only recognize objects, but also infer their              tion 3.1 defines the PinCoT structured reasoning representation,
+locations, spatial relations, and task-relevant regions. Recent vision-           including the design of reasoning anchors, the identity tracking
+language models have substantially improved this capability by                    mechanism, and its natural extension to multi-view settings. Sec-
+incorporating explicit spatial coordinates, geometric reasoning, and              tion 3.2 describes a fully automated data construction pipeline for
+scene-structure modeling into multimodal representations [2, 5]. In               generating high-quality PinCoT-format reasoning supervision at
+robotic manipulation settings, another important line of work pre-                scale. Section 3.3 introduces the three-stage progressive training
+dicts actionable points and visual traces that can directly support               strategy and the process-supervised reward design.
+downstream control, such as grasping, placing, or interaction plan-
+ning [27, 46, 47]. Together, these efforts have significantly strength-           3.1    Pinned Chain-of-Thought Representation
+ened embodied models in tasks such as spatial referring, target
+                                                                                  As discussed in the introduction, although existing paradigms have
+localization, and manipulation-oriented grounding.
+                                                                                  introduced visual coordinates into language models, these spatial
+                                                                                  references are typically isolated and lack explicit identity tracking.
+2.2    Visually Grounded Chain-of-Thought                                         This often causes the reasoning trajectory to decouple from visual
+Chain-of-Thought (CoT) [42] significantly enhances the reasoning                  evidence, leading to reference drift and inconsistency across steps.
+abilities of large language models. To extend this paradigm to mul-               To address the reasoning consistency problem in embodied reason-
+timodal domains, early works primarily focused on augmenting                      ing, we propose Pinned Chain-of-Thought (PinCoT), whose core
+the intermediate reasoning process with visual evidence[24, 53, 54].              concept is the reasoning anchor.
+While these methods successfully improve interpretability, their                     A reasoning anchor is fundamentally different from conven-
+reasoning processes remain predominantly text-centric.                            tional visual grounding. Traditional grounding operations such as
+   To better leverage visual information within reasoning, subse-                 object detection and referring expression comprehension, operate
+quent methods progressed by directly injecting spatial references                 primarily at the perceptual level and are not explicitly maintained
+into the reasoning chain[3, 15, 23, 45]. However, while these meth-               throughout multi-step reasoning. Once an object is localized, the
+ods successfully make visual grounding explicit, they predomi-                    grounding result is typically not reused as a persistent variable. In
+nantly treat spatial references as localized, single-use annotations              contrast, a reasoning anchor functions as a reasoning-level variable
+attached to individual reasoning steps. Consequently, entity track-               that unifies identity and grounding. Upon introduction, it binds an
+ing still relies on implicit natural language descriptions, leaving               entity to a unique identity along with its spatial location and view
+MM ’26, November 10–14, 2026, Rio de Janeiro, Brazil                                                                           Yaoting Huang et al.
+
+
+context, and persists as a variable throughout the reasoning process,     reasoning, pointing, affordance prediction) and design task-specific
+forming a traceable and step-wise verifiable reasoning chain.             prompts for semantic parsing. This targeted strategy produces sta-
+   PinCoT encodes entities as lightweight XML tags. Two tag types         ble semantic specifications that accurately capture target entities.
+are defined: obj for physical objects and space for task-relevant            Given the parsed semantic metadata, we employ a Florence-
+spatial regions. Both share a unified parameterized schema:               2 [43] + SAM 2.1 [28] pipeline to obtain precise point coordinates
+                                                                          and bounding boxes for the relevant entities. This stage retains the
+  <obj name="NAME" id="ID" img_idx="VIEW" point="[x, y]">                 predicted bounding boxes, refined segmentation masks, and derived
+  <space name="NAME" id="ID" img_idx="VIEW" point="[x, y]">               point anchors as structured grounding evidence for subsequent use.
+                                                                          However, this pipeline is not equally reliable across all target types:
+                                                                          for small symbolic targets such as “X” marks in images, Florence-2
+   Here, name denotes a semantic label, id is an explicit identity
+                                                                          + SAM 2.1 often fails to localize accurately. To address this, we
+token, img_idx indicates the view, and point represents a 2D co-
+                                                                          introduce a reverse prediction verification step, where Florence is
+ordinate normalized to 0–1000. Formally, each reasoning anchor
+                                                                          asked to identify what the predicted point corresponds to. Only
+can be represented as a structured tuple 𝑎 = (𝑛, 𝑖, 𝑣, 𝑝). This rep-
+                                                                          predictions whose reverse interpretation is consistent with the
+resentation design tightly binds semantic meaning, identity, view
+                                                                          original target description are retained, substantially improving the
+provenance, and spatial localization into a unified representation.
+                                                                          quality and reliability of the grounding annotations.
+   We adopt point coordinates over bounding boxes for three rea-
+                                                                             We then feed the structured grounding evidence as ground-truth
+sons. First, many embodied task targets are inherently about “which
+                                                                          information into Qwen3-VL-32B-Instruct to generate the corre-
+location” rather than “which region” (e.g., pointing, affordance pre-
+                                                                          sponding PinCoT reasoning chains. To improve generation quality,
+diction, placement positions), and points naturally align with such
+                                                                          we impose task-specific constraints for different task categories,
+operational targets. Second, points are more compact: they incur
+                                                                          reducing arbitrary or unsupported reasoning during generation. Af-
+lower information overhead when used as anchors within a reason-
+                                                                          ter obtaining PinCoT outputs, we further apply rule-based filtering
+ing chain. Third, the combination of point and ID is better suited as
+                                                                          to remove low-quality reasoning chains and inconsistent results,
+a reasoning variable, analogous to a pointer in a program that refers
+                                                                          such as incorrect ID references or mismatched anchor coordinates,
+to a precise location while carrying identity, whereas a bounding
+                                                                          ensuring the overall quality of the constructed data.
+box resembles an output of a detection module. We validate this
+                                                                             Through this pipeline, multimodal datasets are progressively
+design choice through ablation experiments comparing point and
+                                                                          transformed into structured reasoning data. The entire pipeline
+bounding box representations in Section 4.4.
+                                                                          executes fully automatically without manual annotation and scales
+   Building on these structured tags, PinCoT enforces an identity-
+                                                                          to large volumes of data, yielding the PIN-170K reasoning dataset.
+aware reasoning mechanism. When an entity first appears during
+                                                                          Further details regarding the pipeline can be found in Appendix A.
+reasoning, it must be introduced through a complete XML tag that
+establishes both its spatial localization and identity. Subsequent
+reasoning steps reference the same entity directly through its ID,        3.3    Progressive Training Pipeline
+without regenerating a full tag.
+                                                                          Building on the framework and data, we start from Qwen3-VL-4B-
+   This mechanism naturally extends to multi-view settings. The
+                                                                          Instruct [1] and progressively inject the capabilities through three-
+same entity across viewpoints shares a unified identity token, vary-
+                                                                          stage post-training: Stage 1 performs embodied domain adaptation
+ing only in img_idx and point. With a shared identity, cross-view
+                                                                          via SFT, Stage 2 learns PinCoT structured reasoning via CoT-SFT,
+consistency becomes an explicit constraint within the reasoning
+                                                                          and Stage 3 achieves process-supervised alignment via RFT.
+process, thereby reducing identity drift and enabling consistent
+                                                                             We train RoboPIN on a diverse corpus to improve spatial un-
+reasoning about the same entity from different observation angles.
+                                                                          derstanding, multi-view reasoning, pointing, and long-horizon em-
+                                                                          bodied reasoning. Data subsets are assigned to training stages ac-
+3.2     Automated Data Construction                                       cording to their supervision signals and capabilities. For Stage 2,
+Training models to follow PinCoT requires aligning visual ground-         we apply the data construction pipeline described in Section 3.2 to
+ing and identity with the reasoning process. However, existing            generate structured PinCoT samples for learning reasoning anchor
+multimodal datasets rarely provide such unified annotations, and          introduction and the identity-aware reasoning mechanism.
+directly converting raw data into PinCoT format using large models           Geometric and general spatial reasoning data. This subset is
+tends to bypass explicit intermediate grounding steps, resulting          primarily derived from Euclid [16] and Video-R1 [11]. Euclid pro-
+in anchors that are not reliably grounded in visual evidence. We          vides structured problems involving spatial relations and geometric
+therefore build a fully automated three-stage pipeline organized          properties, helping the model build precise spatial reasoning capa-
+around explicit structured intermediate representations, incorpo-         bilities. Video-R1 provides general visual understanding samples
+rating dedicated quality assurance throughout the process. Using          from dynamic and diverse scenes, preserving the model’s broad
+this pipeline, we construct the PIN-170K reasoning dataset.               perceptual abilities during training.
+   To identify relevant entities, we use Qwen3-VL-32B-Instruct [1]           Embodied spatial reasoning and pointing data. This subset
+to analyze the current question and extract semantic descriptions         is primarily from EmbSpatial [10], EO-Data [26], RoboVQA [30],
+of candidate entities. Since embodied task types vary significantly,      EgoPlan [4], and Embodied-Point [48]. EmbSpatial and EO-Data
+a single prompting strategy cannot cover all cases. We therefore          focus primarily on embodied spatial perception, driving the model
+partition the data into several task categories (e.g., spatial relation   to develop robust environment-level reasoning capabilities. RoboVQA
+RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought                                     MM ’26, November 10–14, 2026, Rio de Janeiro, Brazil
+
+
+and EgoPlan emphasize task-oriented and egocentric embodied sce-               Consistency reward. 𝑅consistency evaluates the coherence of
+narios, introducing action-related reasoning and sequential decision-       entity references throughout the reasoning process, measuring
+making processes. Furthermore, Embodied-Point covers diverse                the proportion of entity mentions that follow the identity-aware
+multi-task pointing scenarios, helping the model learn to generate          reasoning mechanism:
+precise point coordinates in embodied environments.                                                              |Mvalid (𝑦)|
+    Multi-view understanding data. This subset is primarily de-                                𝑅consistency =                   .                    (2)
+                                                                                                                max(|M (𝑦)|, 1)
+rived from CrossPoint [40] and SAT [29], and augmented with
+additional multi-view data constructed from InternData-M1 [8].              This reward encourages the model to maintain stable entity refer-
+CrossPoint and SAT provide observations of the same scene under             ences across reasoning chains and multiple views, reducing identity
+diverse camera viewpoints, enabling the model to learn consis-              drift and reference ambiguity.
+tent object representations and spatial relationships across views.            Pin reward. 𝑅pin evaluates the localization accuracy of reason-
+InternData-M1 provides a diverse array of scenes, serving as a              ing anchors in the reasoning process. This term is applied only
+crucial foundation for multi-view reasoning in embodied tasks.              to datasets with explicit target region supervision, avoiding over-
+    Detailed statistics of the training corpus, including the size of       constraining the model’s reasoning on other tasks:
+each data subset and the mixture ratios used across progressive                                     n                             o
+training stages, are provided in Appendix B.                                                          𝑝 𝑗 ∈ Pxml (𝑦) | 𝑝 𝑗 ∈ 𝑏 ★𝑗
+                                                                                             𝑅pin =                                 .       (3)
+    The first stage focuses on embodied domain adaptation. We fine-                                       max(|Pxml (𝑦)|, 1)
+tune the model on embodied data covering object understanding,
+                                                                            By directly supervising the localization accuracy of intermediate
+egocentric activity recognition, pointing and planning, enabling it
+                                                                            anchors, the pin reward ensures that reasoning anchors during
+to build foundational understanding of objects, affordances, spatial
+                                                                            reasoning are genuinely “pinned” to the correct locations.
+relations, and action events. A small amount of general-domain
+                                                                               Accuracy reward. 𝑅accuracy evaluates the correctness of the
+data is mixed in to mitigate catastrophic forgetting. The second
+                                                                            final answer. Since answer formats vary across tasks, this reward
+stage injects PinCoT structured reasoning ability. We leverage the
+                                                                            is instantiated in a task-dependent manner: for multiple-choice
+pipeline from Section 3.2 to generate structured, multi-step PinCoT
+                                                                            tasks, it is a binary indicator of exact match; for pointing tasks,
+reasoning traces for supervised learning. In this stage, the model
+                                                                            it measures the proportion of predicted points falling within the
+learns two key capabilities: introducing entities through complete
+                                                                            target bounding boxes; for open-ended tasks, it uses normalized
+XML tags to establish their reasoning anchors, and maintaining
+                                                                            sentence-level BLEU [25] as a soft text-matching reward.
+consistent identity references across both multi-step reasoning
+                                                                               Overall, the reward design introduces process supervision over
+chains and multiple viewpoints.
+                                                                            how the model reasons. 𝑅format ensures well-formed outputs, 𝑅consistency
+    The third stage focuses on process-supervised alignment. After
+                                                                            enforces stable identity-aware reasoning mechanism, 𝑅pin directly
+the first two stages, the model can generate structured reasoning
+                                                                            supervises reasoning anchor localization quality, and 𝑅accuracy en-
+chains, but may still prefer fluent yet poorly anchored outputs
+                                                                            sures final-answer correctness. Together, these four terms enforce
+during inference. To counteract this tendency, we apply GRPO [32]
+                                                                            reasoning quality from both the process and the final answer, ulti-
+with a composite reward function that simultaneously supervises
+                                                                            mately driving the model to generate high-quality PinCoT reason-
+both the reasoning process and the final answer.
+                                                                            ing chains. Further details regarding the training configurations
+    For a generated response 𝑦, let 𝑎ˆ denote the parsed final an-
+                                                                            can be found in Appendix C.
+swer, M (𝑦) the set of entity mentions appearing in the <think>
+block, and Mvalid (𝑦) ⊆ M (𝑦) the subset whose first occurrence
+                                                                            4     Experiments
+is introduced by a valid format and whose subsequent mentions
+strictly maintain cross-step identity consistency. We further denote        We evaluate RoboPIN on embodied spatial reasoning (Sec. 4.1),
+by Pxml (𝑦) the set of anchor points extracted from the reasoning           point-level grounding (Sec. 4.2), and real-world robot execution
+trace. For certain specific tasks, each predicted point 𝑝 𝑗 is paired       (Sec. 4.3). We then ablate the contributions of PinCoT and the three-
+with a target grounding region 𝑏 ★𝑗 .                                       stage training recipe (Sec. 4.4), and analyze how process supervi-
+    We design a composite reward that evaluates four complemen-             sion improves reasoning quality and consistency (Sec. 4.5). Finally,
+tary dimensions of output quality:                                          we verify that our embodied alignment preserves general vision-
+                                                                            language capabilities without catastrophic forgetting, with detailed
+        𝑅 = 𝜆 𝑓 𝑅format + 𝜆𝑐 𝑅consistency + 𝜆𝑝 𝑅pin + 𝜆𝑎 𝑅accuracy,   (1)   results provided in Appendix D.
+
+where 𝜆 · are task-specific weights. When a reward term is not              4.1    Embodied Cognition and Spatial Reasoning
+applicable to a particular task, its weight is set to zero.                 We evaluate the embodied cognition and spatial reasoning capabili-
+   Format reward. 𝑅format evaluates whether the output structure            ties of our model across 9 benchmarks encompassing 13 distinct
+is well-formed. The reasoning process must be enclosed within               capability dimensions. These include ERQA [37], CV-Bench [38],
+<think>...</think> and the final answer within the format of                EmbSpatial [10], SAT [29], RoboSpatial [34], Robo-VQA [30], Cross-
+<answer>...</answer>. The <think> block must also contain valid             Point [40], MVRoboBench [12], and BLINK [13]. These benchmarks
+reasoning anchor tags. The highest reward is assigned when both             comprehensively cover various aspects of spatial understanding,
+formatting and reasoning anchor constraints are satisfied, a lower          object localization, and physical reasoning. To rigorously assess per-
+reward when only the outer format is correct, and zero otherwise.           formance, we compare RoboPIN against two leading closed-source
+MM ’26, November 10–14, 2026, Rio de Janeiro, Brazil                                                                                                    Yaoting Huang et al.
+
+
+Table 1: Performance on spatial reasoning benchmarks. Bold and underlined denote the best and second open-source results.
+
+                                                                                               MV-RoboBench                                  BLINK
+ Model              Params ERQA CV-Bench EmbSpatial SAT RoboSpatial RoboVQA CrossPoint
+                                                                                            CrossV. Match Traj. Sel        Multi. View Vis. Corr. Spat. Rel. Rel. Depth
+ Closed-source models
+ GPT-5                  -      54.5   84.5       78.3   83.3   54.1   33.1      33.0              29.0             54.5        45.8          77.3         90.2          82.3
+ Gemini-2.5-Pro         -      55.7   84.6       78.7   76.7   59.9   33.9      37.1              39.5             65.5        46.6          78.5         85.3          86.3
+ Open-source generalist models
+ Qwen3-VL             4B       41.8   85.0       77.1   70.7   59.4   41.1      29.3              24.0             31.0        51.1          88.4         84.6          85.5
+ InternVL3.5          8B       41.0   81.5       70.3   55.3   51.1   28.6      19.2              21.5             35.0        47.4          72.7         81.8          78.2
+ Open-source embodied models
+ RoboBrain2.0         7B       38.5   85.8       76.3   75.3   54.2   57.5      26.0              21.0             26.0        48.1          46.5         80.4          80.7
+ VeBrain              7B       37.3   79.7       70.5   58.0   42.5   42.4      20.2              18.0             30.0        46.6          48.8         83.2          67.7
+ Mimo-Embodied        7B       46.8   88.8       76.2   54.6   61.8   62.0      36.8              21.1             34.0        26.3          83.2         77.6          94.4
+ Pelican-VL           7B       39.8   78.9       73.2   54.6   57.5   58.5      23.8              23.0             32.5        47.3          63.3         84.6          75.0
+ Embodied-R1          3B       35.2   82.7       67.4   76.3   47.4   51.8      25.2              21.5             26.5        40.6          50.0         76.9          79.8
+ RoboPIN              4B      44.0    85.5       83.1   78.0   66.6   56.1      72.2              26.0            35.5         72.9         89.5          87.4          87.1
+
+
+
+models: GPT-5 [33] and Gemini-2.5-Pro [7], alongside seven compet-            Table 2: Performance on pointing benchmarks. Bold and
+itive open-source vision-language models equipped with advanced               underlined values denote the best and second-best open-
+spatial reasoning and grounding capabilities. These include gen-              source results.
+eralist multi-modal models (Qwen3-VL [1] and InternVL3.5 [39]),
+as well as recent domain-specific models designed for embodied                 Model               Params      VABench-P   Where2Place   Ref-Spatial   Robo-Refit    Robo-Afford
+                                                                               Closed-source models
+reasoning (RoboBrain2.0 [36], VeBrain [20], Mimo-Embodied [14],                GPT-5                   -         31.1         39.7          21.6          44.7          30.0
+Pelican-VL [52], and Embodied-R1 [48]).                                        Gemini-2.5-Pro          -         21.7         49.6          36.5          38.4          23.4
+                                                                               Open-source generalist models
+    Results. As detailed in Table 1, RoboPIN demonstrates excep-               Qwen3-VL               4B         30.6         67.7          43.0          86.1          70.1
+tional general spatial reasoning capabilities. It achieves the best            InternVL3.5            8B         23.0         34.8          16.8          30.8          31.5
+                                                                               Open-source embodied models
+open-source results on EmbSpatial, SAT, and RoboSpatial, demon-                RoboBrain2.0           7B         41.0         63.6          32.5          70.4          51.5
+                                                                               VeBrain                7B          1.7         12.3          0.3           32.2           2.1
+strating the advantage of PinCoT in tasks requiring relative object            Mimo-Embodied          7B         46.9         63.6          48.0          82.3          69.8
+positions and spatial changes. Across the other embodied cognition             Pelican-VL             7B         14.5         57.8          37.5          74.9          63.4
+                                                                               Embodied-R1            3B         66.0         69.5          39.7          85.6          67.2
+benchmarks, our model consistently performs within the first tier.
+                                                                               RoboPIN               4B          65.0         62.0          50.5         89.0           72.8
+Furthermore, on multi-view evaluations, RoboPIN ranks first on
+CrossPoint, as well as the Multi-View and Visual Correspondence
+subsets of BLINK. This indicates that the universal identity design           Table 3: Real-world robot evaluation. Each setting is evalu-
+across views effectively facilitates stable object correspondence,            ated over 5 independent trials.
+enhancing the multi-view reasoning proficiency.
+                                                                                Task                        RoboBrain2.0             Mimo-Embodied               RoboPIN
+                                                                                Spatial                          12/20                     7/20                     20/20
+4.2      Embodied Pointing and Location                                         Multi-view                       1/20                      0/20                     14/20
+We next examine point-level grounding ability by evaluating on                  Long-horizon                     5/20                      3/20                     11/20
+five distinct benchmarks: VABench-P [47], Where2Place [46], RefS-
+patial [55], RoboRefit [19], and RoboAfford [35].                                Tasks. We design three types of complex manipulation tasks
+   Results. As shown in Table 2, RoboPIN achieves the best open-              to evaluate spatial reasoning, multi-view understanding, and long-
+source performance on RefSpatial, RoboRefit, and RoboAfford. We               horizon planning:
+note that Embodied-R1, as a model specifically designed and trained              (1) Spatial reasoning task: “Pick up the duck in front of two toys
+for pointing tasks, shows strong performance on VABench-P and                 and place it to the middle plate among plates.”
+Where2Place. Despite being a general-purpose embodied reasoning                  (2) Multi-view reasoning task: “Pick up the duck behind two
+model, RoboPIN remains competitive on two benchmarks while                    toys and place it to the plate in front of the two toys.”
+significantly outperforming Embodied-R1 on broader spatial rea-                  (3) Long-horizon task: “Pick up yellow objects located outside
+soning tasks, demonstrating a more balanced capability profile.               the plates and place into the yellow plate.”
+                                                                                 To rigorously ensure robustness, we extensively randomize ob-
+                                                                              ject instances, distractor placements, and overall scene layouts for
+4.3      Real-World Robot Evaluation                                          each task. We conduct 20 distinct trials per setting under these
+We conduct zero-shot real-world evaluations using an xArm robot.              varied conditions to compute the success rate.
+The system is equipped with two RGB cameras: a static camera                     Results. Table 3 reports the success rates of different methods,
+observing the tabletop scene and a wrist-mounted camera. Given                including RoboBrain2-7B and Mimo-Embodied-7B. In multi-view
+a language instruction, the model predicts target points via visual           tasks, baseline models tend to rely solely on the static camera and
+grounding, which are then executed using the point-based motion               often select incorrect targets, failing to utilize the wrist-view in-
+planning pipeline from Embodied-R1 [48].                                      formation. In contrast, our model effectively integrates multi-view
+RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought                                      MM ’26, November 10–14, 2026, Rio de Janeiro, Brazil
+
+
+Table 4: Ablation of reasoning format and RFT. The first row                Table 5: Ablation of reward components on EmbSpatial.
+indicates the Qwen3-VL-4B-Instruct baseline. All compared
+variants use the same training recipe and data subsets.                                Setting                               EmbSpatial
+                                                                                       RoboPIN                                  84.7
+                Reasoning Design              Performance
+                                                                                        w/o Pin reward                          82.0
+           Format              SFT   RFT    EmbSpatial    SAT                           w/o Consistency reward                  82.7
+           Baseline             ×      ×        77.1      70.7
+           Text CoT             ✓      ×        78.9      74.0
+           Text CoT             ✓      ✓        79.3      76.3                  Table 6: Ablation of the three-stage training recipe.
+           Coord CoT            ✓      ×        81.7      67.3
+           Coord CoT            ✓      ✓        83.1      74.0                          Training Stages             Avg-Performance
+           Coord CoT w/ ID      ✓      ×        78.6      70.7
+           Coord CoT w/ ID      ✓      ✓        81.5      76.0                       SFT     CoT-SFT       RFT      Spatial        Point
+           PinCoT               ✓      ×        80.3      74.0                        ✓          ×            ×       57.0         66.0
+           PinCoT               ✓      ✓        84.7      78.7
+                                                                                      ✓          ✓            ×       62.0         63.6
+                                                                                      ✓          ✓            ✓       67.7         67.9
+observations and demonstrating enhanced reliability in identifying
+the target object compared to the baselines.                              Table 7: Reasoning process analysis on EmbSpatial. A-Cov:
+    In spatial reasoning tasks, our model also achieves consistently      Anchor Coverage; AC: Anchor Correctness; CS-IDCov: Cross-
+higher accuracy, reflecting a stronger capacity for interpreting spa-     Step identity Coverage.
+tial relations and resolving ambiguous object configurations. For
+the long-horizon task, RoboPIN predicts keypoints step-by-step and
+                                                                                     Model           A-Cov (%)    AC (%)      CS-IDCov (%)
+outperforms other models at each step, leading to a substantially
+higher overall success rate. Figure 3 illustrates representative execu-              RoboPIN          100.0         89.1           99.9
+tion sequences alongside the predicted anchor points for multi-view                   w/o RFT          96.3         87.0           18.8
+and spatial tasks, visually confirming the model’s ability to ground
+its reasoning in precise spatial locations.
+                                                                          suggesting that anchor localization quality is the more fundamental
+4.4    Ablation Study                                                     bottleneck for embodied reasoning.
+In this section, we conduct ablation studies on three key compo-             Performance Comparison of the Three-Stage Training. We
+nents: the reasoning format, the reward design, and the three-stage       further analyze how model performance progresses across different
+training pipeline. For the format and reward ablations, we use iden-      training stages based on average scores over embodied reasoning
+tical training hyperparameters on fixed training subsets to isolate       and pointing tasks. As shown in Table 6, embodied reasoning im-
+the effects of reasoning format and reward design.                        proves progressively as additional stages are introduced: CoT-SFT
+   Performance Comparison of Reasoning Formats. We com-                   yields a +5.0 gain over SFT alone, and RFT provides a further +5.7
+pare four spatial representations: text-only CoT (Text CoT ), coordi-     improvement. This suggests that our three-stage recipe primarily
+nate CoT (Coord CoT ), coordinate CoT with IDs (Coord CoT w/ ID),         strengthens high-level embodied spatial reasoning, while effectively
+and our PinCoT with point-based anchors and IDs. As shown in Ta-          preserving the fundamental point-level localization capabilities.
+ble 4, explicit reasoning consistently improves over non-reasoning
+baselines, while the spatial representation remains crucial. PinCoT       4.5     Reasoning Process Analysis
+generally outperforms other formats, with larger gains after RFT.         To understand why RoboPIN achieves superior performance, we
+Although PinCoT underperforms Coord CoT under SFT on Emb-                 analyze the intermediate reasoning process on EmbSpatial (which
+Spatial, it surpasses it after RFT, suggesting that PinCoT provides       provides ground-truth bounding boxes) and CrossPoint (for cross-
+a more effective reasoning interface when sufficiently optimized.         view evaluation).
+Moreover, compared with Coord CoT w/ ID, which uses box coordi-              Anchor Quality and Identity Consistency. As shown in Ta-
+nates with the same ID mechanism, PinCoT consistently performs            ble 7, RoboPIN achieves full anchor coverage (100.0%) and high
+better, confirming that point-based anchors provide a more suitable       anchor correctness (89.1%), both degrading without RFT. The key
+spatial representation for embodied reasoning.                            difference lies in identity tracking: without RFT, the model rarely
+   Ablation of Reward Components. We further ablate the two               maintains ID-based reasoning (18.8%) despite accurate anchors,
+core reward components in RFT: the Pin reward for anchor localiza-        while RFT achieves 99.9% cross-step coverage. This shows that pro-
+tion and the Consistency reward for entity references. As shown in        cess supervision enforces stable identity-aware reasoning beyond
+Table 5, removing either component leads to a clear performance           improving anchor quality. Figure 4 further shows that identity-
+drop, confirming that both spatially accurate anchors and identity-       aware tracking removes ambiguous references and improves cross-
+consistent reasoning are necessary for strong embodied reasoning          step and cross-view consistency.
+performance. Notably, removing the Pin reward causes a larger                Error Propagation from Reasoning to Answer. As shown in
+degradation (−2.7) than removing the Consistency reward (−2.0),           Table 8, samples with faulty anchors exhibit roughly 2.2× higher
+MM ’26, November 10–14, 2026, Rio de Janeiro, Brazil                                                                          Yaoting Huang et al.
+
+
+
+
+Figure 3: Real-world robot visualization. Left: robot execution. Right: predicted anchor points during manipulation. R.B and
+M.E denote Robobrain2 and Mimo-Embodied.
+
+                                                                          Table 9: Cross-view reasoning consistency on CrossPoint.
+                                                                          Acc: Overall Accuracy; ID-Trans: Shared-ID Transfer Rate;
+                                                                          Trans-Acc: Accuracy given successful ID transfer.
+
+                                                                                 Model         Acc (%)     ID-Trans (%)    Trans-Acc (%)
+                                                                                 RoboPIN         71.1          86.3             72.1
+                                                                                  w/o RFT        62.5          60.6             61.1
+
+
+
+
+                                                                          and when this transfer succeeds, predictions become highly reliable
+                                                                          (72.1%). Removing RFT substantially weakens this behavior (ID-
+                                                                          Trans drops to 60.6%), accompanied by a clear performance decline.
+    Figure 4: Qualitative analysis of grounded reasoning.                 These findings confirm that process supervision is the critical driver
+                                                                          enforcing explicit cross-view correspondence.
+
+           Table 8: Error propagation on EmbSpatial.
+                                                                          5   Conclusion
+                           Answer Error Rate (%)                          We present PinCoT, a structured reasoning paradigm that anchors
+                                                                          each reasoning step to visual evidence by unifying semantic iden-
+    Model         w/ Faulty Anchor       w/ Correct Anchor   Risk Ratio   tity and spatial localization into structured reasoning variables,
+    RoboPIN              29.2                    13.2           2.2       enabling persistent entity tracking across steps and viewpoints.
+                                                                          Based on an automated data pipeline and three-stage training, we
+                                                                          develop RoboPIN, where RFT further improves reasoning-process
+answer-error rates than those with correct anchors, showing that          and answer consistency. Across 14 embodied VLM benchmarks,
+reliable spatial grounding is critical for robust reasoning.              4B-parameter RoboPIN achieves a 12% average improvement over
+   Cross-view Consistency. We evaluate the Pointing and Judge-            the strongest 7B baseline Mimo-Embodied. Our results demonstrate
+ment subsets of CrossPoint, measuring overall accuracy (Acc), shared-     that explicitly grounding reasoning in visual evidence is an effective
+ID transfer rate across views (ID-Trans), and conditional accuracy        approach for improving embodied VLM spatial reasoning. Future
+given successful transfer (Trans-Acc). As shown in Table 9, RoboPIN       work will explore larger-scale models and data, as well as extending
+consistently maintains shared-identity transfer across views (86.3%),     PinCoT to 3D localization and long-horizon planning.
+RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought                                                           MM ’26, November 10–14, 2026, Rio de Janeiro, Brazil
+
+
+Acknowledgement                                                                                 Let’s verify step by step. In The twelfth international conference on learning
+                                                                                                representations.
+This work is supported by the National Natural Science Foundation                          [19] Yuhao Lu, Yixuan Fan, Beixing Deng, Fangfu Liu, Yali Li, and Shengjin Wang.
+of China (Grant Nos. 62422605, 92370132). This work is also sup-                                2023. Vl-grasp: a 6-dof interactive grasp policy for language-oriented objects in
+                                                                                                cluttered indoor scenes. In 2023 IEEE/RSJ International Conference on Intelligent
+ported by the National Natural Science Foundation of China Youth                                Robots and Systems (IROS). IEEE, 976–983.
+Student Basic Research Project (Grant No. 625B2128). Yifu Yuan                             [20] Gen Luo, Ganlin Yang, Ziyang Gong, Guanzhou Chen, Haonan Duan, Erfei Cui,
+is also supported by the Young Science and Technology Scientists                                Ronglei Tong, Zhi Hou, Tianyi Zhang, Zhe Chen, et al. 2025. Visual embodied
+                                                                                                brain: Let multimodal large language models see, think, and control in spaces.
+Sponsorship Program by CAST - Doctoral Student Special Plan.                                    arXiv preprint arXiv:2506.00123 (2025).
+                                                                                           [21] Chancharik Mitra, Brandon Huang, Trevor Darrell, and Roei Herzig. 2024. Compo-
+References                                                                                      sitional chain-of-thought prompting for large multimodal models. In Proceedings
+                                                                                                of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 14420–
+ [1] Shuai Bai, Yuxuan Cai, Ruizhe Chen, Keqin Chen, Xionghui Chen, Zesen Cheng,                14431.
+     Lianghao Deng, Wei Ding, Chang Gao, Chunjiang Ge, et al. 2025. Qwen3-vl               [22] Fei Ni, Zhuo Chen, Yifu Yuan, Zibin Dong, Xianze Yao, Shan Luo, Jianye Hao,
+     technical report. arXiv preprint arXiv:2511.21631 (2025).                                  Jiankang Deng, and Stefanos Zafeiriou. 2026. Semanticvla: Towards semantic
+ [2] Boyuan Chen, Zhuo Xu, Sean Kirmani, Brain Ichter, Dorsa Sadigh, Leonidas                   reasoning over action memorization via synergistic explicit trace and latent
+     Guibas, and Fei Xia. 2024. Spatialvlm: Endowing vision-language models with                action planning. In Proceedings of the IEEE/CVF Conference on Computer Vision
+     spatial reasoning capabilities. In Proceedings of the IEEE/CVF Conference on Com-          and Pattern Recognition. 12237–12247.
+     puter Vision and Pattern Recognition. 14455–14465.                                    [23] Fei Ni, Jianye Hao, Shiguang Wu, Longxin Kou, Yifu Yuan, Zibin Dong, Jinyi
+ [3] Keqin Chen, Zhao Zhang, Weili Zeng, Richong Zhang, Feng Zhu, and Rui Zhao.                 Liu, MingZhi Li, Yuzheng Zhuang, and Yan Zheng. 2024. Peria: Perceive, reason,
+     2023. Shikra: Unleashing multimodal llm’s referential dialogue magic. arXiv                imagine, act via holistic language and vision planning for manipulation. Advances
+     preprint arXiv:2306.15195 (2023).                                                          in Neural Information Processing Systems 37 (2024), 17541–17571.
+ [4] Yi Chen, Yuying Ge, Yixiao Ge, Mingyu Ding, Bohao Li, Rui Wang, Ruifeng Xu,           [24] Fei Ni, Min Zhang, Pengyi Li, Yifu Yuan, Lingfeng Zhang, Yuecheng Liu, Peilong
+     Ying Shan, and Xihui Liu. 2026. Egoplan-bench: Benchmarking multimodal large               Han, Longxin Kou, Shaojin Ma, Jinbin Qiao, et al. 2025. Embodied arena: A
+     language models for human-level planning. International Journal of Computer                comprehensive, unified, and evolving evaluation platform for embodied ai. arXiv
+     Vision 134, 3 (2026), 118.                                                                 preprint arXiv:2509.15273 (2025).
+ [5] An-Chieh Cheng, Hongxu Yin, Yang Fu, Qiushan Guo, Ruihan Yang, Jan Kautz,             [25] Kishore Papineni, Salim Roukos, Todd Ward, and Wei-Jing Zhu. 2002. Bleu: a
+     Xiaolong Wang, and Sifei Liu. 2024. Spatialrgpt: Grounded spatial reasoning in             method for automatic evaluation of machine translation. In Proceedings of the
+     vision-language models. Advances in Neural Information Processing Systems 37               40th annual meeting of the Association for Computational Linguistics. 311–318.
+     (2024), 135062–135093.                                                                [26] Delin Qu, Haoming Song, Qizhi Chen, Zhaoqing Chen, Xianqiang Gao, Xinyi Ye,
+ [6] Long Cheng, Jiafei Duan, Yi Ru Wang, Haoquan Fang, Boyang Li, Yushan Huang,                Qi Lv, Modi Shi, Guanghui Ren, Cheng Ruan, et al. 2025. Embodiedonevision:
+     Elvis Wang, Ainaz Eftekhar, Jason Lee, Wentao Yuan, et al. 2025. Pointarena:               Interleaved vision-text-action pretraining for general robot control. arXiv e-prints
+     Probing multimodal grounding through language-guided pointing. arXiv preprint              (2025), arXiv–2508.
+     arXiv:2505.09990 (2025).                                                              [27] Delin Qu, Haoming Song, Qizhi Chen, Yuanqi Yao, Xinyi Ye, Yan Ding, Zhigang
+ [7] Gheorghe Comanici, Eric Bieber, Mike Schaekermann, Ice Pasupat, Noveen                     Wang, JiaYuan Gu, Bin Zhao, Dong Wang, et al. 2025. Spatialvla: Exploring spatial
+     Sachdeva, Inderjit Dhillon, Marcel Blistein, Ori Ram, Dan Zhang, Evan Rosen,               representations for visual-language-action model. arXiv preprint arXiv:2501.15830
+     et al. 2025. Gemini 2.5: Pushing the frontier with advanced reasoning, multi-              (2025).
+     modality, long context, and next generation agentic capabilities. arXiv preprint      [28] Nikhila Ravi, Valentin Gabeur, Yuan-Ting Hu, Ronghang Hu, Chaitanya Ryali,
+     arXiv:2507.06261 (2025).                                                                   Tengyu Ma, Haitham Khedr, Roman Rädle, Chloe Rolland, Laura Gustafson,
+ [8] InternData-M1 contributors. 2025.          InternData-M1.     https://github.com/          et al. 2024. Sam 2: Segment anything in images and videos. arXiv preprint
+     InternRobotics/InternManip.                                                                arXiv:2408.00714 (2024).
+ [9] Zibin Dong, Fei Ni, Yifu Yuan, Yinchuan Li, and Jianye Hao. 2025. Embodiedmae:        [29] Arijit Ray, Jiafei Duan, Ellis Brown, Reuben Tan, Dina Bashkirova, Rose Hendrix,
+     A unified 3d multi-modal representation for robot manipulation. arXiv preprint             Kiana Ehsani, Aniruddha Kembhavi, Bryan A Plummer, Ranjay Krishna, et al.
+     arXiv:2505.10105 (2025).                                                                   2024. Sat: Dynamic spatial aptitude training for multimodal language models.
+[10] Mengfei Du, Binhao Wu, Zejun Li, Xuan-Jing Huang, and Zhongyu Wei. 2024.                   arXiv preprint arXiv:2412.07755 (2024).
+     Embspatial-bench: Benchmarking spatial understanding for embodied tasks with          [30] Pierre Sermanet, Tianli Ding, Jeffrey Zhao, Fei Xia, Debidatta Dwibedi, Keerthana
+     large vision-language models. In Proceedings of the 62nd Annual Meeting of the             Gopalakrishnan, Christine Chan, Gabriel Dulac-Arnold, Sharath Maddineni,
+     Association for Computational Linguistics (Volume 2: Short Papers). 346–355.               Nikhil J Joshi, et al. 2024. Robovqa: Multimodal long-horizon reasoning for
+[11] Kaituo Feng, Kaixiong Gong, Bohao Li, Zonghao Guo, Yibing Wang, Tianshuo                   robotics. In 2024 IEEE International Conference on Robotics and Automation (ICRA).
+     Peng, Junfei Wu, Xiaoying Zhang, Benyou Wang, and Xiangyu Yue. 2025. Video-                IEEE, 645–652.
+     r1: Reinforcing video reasoning in mllms. arXiv preprint arXiv:2503.21776 (2025).     [31] Hao Shao, Shengju Qian, Han Xiao, Guanglu Song, Zhuofan Zong, Letian Wang,
+[12] Zhiyuan Feng, Zhaolu Kang, Qijie Wang, Zhiying Du, Jiongrui Yan, Shubin Shi,               Yu Liu, and Hongsheng Li. 2024. Visual cot: Advancing multi-modal language
+     Chengbo Yuan, Huizhi Liang, Yu Deng, Qixiu Li, et al. 2025. Seeing across views:           models with a comprehensive dataset and benchmark for chain-of-thought rea-
+     Benchmarking spatial reasoning of vision-language models in robotic scenes.                soning. Advances in Neural Information Processing Systems 37 (2024), 8612–8642.
+     arXiv preprint arXiv:2510.19400 (2025).                                               [32] Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi, Haowei
+[13] Xingyu Fu, Yushi Hu, Bangzheng Li, Yu Feng, Haoyu Wang, Xudong Lin, Dan                    Zhang, Mingchuan Zhang, YK Li, Yang Wu, et al. 2024. Deepseekmath: Pushing
+     Roth, Noah A Smith, Wei-Chiu Ma, and Ranjay Krishna. 2024. Blink: Multimodal               the limits of mathematical reasoning in open language models. arXiv preprint
+     large language models can see but not perceive. In European Conference on                  arXiv:2402.03300 (2024).
+     Computer Vision. Springer, 148–166.                                                   [33] Aaditya Singh, Adam Fry, Adam Perelman, Adam Tart, Adi Ganesh, Ahmed
+[14] Xiaoshuai Hao, Lei Zhou, Zhijian Huang, Zhiwen Hou, Yingbo Tang, Lingfeng                  El-Kishky, Aidan McLaughlin, Aiden Low, AJ Ostrow, Akhila Ananthram, et al.
+     Zhang, Guang Li, Zheng Lu, Shuhuai Ren, Xianhui Meng, et al. 2025. Mimo-                   2025. Openai gpt-5 system card. arXiv preprint arXiv:2601.03267 (2025).
+     embodied: X-embodied foundation model technical report. arXiv preprint                [34] Chan Hee Song, Valts Blukis, Jonathan Tremblay, Stephen Tyree, Yu Su, and
+     arXiv:2511.16518 (2025).                                                                   Stan Birchfield. 2025. Robospatial: Teaching spatial understanding to 2d and 3d
+[15] Zejun Li, Ruipu Luo, Jiwen Zhang, Minghui Qiu, Xuan-Jing Huang, and Zhongyu                vision-language models for robotics. In Proceedings of the Computer Vision and
+     Wei. 2025. Vocot: Unleashing visually grounded multi-step reasoning in large               Pattern Recognition Conference. 15768–15780.
+     multi-modal models. In Proceedings of the 2025 Conference of the Nations of the       [35] Yingbo Tang, Lingfeng Zhang, Shuyi Zhang, Yinuo Zhao, and Xiaoshuai Hao. 2025.
+     Americas Chapter of the Association for Computational Linguistics: Human Lan-              Roboafford: A dataset and benchmark for enhancing object and spatial affordance
+     guage Technologies (Volume 1: Long Papers). 3769–3798.                                     learning in robot manipulation. In Proceedings of the 33rd ACM International
+[16] Shijie Lian, Changti Wu, Laurence Tianruo Yang, Hang Yuan, Bin Yu, Lei Zhang,              Conference on Multimedia. 12706–12713.
+     and Kai Chen. 2025. Euclid’s gift: Enhancing spatial perception and reason-           [36] BAAI RoboBrain Team, Mingyu Cao, Huajie Tan, Yuheng Ji, Xiansheng Chen,
+     ing in vision-language models via geometric surrogate tasks. arXiv preprint                Minglan Lin, Zhiyu Li, Zhou Cao, Pengwei Wang, Enshen Zhou, et al. 2025.
+     arXiv:2509.24473 (2025).                                                                   Robobrain 2.0 technical report. arXiv preprint arXiv:2507.02029 (2025).
+[17] Yuan-Hong Liao, Rafid Mahmood, Sanja Fidler, and David Acuna. 2024. Reasoning         [37] Gemini Robotics Team, Saminda Abeyruwan, Joshua Ainslie, Jean-Baptiste
+     paths with reference objects elicit quantitative spatial reasoning in large vision-        Alayrac, Montserrat Gonzalez Arenas, Travis Armstrong, Ashwin Balakrishna,
+     language models. In Proceedings of the 2024 Conference on Empirical Methods in             Robert Baruch, Maria Bauza, Michiel Blokzijl, et al. 2025. Gemini robotics: Bring-
+     Natural Language Processing. 17028–17047.                                                  ing ai into the physical world. arXiv preprint arXiv:2503.20020 (2025).
+[18] Hunter Lightman, Vineet Kosaraju, Yuri Burda, Harrison Edwards, Bowen Baker,
+     Teddy Lee, Jan Leike, John Schulman, Ilya Sutskever, and Karl Cobbe. 2023.
+MM ’26, November 10–14, 2026, Rio de Janeiro, Brazil                                                                                                       Yaoting Huang et al.
+
+
+[38] Shengbang Tong, Ellis Brown, Penghao Wu, Sanghyun Woo, Manoj Middepogu,                     preprint arXiv:2406.10721 (2024).
+     Sai C Akula, Jihan Yang, Shusheng Yang, Adithya Iyer, Xichen Pan, et al. 2024.         [47] Yifu Yuan, Haiqin Cui, Yibin Chen, Zibin Dong, Fei Ni, Longxin Kou, Jinyi Liu,
+     Cambrian-1: A fully open, vision-centric exploration of multimodal llms. Ad-                Pengyi Li, Yan Zheng, and Jianye Hao. 2025. From seeing to doing: Bridging
+     vances in Neural Information Processing Systems 37 (2024), 87310–87356.                     reasoning and decision for robotic manipulation. arXiv preprint arXiv:2505.08548
+[39] Weiyun Wang, Zhangwei Gao, Lixin Gu, Hengjun Pu, Long Cui, Xingguang Wei,                   (2025).
+     Zhaoyang Liu, Linglin Jing, Shenglong Ye, Jie Shao, et al. 2025. Internvl3. 5: Ad-     [48] Yifu Yuan, Haiqin Cui, Yaoting Huang, Yibin Chen, Fei Ni, Zibin Dong, Pengyi Li,
+     vancing open-source multimodal models in versatility, reasoning, and efficiency.            Yan Zheng, and Jianye Hao. 2025. Embodied-r1: Reinforced embodied reasoning
+     arXiv preprint arXiv:2508.18265 (2025).                                                     for general robotic manipulation. arXiv preprint arXiv:2508.13998 (2025).
+[40] Yipu Wang, Yuheng Ji, Yuyang Liu, Enshen Zhou, Ziqiang Yang, Yuxuan Tian,              [49] Yifu Yuan, Jianye Hao, Yi Ma, Zibin Dong, Hebin Liang, Jinyi Liu, Zhixin Feng,
+     Ziheng Qin, Yue Liu, Huajie Tan, Cheng Chi, et al. 2025. Towards cross-view                 Kai Zhao, and Yan Zheng. 2024. Uni-rlhf: Universal platform and benchmark
+     point correspondence in vision-language models. arXiv preprint arXiv:2512.04686             suite for reinforcement learning with diverse human feedback. In International
+     (2025).                                                                                     Conference on Learning Representations, Vol. 2024. 49155–49187.
+[41] Ziyi Wang, Xumin Yu, Yongming Rao, Yonggen Ling, Yunheng Li, Oran Wang,                [50] Yifu Yuan, Yaoting Huang, Xianze Yao, Yutong Li, Shuoheng Zhang, Linqi Han,
+     Mingqi Gao, Yuchen Zhou, Yves Liang, Zuyan Liu, et al. 2026. Hy-Embodied-                   Pengyi Li, Jiangeng Sun, Wenting Jia, Zhao Zhang, et al. 2026. Embodied-R1.5:
+     VLM-1.0: Efficient Physical-World Agents. arXiv preprint arXiv:2607.12894 (2026).           Evolving Physical Intelligence via Embodied Foundation Models. arXiv preprint
+[42] Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed Chi,                    arXiv:2606.11324 (2026).
+     Quoc V Le, Denny Zhou, et al. 2022. Chain-of-thought prompting elicits reasoning       [51] Michał Zawalski, William Chen, Karl Pertsch, Oier Mees, Chelsea Finn, and
+     in large language models. Advances in neural information processing systems 35              Sergey Levine. 2024. Robotic control via embodied chain-of-thought reasoning.
+     (2022), 24824–24837.                                                                        arXiv preprint arXiv:2407.08693 (2024).
+[43] Bin Xiao, Haiping Wu, Weijian Xu, Xiyang Dai, Houdong Hu, Yumao Lu, Michael            [52] Yi Zhang, Che Liu, Xiancong Ren, Hanchu Ni, Shuai Zhang, Zeyuan Ding, Jiayu
+     Zeng, Ce Liu, and Lu Yuan. 2024. Florence-2: Advancing a unified representation             Hu, Hanzhe Shan, Zhenwei Niu, Zhaoyang Liu, et al. 2025. Pelican-VL 1.0: A Foun-
+     for a variety of vision tasks. In Proceedings of the IEEE/CVF Conference on Computer        dation Brain Model for Embodied Intelligence. arXiv preprint arXiv:2511.00108
+     Vision and Pattern Recognition. 4818–4829.                                                  (2025).
+[44] Sihan Yang, Runsen Xu, Yiman Xie, Sizhe Yang, Mo Li, Jingli Lin, Chenming              [53] Zhuosheng Zhang, Aston Zhang, Mu Li, Hai Zhao, George Karypis, and Alex
+     Zhu, Xiaochen Chen, Haodong Duan, Xiangyu Yue, et al. 2025. Mmsi-bench: A                   Smola. 2023. Multimodal chain-of-thought reasoning in language models. arXiv
+     benchmark for multi-image spatial intelligence. arXiv preprint arXiv:2505.23764             preprint arXiv:2302.00923 (2023).
+     (2025).                                                                                [54] Ge Zheng, Bin Yang, Jiajin Tang, Hong-Yu Zhou, and Sibei Yang. 2023. Ddcot:
+[45] Haoxuan You, Haotian Zhang, Zhe Gan, Xianzhi Du, Bowen Zhang, Zirui Wang,                   Duty-distinct chain-of-thought prompting for multimodal reasoning in language
+     Liangliang Cao, Shih-Fu Chang, and Yinfei Yang. 2023. Ferret: Refer and ground              models. Advances in Neural Information Processing Systems 36 (2023), 5168–5191.
+     anything anywhere at any granularity. arXiv preprint arXiv:2310.07704 (2023).          [55] Enshen Zhou, Jingkun An, Cheng Chi, Yi Han, Shanyu Rong, Chi Zhang, Pengwei
+[46] Wentao Yuan, Jiafei Duan, Valts Blukis, Wilbert Pumacay, Ranjay Krishna,                    Wang, Zhongyuan Wang, Tiejun Huang, Lu Sheng, et al. 2025. Roborefer: Towards
+     Adithyavairavan Murali, Arsalan Mousavian, and Dieter Fox. 2024. Robopoint:                 spatial referring with reasoning in vision-language models for robotics. arXiv
+     A vision-language model for spatial affordance prediction for robotics. arXiv               preprint arXiv:2506.04308 (2025).
+
