@@ -11,7 +11,13 @@
    Filename: `ACMMM2026_Poster_Track_OpenReviewID.pdf`.
 3. Conference homepage: <https://2026.acmmm.org/> confirms Rio de Janeiro, Brazil, November 10–14, 2026.
 
-HTML copies of the pages used are retained in `assets/`. No conference submission or printing order has been placed. Logos remain intentional placeholders at the user's request.
+HTML copies of the pages used are retained in `assets/`. No conference submission or printing order has been placed. The logo placeholders have been replaced with official assets matching the user's supplied designs; only the paper/code QR remains a placeholder.
+
+## Official logo assets — added 2026-10-24
+
+- `assets/mm-logo.png`: unmodified conference logo from <https://2026.acmmm.org/assets/LOGO-ACM-2026-V2.png>, linked by the official conference header. It uses the same multicolour MM / Rio de Janeiro artwork as the user's supplied image.
+- `assets/tju-logo.png`: unmodified blue circular university seal linked in the official Tianjin University identity page <https://www.tju.edu.cn/tdgk/tdbs.htm>. The identity page snapshot is retained as `assets/tju-brand-guidelines.html`; the seal is its second content image (`vurl` `/_vsl/3A79D23C2F7263D10849209C722D53CE/68B1FB11/DB23`). It matches the shield / 1895 / Peiyang University design supplied by the user.
+- Logos are placed as separate images, with their original aspect ratios and colours. They are not generated, recoloured, stretched, or redrawn. The header is white, the title is navy, and the affiliation line remains teal. Embedded logo bytes in the PowerPoint are checked against these saved source files.
 
 ## Supplied scientific source
 
@@ -45,8 +51,6 @@ Precise crop coordinates in source PDF points are recorded in `assets/crop-prove
 
 ## Remaining publishing assets
 
-- Official ACM Multimedia / MM 2026 logo.
-- Official Tianjin University logo.
 - Final paper/project/code link and a real QR code.
 - Track and OpenReview ID for the official print filename.
 

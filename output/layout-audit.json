@@ -3,7 +3,7 @@
     "text": "VISUAL GROUNDING × IDENTITY-CONSISTENT REASONING",
     "x": 26,
     "y": 15,
-    "width": 560,
+    "width": 450,
     "height": 10.329333333333333,
     "size_pt": 24
   },
@@ -11,25 +11,9 @@
     "text": "RoboPIN",
     "x": 24,
     "y": 31,
-    "width": 580,
+    "width": 440,
     "height": 47.34277777777777,
     "size_pt": 110
-  },
-  {
-    "text": "ACM MM 2026\nLOGO PLACEHOLDER",
-    "x": 641,
-    "y": 31,
-    "width": 76,
-    "height": 15.494,
-    "size_pt": 18
-  },
-  {
-    "text": "TIANJIN UNIVERSITY\nLOGO PLACEHOLDER",
-    "x": 736,
-    "y": 31,
-    "width": 76,
-    "height": 15.494,
-    "size_pt": 18
   },
   {
     "text": "Grounded Embodied Reasoning\nvia Pinned Chain-of-Thought",

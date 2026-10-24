@@ -39,7 +39,7 @@ slide = prs.slides.add_slide(prs.slide_layouts[6])
 c = canvas.Canvas(str(OUT / 'RoboPIN_A0_portrait.pdf'), pagesize=(W*MM,H*MM), initialFontName='Regular')
 c.setTitle('RoboPIN — Grounded Embodied Reasoning via Pinned Chain-of-Thought')
 c.setAuthor('Yaoting Huang et al. — Tianjin University')
-c.setSubject('ACM Multimedia 2026 | A0 portrait | logo and QR placeholders')
+c.setSubject('ACM Multimedia 2026 | A0 portrait | official logos | QR placeholder')
 audit = []
 
 def rgb(v): return RGBColor.from_string(v.lstrip('#'))
@@ -134,16 +134,16 @@ def logo_placeholder(key,x,y,w,h):
 
 # Header and a clear four-number summary.
 rect(0,0,W,H,BG)
-rect(0,0,W,176,NAVY)
+rect(0,0,W,176,WHITE)
 rect(0,173,W,3,TEAL)
-text(26,15,560,'VISUAL GROUNDING × IDENTITY-CONSISTENT REASONING',24,True,'#87DCD1')
-text(24,31,580,'RoboPIN',110,True,WHITE)
-logo_placeholder('mm_logo',638,22,82,42)
-logo_placeholder('tju_logo',733,22,82,42)
-text(26,79,789,'Grounded Embodied Reasoning\nvia Pinned Chain-of-Thought',49,True,WHITE,leading=1.14,max_h=45)
-text(26,125,789,'Yaoting Huang* · Yifu Yuan*† · Linqi Han · Chengwen Li · Shuoheng Zhang',25,color='#E0EBF2')
-text(26,138,789,'Xianze Yao · Hongyao Tang · Yan Zheng · Jianye Hao†',25,color='#E0EBF2')
-text(26,154,789,'Tianjin University   |   ACM Multimedia 2026 · Rio de Janeiro, Brazil',26,True,'#87DCD1')
+text(26,15,450,'VISUAL GROUNDING × IDENTITY-CONSISTENT REASONING',24,True,TEAL)
+text(24,31,440,'RoboPIN',110,True,NAVY)
+logo_placeholder('mm_logo',478,22,240,54)
+logo_placeholder('tju_logo',735,10,80,78)
+text(26,79,789,'Grounded Embodied Reasoning\nvia Pinned Chain-of-Thought',49,True,NAVY,leading=1.14,max_h=45)
+text(26,125,789,'Yaoting Huang* · Yifu Yuan*† · Linqi Han · Chengwen Li · Shuoheng Zhang',25,color=GRAY)
+text(26,138,789,'Xianze Yao · Hongyao Tang · Yan Zheng · Jianye Hao†',25,color=GRAY)
+text(26,154,789,'Tianjin University   |   ACM Multimedia 2026 · Rio de Janeiro, Brazil',26,True,TEAL)
 
 for i,(value,label) in enumerate([('4B','model parameters'),('170K','PinCoT reasoning samples'),('14','evaluation benchmarks'),('+35.4 pp','CrossPoint vs. Mimo-7B')]):
     x=26+i*201
@@ -263,10 +263,12 @@ for item in audit:
 c.showPage();c.save()
 slide.notes_slide.notes_text_frame.text=(
     'A0 portrait (841 × 1189 mm), verified against the ACM Multimedia 2026 presenter guidelines. '
-    'All text, bars, tables, nodes, pins and logo placeholders are editable; scene/robot photographs are cropped from the supplied paper. '
+    'Text, bars, tables, nodes and pins are editable; the logos are separate replaceable images. '
+    'Scene/robot photographs are cropped from the supplied paper. '
     'Tables 1–2: selected comparisons only. Table 7: cross-step identity coverage. '
     'Robot trial counts follow Table 3 and Section 4.3; the Table 3 caption says 5 trials and requires author confirmation. '
-    'Conference and Tianjin University logos and paper/code QR are intentional placeholders. '
+    'Conference and Tianjin University logos use unmodified official assets matching the supplied designs on a white header. '
+    'Only the paper/code QR remains an intentional placeholder. '
     'The 12% abstract claim is omitted because the aggregate weighting is not specified. '
     'See README.md and SOURCES.md for provenance, editing and build instructions.'
 )

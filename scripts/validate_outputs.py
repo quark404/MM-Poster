@@ -3,6 +3,7 @@
 from pathlib import Path
 from zipfile import ZipFile
 import json
+import hashlib
 import fitz
 from pptx import Presentation
 
@@ -35,6 +36,18 @@ slide = prs.slides[0]
 boxes=[s for s in slide.shapes if s.has_text_frame and s.text.strip()]
 assert len(boxes) >= 100, 'PowerPoint appears flattened'
 assert any('CrossPoint' in s.text for s in boxes)
+config = json.loads((root / 'poster_config.json').read_text())
+embedded = {hashlib.sha256(s.image.blob).hexdigest() for s in slide.shapes if s.shape_type == 13}
+logo_assets=[]
+for key in ['mm_logo_file', 'tju_logo_file']:
+    asset = config.get(key)
+    if asset:
+        assert hashlib.sha256((root/asset).read_bytes()).hexdigest() in embedded, f'Logo not embedded: {asset}'
+        logo_assets.append(asset)
+assert 'LOGO PLACEHOLDER' not in pdf_text, 'Outdated logo placeholder remains'
+assert not any('LOGO PLACEHOLDER' in s.text for s in boxes)
+header_pixel = page.get_pixmap(matrix=fitz.Matrix(.1,.1)).pixel(1,1)
+assert header_pixel == (255,255,255), 'Header should be white'
 for s in slide.shapes:
     assert s.left >= 0 and s.top >= 0 and s.left+s.width <= prs.slide_width+1 and s.top+s.height <= prs.slide_height+1, s.name
 with ZipFile(out / 'RoboPIN_A0_editable.pptx') as z:
@@ -46,7 +59,9 @@ report={
     'pptx_shapes': len(slide.shapes), 'source_value_checks': 'passed',
     'page_bounds': 'passed', 'pptx_archive_integrity': 'passed',
     'visual_review': 'PDF preview inspected; PowerPoint not rendered in Office in this environment',
-    'intentional_placeholders': ['ACM Multimedia logo','Tianjin University logo','paper/code QR'],
+    'embedded_logo_assets': logo_assets,
+    'header_background': 'white',
+    'intentional_placeholders': ['paper/code QR'],
 }
 (out / 'validation.json').write_text(json.dumps(report, indent=2))
 print(json.dumps(report, indent=2))

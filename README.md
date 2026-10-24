@@ -10,6 +10,8 @@
 
 在 GitHub 文件页点击 **Download raw file** 下载 PDF、PPTX 或 ZIP；预览图可直接在下方查看。
 
+当前版本已采用**白色页眉、深蓝标题**，并嵌入与用户提供图案一致的 ACM Multimedia 2026 官方标识和天津大学官方校徽。右下角论文/项目二维码暂为占位符。
+
 ![RoboPIN A0 poster preview](output/RoboPIN_preview.png)
 
 # RoboPIN · ACM Multimedia 2026 A0 Poster
@@ -18,7 +20,7 @@
 
 ## 交付文件
 
-- `output/RoboPIN_A0_portrait.pdf`：841 × 1189 mm，竖版，字体已嵌入；包含有意保留的标识和二维码占位符，替换后再印刷。
+- `output/RoboPIN_A0_portrait.pdf`：841 × 1189 mm，竖版，字体已嵌入；已包含正式会议和学校标识，二维码仍为占位符。
 - `output/RoboPIN_A0_editable.pptx`：同尺寸的一页 PowerPoint。文字、表格、柱形图、流程框、箭头、锚点、占位框均为可编辑对象；论文实拍图为裁剪后的图片。
 - `output/RoboPIN_preview.png`：整体预览。
 - `output/validation.json`：实际产物检查结果。
@@ -28,9 +30,9 @@
 
 ## 直接修改 PowerPoint
 
-打开 `output/RoboPIN_A0_editable.pptx` 即可修改正文、数据与各元素。版式为 A0 竖版，字号主要为 24–33 pt，标题 49–110 pt，注释及占位文字为 18–23 pt。建议安装 DejaVu Sans，避免替换字体影响换行。
+打开 `output/RoboPIN_A0_editable.pptx` 即可修改正文、数据与各元素。版式为 A0 竖版，字号主要为 24–33 pt，标题 49–110 pt，注释及二维码占位文字为 21–23 pt。建议安装 DejaVu Sans，避免替换字体影响换行。
 
-将右上角两处占位框替换为会议和学校正式标识，右下角替换为论文/项目二维码。没有伪造标识或制作无效二维码。作者顺序、单位和联系邮箱均来自论文。
+右上角会议标识和天津大学校徽已嵌入，可在 PowerPoint 中作为图片移动或替换；两者保持原始比例、颜色和字形。白色页眉与标识底色衔接，作者行采用深灰文字以保证对比度。右下角仍需替换为有效的论文/项目二维码。作者顺序、单位和联系邮箱均来自论文。
 
 **若在 PowerPoint 中修改，请从 PowerPoint 重新导出 PDF。** Python 生成器不会反向读取 PowerPoint 中的修改；重新运行生成器会覆盖其输出，所以请先另存修改版。当前环境验证了 PPTX 结构和编辑对象，未使用 Microsoft Office 渲染它；交付 PDF 的预览已实际检查。
 
@@ -58,7 +60,7 @@ python -m venv .venv
 
 ## 替换标识与二维码
 
-将正式 PNG 标识放入 `assets/`，然后在 `poster_config.json` 中将路径设置为例如：
+正式标识已保存在 `assets/mm-logo.png` 和 `assets/tju-logo.png`，来源见 `SOURCES.md`。如需更换标识或加入二维码，在 `poster_config.json` 中设置相应路径，例如：
 
 ```json
 {
@@ -70,7 +72,7 @@ python -m venv .venv
 }
 ```
 
-这些文件名是示例，不代表已经包含正式标识。标识会等比缩放并居中；二维码请提供正方形、包含足够留白且可实际扫描的文件。准备好后重新构建并检查预览及扫描结果。
+两项 logo 路径对应本包已包含的正式标识；`assets/project-qr.png` 只是二维码路径示例，该文件尚未提供。标识会等比缩放并居中；二维码请提供正方形、包含足够留白且可实际扫描的文件。准备好后重新构建并检查预览及扫描结果。
 
 ## 印刷与官方要求
 

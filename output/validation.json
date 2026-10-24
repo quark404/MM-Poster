@@ -9,15 +9,18 @@
     "AAAAAA+DejaVuSans-Bold",
     "AAAAAA+DejaVuSans"
   ],
-  "editable_text_boxes": 110,
-  "pptx_shapes": 167,
+  "editable_text_boxes": 108,
+  "pptx_shapes": 165,
   "source_value_checks": "passed",
   "page_bounds": "passed",
   "pptx_archive_integrity": "passed",
   "visual_review": "PDF preview inspected; PowerPoint not rendered in Office in this environment",
+  "embedded_logo_assets": [
+    "assets/mm-logo.png",
+    "assets/tju-logo.png"
+  ],
+  "header_background": "white",
   "intentional_placeholders": [
-    "ACM Multimedia logo",
-    "Tianjin University logo",
     "paper/code QR"
   ]
 }

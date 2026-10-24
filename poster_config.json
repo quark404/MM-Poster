@@ -1,7 +1,7 @@
 {
   "mm_logo_label": "ACM MM 2026\nLOGO PLACEHOLDER",
-  "mm_logo_file": null,
+  "mm_logo_file": "assets/mm-logo.png",
   "tju_logo_label": "TIANJIN UNIVERSITY\nLOGO PLACEHOLDER",
-  "tju_logo_file": null,
+  "tju_logo_file": "assets/tju-logo.png",
   "qr_file": null
 }
