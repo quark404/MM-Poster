@@ -151,89 +151,56 @@ for i,(value,label) in enumerate([('4B','model parameters'),('170K','PinCoT reas
     text(x+10,193,166,value,52,True,TEAL)
     text(x+10,221,166,label,22,color=GRAY)
 
-# Core idea: native text plus two cropped source views, with editable anchors.
-card(26,254,789,219)
+# Core idea: use Figure 1's original comparison artwork, excluding its result panels.
+card(26,254,789,270)
 section(42,267,'01','One entity. One persistent identity.',760)
-text(42,294,373,'Why visual reasoning drifts',31,True)
-for y,title,desc,fill in [
-    (315,'Text CoT','Implicit references can switch objects.',BG),
-    (359,'Coordinate CoT','A location alone does not track identity.',BG),
-    (403,'PinCoT / ours','Ground once; reuse the same entity ID.',MINT),
+image(ROOT/'assets/figure-1-cot-comparison.png',42,293,414,414*180.96/335.60)
+text(483,298,306,'Ground reasoning in\npersistent visual anchors.',33,True,TEAL,max_h=34)
+for y,title,desc in [
+    (341,'Text CoT','Implicit entity references can drift.'),
+    (382,'Coordinate CoT','Spatial coordinates alone do not preserve identity.'),
+    (429,'PinCoT / ours','Bind every step to an explicit, trackable entity.'),
 ]:
-    rect(42,y,373,39,fill,radius=2)
-    text(52,y+4,353,title,27,True,TEAL if fill==MINT else INK)
-    text(52,y+21,353,desc,24,color=GRAY)
-text(446,294,157,'VIEW 0',24,True,TEAL)
-text(632,294,157,'VIEW 1',24,True,TEAL)
-image(ROOT/'assets/view-0.png',446,310,157,118)
-image(ROOT/'assets/view-1.png',632,310,157,118)
-arrow(608,367,626)
-for x,px,py in [(446,.634,.576),(632,.844,.706)]:
-    circle(x+157*px,310+118*py,4)
-    rect(x+6,316,72,14,TEAL,radius=1)
-    text(x+8,317,68,'obj_01',24,True,WHITE,align='center')
-text(446,434,348,'Same microwave → same obj_01',27,True,TEAL)
-text(446,450,348,'Name + ID + view + point = reasoning anchor',23,color=GRAY)
+    text(483,y,306,title,27,True,TEAL if 'ours' in title else INK)
+    text(483,y+16,306,desc,25,color=GRAY,max_h=27)
+text(483,481,306,'Name + ID + view + point',27,True,TEAL)
+text(483,499,306,'Original comparison: paper Figure 1 (left).',21,color=GRAY)
 
-# Methods, left column.
-card(26,487,384,286)
-section(42,502,'02','From data to RoboPIN')
-text(42,529,352,'Automated PIN-170K construction',27,True,TEAL)
-for idx,(y,title,desc) in enumerate([
-    (548,'Semantic parsing','Qwen3-VL-32B extracts task-relevant entities.'),
-    (591,'Point grounding','Florence-2 + SAM 2.1; reverse verification.'),
-    (634,'PinCoT generation','Grounded traces + rule-based quality filtering.'),
-]):
-    rect(42,y,352,36,BG,radius=2)
-    text(50,y+4,23,str(idx+1),29,True,TEAL)
-    text(73,y+3,313,title,27,True)
-    text(73,y+19,313,desc,22,color=GRAY)
-    if idx<2:
-        line(218,y+37,218,y+42,TEAL,2)
-text(42,687,352,'Three-stage post-training',28,True,TEAL)
-for i,(name,desc) in enumerate([('SFT','Embodied\nknowledge'),('CoT-SFT','Structured\nreasoning'),('RFT / GRPO','Process\nalignment')]):
-    x=42+i*122
-    rect(x,706,108,47,MINT,radius=2)
-    text(x+4,712,100,name,25,True,TEAL,align='center')
-    text(x+4,729,100,desc,22,color=GRAY,align='center',leading=1.05)
-    if i<2:arrow(x+111,729,x+120)
+# A full-width Figure 2 keeps the original source images and pipeline legible.
+card(26,538,789,239)
+section(42,551,'02','From data to RoboPIN',760)
+image(ROOT/'assets/figure-2-data-pipeline.png',70,573,700,700*110.12/493.65)
+text(42,738,168,'Three-stage\npost-training',25,True,TEAL,leading=1.1)
+for i,(name,desc) in enumerate([('SFT','Embodied knowledge'),('CoT-SFT','Structured reasoning'),('RFT / GRPO','Process alignment')]):
+    x=225+i*195
+    rect(x,735,179,30,MINT,radius=2)
+    text(x+4,738,171,name,25,True,TEAL,align='center')
+    text(x+4,752,171,desc,22,color=GRAY,align='center')
+    if i<2:arrow(x+182,750,x+192)
 
-# Benchmark results, right column: editable table with precise source values.
-card(431,487,384,286)
-section(447,502,'03','Benchmark highlights')
-text(447,529,352,'RoboPIN 4B vs. Mimo-Embodied 7B',27,True,TEAL)
-rect(447,550,352,23,NAVY,radius=1)
-for x,w,t in [(453,145,'Benchmark'),(601,54,'7B'),(662,61,'4B / ours'),(737,57,'Δ pp')]:
-    text(x,556,w,t,23,True,WHITE,align='left' if x==453 else 'right')
+# Benchmark table and a compact process-supervision finding.
+card(26,791,384,250)
+section(42,804,'03','Results & process analysis')
+text(42,830,352,'RoboPIN 4B vs. Mimo-Embodied 7B',26,True,TEAL)
+rect(42,848,352,21,NAVY,radius=1)
+for x,w,t in [(48,145,'Benchmark'),(196,54,'7B'),(257,61,'4B / ours'),(332,57,'Δ pp')]:
+    text(x,853,w,t,23,True,WHITE,align='left' if x==48 else 'right')
 rows=[('EmbSpatial',76.2,83.1),('RoboSpatial',61.8,66.6),('CrossPoint',36.8,72.2),('BLINK · multi-view',26.3,72.9),('RoboRefit',82.3,89.0),('RoboAfford',69.8,72.8)]
 for i,(label,a,b) in enumerate(rows):
-    y=575+i*22
-    if i%2==0:rect(447,y-1,352,22,MINT if i==2 else BG)
-    text(453,y+3,148,label,24,bold=i==2)
-    text(601,y+3,54,f'{a:.1f}',26,align='right')
-    text(662,y+3,61,f'{b:.1f}',26,True,TEAL,align='right')
-    text(737,y+3,57,f'+{b-a:.1f}',25,True,TEAL,align='right')
-text(447,716,352,'Strong cross-view correspondence\nwith a smaller parameter budget.',28,True,max_h=30)
-text(447,752,352,'Selected results, Tables 1–2; Δ is percentage points.',21,color=GRAY)
-
-# Process analysis, left bottom.
-card(26,787,384,254)
-section(42,802,'04','Why process rewards help')
-text(42,830,352,'Reward the process and the answer.',27,True,TEAL)
-rect(42,850,352,35,MINT,radius=2)
-text(50,857,336,'Format + consistency + pin + accuracy',25,True,TEAL,align='center')
-text(42,897,352,'Cross-step identity coverage · EmbSpatial',25,True)
-for y,label,value,color in [(921,'w/o RFT',18.8,BLUE),(946,'RoboPIN',99.9,TEAL)]:
-    text(42,y,85,label,24,bold=label=='RoboPIN',color=color)
-    rect(132,y+1,202,10,BG,radius=1)
-    rect(132,y+1,202*value/100,10,color,radius=1)
-    text(341,y-1,53,f'{value:.1f}%',25,True,color,align='right')
-text(42,974,352,'RFT enforces persistent ID reuse, beyond\nlocalizing anchors correctly.',27,True,max_h=28)
-text(42,1015,352,'Anchor correctness: 89.1%   |   Table 7',23,color=GRAY)
+    y=872+i*18
+    if i%2==0:rect(42,y-1,352,18,MINT if i==2 else BG)
+    text(48,y+2,148,label,24,bold=i==2)
+    text(196,y+2,54,f'{a:.1f}',26,align='right')
+    text(257,y+2,61,f'{b:.1f}',26,True,TEAL,align='right')
+    text(332,y+2,57,f'+{b-a:.1f}',25,True,TEAL,align='right')
+text(42,985,352,'Selected results, Tables 1–2; Δ in percentage points.',21,color=GRAY)
+rect(42,1001,352,28,MINT,radius=2)
+text(50,1004,336,'Cross-step ID coverage: 18.8% → 99.9%',25,True,TEAL)
+text(50,1018,336,'Without RFT → RoboPIN · EmbSpatial, Table 7',21,color=GRAY)
 
 # Real-world validation, right bottom.
-card(431,787,384,254)
-section(447,802,'05','Zero-shot robot transfer')
+card(431,791,384,250)
+section(447,806,'04','Zero-shot robot transfer')
 text(447,830,352,'xArm · static + wrist RGB cameras',26,True,TEAL)
 image(ROOT/'assets/robot-demo.png',447,850,352,108)
 text(447,966,352,'Successful executions / 20 per task',23,True,color=GRAY)
@@ -263,8 +230,8 @@ for item in audit:
 c.showPage();c.save()
 slide.notes_slide.notes_text_frame.text=(
     'A0 portrait (841 × 1189 mm), verified against the ACM Multimedia 2026 presenter guidelines. '
-    'Text, bars, tables, nodes and pins are editable; the logos are separate replaceable images. '
-    'Scene/robot photographs are cropped from the supplied paper. '
+    'Text, the results table and the training nodes are editable; original paper figures and logos are separate replaceable images. '
+    'Sections 01 and 02 use the original Figure 1 left comparison and Figure 2 upper data pipeline from the supplied paper. '
     'Tables 1–2: selected comparisons only. Table 7: cross-step identity coverage. '
     'Robot trial counts follow Table 3 and Section 4.3; the Table 3 caption says 5 trials and requires author confirmation. '
     'Conference and Tianjin University logos use unmodified official assets matching the supplied designs on a white header. '

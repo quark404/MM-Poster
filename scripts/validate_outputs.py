@@ -34,10 +34,19 @@ assert abs(prs.slide_width / 36000 - 841) < .01
 assert abs(prs.slide_height / 36000 - 1189) < .01
 slide = prs.slides[0]
 boxes=[s for s in slide.shapes if s.has_text_frame and s.text.strip()]
-assert len(boxes) >= 100, 'PowerPoint appears flattened'
-assert any('CrossPoint' in s.text for s in boxes)
+native_text = '\n'.join(s.text for s in boxes)
+for item in ['CrossPoint', 'EmbSpatial', 'RoboRefit', 'SFT', 'CoT-SFT', 'RFT / GRPO', '18.8% → 99.9%']:
+    assert item in native_text, f'Expected editable content is missing: {item}'
 config = json.loads((root / 'poster_config.json').read_text())
 embedded = {hashlib.sha256(s.image.blob).hexdigest() for s in slide.shapes if s.shape_type == 13}
+paper_figures=['assets/figure-1-cot-comparison.png','assets/figure-2-data-pipeline.png']
+for asset in paper_figures:
+    assert hashlib.sha256((root/asset).read_bytes()).hexdigest() in embedded, f'Original paper figure missing: {asset}'
+    from PIL import Image
+    with Image.open(root/asset) as im:
+        ratio=im.width/im.height
+    matching=[s for s in slide.shapes if s.shape_type == 13 and hashlib.sha256(s.image.blob).hexdigest()==hashlib.sha256((root/asset).read_bytes()).hexdigest()]
+    assert all(abs((s.width/s.height)/ratio-1)<.005 for s in matching), f'Figure stretched: {asset}'
 logo_assets=[]
 for key in ['mm_logo_file', 'tju_logo_file']:
     asset = config.get(key)
@@ -53,6 +62,12 @@ for s in slide.shapes:
 with ZipFile(out / 'RoboPIN_A0_editable.pptx') as z:
     assert z.testzip() is None
 page.get_pixmap(matrix=fitz.Matrix(.62,.62)).save(out / 'RoboPIN_preview.png')
+mm=72/25.4
+for name, bounds in [
+    ('detail-results.png', (26,791,410,1041)),
+    ('detail-original-figures.png', (26,254,815,777)),
+]:
+    page.get_pixmap(matrix=fitz.Matrix(.75,.75),clip=fitz.Rect(*(v*mm for v in bounds))).save(out/name)
 report={
     'pdf_pages': len(doc), 'page_mm': size_mm, 'orientation': 'portrait',
     'embedded_fonts': fonts, 'editable_text_boxes': len(boxes),
@@ -60,6 +75,8 @@ report={
     'page_bounds': 'passed', 'pptx_archive_integrity': 'passed',
     'visual_review': 'PDF preview inspected; PowerPoint not rendered in Office in this environment',
     'embedded_logo_assets': logo_assets,
+    'embedded_original_paper_figures': paper_figures,
+    'paper_figure_aspect_ratios': 'preserved',
     'header_background': 'white',
     'intentional_placeholders': ['paper/code QR'],
 }

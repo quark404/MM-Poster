@@ -29,7 +29,8 @@ Author ordering follows the paper's ACM reference-format block on page 2.
 |---|---|---|
 | Model size, dataset size, benchmark count | Abstract, pp. 1–2 | 4B parameters; PIN-170K; 14 benchmarks |
 | Persistent identity anchor | Section 3.1, pp. 3–4 | Name, identity, view, normalized point |
-| Camera-view example | Figure 2, p. 3 | Microwave `obj_01`, view 0 `[634,576]`, view 1 `[844,706]`; image crops and editable point overlays |
+| Section 01 original artwork | Figure 1, p. 1 | Original left-hand comparison of Text CoT, Coord CoT and PinCoT; right-side benchmark and robot panels excluded |
+| Section 02 original artwork | Figure 2, p. 3 | Original upper data-construction pipeline, with source images, model names, grounding, verification and filtering retained |
 | Data pipeline | Section 3.2 | Qwen3-VL-32B-Instruct → Florence-2 + SAM 2.1 → grounded generation and filtering |
 | Training | Section 3.3 | SFT → CoT-SFT → RFT / GRPO |
 | Reward components | Equation 1 / Section 3.3 | Format, consistency, pin, accuracy; no fixed weights asserted |
@@ -40,7 +41,7 @@ Author ordering follows the paper's ACM reference-format block on page 2.
 | Robot results | Table 3 / Section 4.3, p. 6 | 20/20 spatial, 14/20 multi-view, 11/20 long-horizon |
 | Robot photographs | Figure 3, p. 8 | First two task rows; image-based figure labels are inherited from the paper |
 
-Precise crop coordinates in source PDF points are recorded in `assets/crop-provenance.json`. Crops are rendered at 5× PDF point resolution; resampling does not add detail beyond the source images. Most typography and all quantitative chart/table elements remain vector in the PDF and editable in the PowerPoint.
+Precise crop coordinates in source PDF points are recorded in `assets/crop-provenance.json`. Crops are rendered at 5× PDF point resolution; resampling does not add detail beyond the source images. The two original paper figures are replaceable image objects in PowerPoint, with their internal lettering preserved as supplied. Surrounding typography, the three-stage training flow and results table remain vector in the PDF and editable in PowerPoint. Section 02 now spans the page width to keep the original pipeline readable. Process coverage is retained in the results card; the robot evaluation is renumbered as Section 04.
 
 ## Author confirmation items
 

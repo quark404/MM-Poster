@@ -7,6 +7,8 @@ import fitz
 root = Path(__file__).resolve().parents[1]
 doc = fitz.open(root / 'assets/paper.pdf')
 crops = {
+    'figure-1-cot-comparison': (0, (53.80, 337.88, 389.40, 518.84)),
+    'figure-2-data-pipeline': (2, (57.83, 84.48, 551.48, 194.60)),
     'view-0': (2, (60.82, 229.00, 120.23, 275.05)),
     'view-1': (2, (124.20, 229.00, 180.32, 275.05)),
     'robot-demo': (7, (53.80, 83.69, 558.20, 238.4)),
@@ -19,4 +21,4 @@ for name, (page, box) in crops.items():
     name: {'page': page+1, 'bbox_pdf_points': box}
     for name, (page, box) in crops.items()
 }, indent=2))
-print('Extracted two camera views and the robot demonstration from the supplied PDF.')
+print('Extracted the original CoT comparison, data pipeline, camera views and robot demonstration.')

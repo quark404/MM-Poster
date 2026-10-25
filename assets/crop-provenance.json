@@ -1,4 +1,22 @@
 {
+  "figure-1-cot-comparison": {
+    "page": 1,
+    "bbox_pdf_points": [
+      53.8,
+      337.88,
+      389.4,
+      518.84
+    ]
+  },
+  "figure-2-data-pipeline": {
+    "page": 3,
+    "bbox_pdf_points": [
+      57.83,
+      84.48,
+      551.48,
+      194.6
+    ]
+  },
   "view-0": {
     "page": 3,
     "bbox_pdf_points": [
