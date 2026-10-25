@@ -7,11 +7,13 @@
   "orientation": "portrait",
   "embedded_fonts": [
     "AAAAAA+DejaVuSans-Bold",
-    "AAAAAA+DejaVuSans"
+    "AAAAAA+DejaVuSans",
+    "AAAAAA+DejaVuSansMono"
   ],
-  "editable_text_boxes": 105,
-  "pptx_shapes": 162,
+  "editable_text_boxes": 75,
+  "pptx_shapes": 128,
   "source_value_checks": "passed",
+  "native_text_collisions": "none",
   "page_bounds": "passed",
   "pptx_archive_integrity": "passed",
   "visual_review": "PDF preview inspected; PowerPoint not rendered in Office in this environment",
@@ -28,6 +30,7 @@
   "aggregate_chart_values": "verified against paper Figure 1 / Tables 1\u20133",
   "old_metric_cards": "removed",
   "header_background": "white",
+  "design": "Paper2Poster skill-guided editorial layout; two rendered iterations",
   "intentional_placeholders": [
     "paper/code QR"
   ]

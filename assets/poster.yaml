@@ -1,0 +1,18 @@
+# A0 portrait; venue constraints override the upstream landscape default.
+main_text_font_size: 28
+section_title_font_size: 34
+poster_title_font_size: 46
+poster_author_font_size: 24
+title_text_color: [16, 43, 70]
+title_fill_color: null
+main_text_color: [24, 51, 75]
+main_text_fill_color: null
+section_title_vertical_align: bottom
+section_title_symbol: ""
+# Additional settings consumed by this repository's deterministic renderer.
+robopin:
+  width_mm: 841
+  height_mm: 1189
+  accent_rgb: [0, 126, 135]
+  paper_background_rgb: [255, 255, 255]
+  baseline_chart_colors: ["#CFD9DF", "#AEBEC9", "#7E98AB"]

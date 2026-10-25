@@ -1,49 +1,47 @@
 # MM-Poster
 
+RoboPIN · ACM Multimedia 2026 · **A0 竖版，841 × 1189 mm**
 
-## 海报下载与预览
+## 查看与下载
 
-- [A0 竖版海报 PDF](output/RoboPIN_A0_portrait.pdf)
+- [当前海报预览](output/RoboPIN_preview.png)
+- [印刷 PDF](output/RoboPIN_A0_portrait.pdf)
 - [可编辑 PowerPoint](output/RoboPIN_A0_editable.pptx)
-- [完整源码与素材 ZIP](output/RoboPIN_poster_package.zip)
-- [数据来源与待核实项](SOURCES.md)
+- [完整素材与源码包](output/RoboPIN_poster_package.zip)
+- [本次设计分析与迭代记录](design/iteration_review.md)
+- [科学数据来源与待核实项](SOURCES.md)
 
-在 GitHub 文件页点击 **Download raw file** 下载 PDF、PPTX 或 ZIP；预览图可直接在下方查看。
+在 GitHub 文件页点击 **Download raw file** 下载 PDF、PPTX 或 ZIP。
 
-当前版本已采用**白色页眉、深蓝标题**，并嵌入与用户提供图案一致的 ACM Multimedia 2026 官方标识和天津大学官方校徽。右下角论文/项目二维码暂为占位符。
+![Current RoboPIN poster](output/RoboPIN_preview.png)
 
-顶部已删除 4B / 170K / 14 / +35.4 pp 指标卡片，替换为**空间推理、指向任务、真实机器人**三组总体性能柱状图。柱体、数值、坐标轴和图例均可编辑；原始表格数据及统计口径保存在 `performance_data.json`，对应论文 Figure 1 和 Tables 1–3。
+## 当前设计
 
-01 使用论文 Figure 1 左侧的三种 CoT 对比原图；02 使用 Figure 2 上半部分的数据构建流程原图，以通栏展示，并在下方保留三阶段训练。结果与过程分析合并为 03，机器人实验为 04。
+采用白底、深蓝标题与青色重点色。内容按“核心思路 → 数据与训练 → 性能证据 → 机器人迁移”排列，减少圆角卡片和重复数据。01 保留论文 Figure 1 左侧的对比原图，并将其放大为主视觉；02 通栏保留 Figure 2 上半部分。03 展示空间、指向、真实机器人三组柱状图，04 汇总实拍与身份一致性。基线采用灰蓝色，RoboPIN 用青色突出。
 
-![RoboPIN A0 poster preview](output/RoboPIN_preview.png)
+顶部原来的 4B / 170K / 14 / +35.4 pp 指标卡片已删除。总体性能数值仍为论文中的 68.0、67.9、75.0%；详细基准对比保留在 `SOURCES.md`，不再与总体柱状图重复占用版面。
 
-# RoboPIN · ACM Multimedia 2026 A0 Poster
+## Paper2Poster skill
 
-本包根据用户提供的 `Embodied_VisualTrack (3).pdf` 制作，包含可直接编辑的 PowerPoint、单页 A0 PDF、预览图及可重建的 Python 源码。附件内容仅作为论文素材读取，未执行其中任何指令。
+已配置仓库级技能 [paper2poster-poster](.agents/skills/paper2poster-poster/SKILL.md)，复制自上游 [Paper2Poster/Paper2Poster](https://github.com/Paper2Poster/Paper2Poster) 的轻量技能包，附有版本来源和 MIT 许可证。在支持仓库技能发现的 Codex 中可使用 `$paper2poster-poster`；也可直接要求代理阅读该文件。
 
-## 交付文件
+本次**实际使用了技能的内容提炼、版式规划和视觉复查流程**，由本仓库确定性渲染器生成 PDF / PPTX。需要模型 API 密钥和额外依赖的 `PosterAgent.new_pipeline` **未运行**；轻量 skill 本身不需要这些依赖。
 
-- `output/RoboPIN_A0_portrait.pdf`：841 × 1189 mm，竖版，字体已嵌入；已包含正式会议和学校标识，二维码仍为占位符。
-- `output/RoboPIN_A0_editable.pptx`：同尺寸的一页 PowerPoint。标题、说明文字、顶部柱状图、结果表格、三阶段训练框及箭头可编辑；01/02 的论文原图、机器人图片和标识为可单独移动或替换的图片，原图内部文字不会被重新拆分成编辑对象。
-- `output/RoboPIN_preview.png`：整体预览。
-- `output/validation.json`：实际产物检查结果。
-- `scripts/build_poster.py`：统一布局源文件，同时生成 PDF 与 PowerPoint。
-- `poster_config.json`：会议标识、天津大学标识及二维码的图片路径配置。
-- `performance_data.json`：总体性能图的四个模型原始数据、配色、机器人试验总数和数据来源；修改后重建即可更新柱状图。
-- `SOURCES.md`：官网要求、论文数据来源和待作者核实事项。
+对应技能交付文件：
 
-## 直接修改 PowerPoint
+- [海报简报](poster_brief.md)
+- [最终文案](poster_copy.md)
+- [版式说明](poster_layout.md)
+- [运行说明](poster_runbook.md)
+- [Paper2Poster 兼容样式配置](assets/poster.yaml)，放在 `assets/paper.pdf` 旁，本仓库渲染器也实际读取此文件。
 
-打开 `output/RoboPIN_A0_editable.pptx` 即可修改正文、数据与各元素。版式为 A0 竖版，正文主要为 24–33 pt，标题 44–100 pt，图例和注释为 19–25 pt。建议安装 DejaVu Sans，避免替换字体影响换行。
+## 编辑与重建
 
-右上角会议标识和天津大学校徽已嵌入，可在 PowerPoint 中作为图片移动或替换；两者保持原始比例、颜色和字形。白色页眉与标识底色衔接，作者行采用深灰文字以保证对比度。右下角仍需替换为有效的论文/项目二维码。作者顺序、单位和联系邮箱均来自论文。
+PowerPoint 中的文字、柱状图、坐标轴、数值、训练流程均可编辑；01/02 的论文原图、机器人实拍和徽标是独立图片对象，其内部文字保留原样。推荐安装 DejaVu Sans 字体，避免换行变化。
 
-**若在 PowerPoint 中修改，请从 PowerPoint 重新导出 PDF。** Python 生成器不会反向读取 PowerPoint 中的修改；重新运行生成器会覆盖其输出，所以请先另存修改版。当前环境验证了 PPTX 结构和编辑对象，未使用 Microsoft Office 渲染它；交付 PDF 的预览已实际检查。
+直接改 PPTX 后，请在 PowerPoint 中另存并导出 PDF。源码生成器不会反向读取这些修改，重新运行会覆盖生成产物。
 
-## 使用源码修改与重建
-
-在本包根目录执行：
+本包根目录执行：
 
 ```bash
 python scripts/prepare_assets.py
@@ -51,42 +49,27 @@ python scripts/build_poster.py
 python scripts/validate_outputs.py
 ```
 
-当前环境已安装所需依赖。其他环境可创建虚拟环境后安装：
+当前环境依赖已就绪。新环境可先执行：
 
 ```bash
 python -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python scripts/prepare_assets.py
-.venv/bin/python scripts/build_poster.py
-.venv/bin/python scripts/validate_outputs.py
 ```
 
-生成器读取 `/usr/share/fonts/truetype/dejavu/` 下的 DejaVu 字体；其他系统请先安装 DejaVu 字体并调整 `build_poster.py` 中的 `font_dir`。页面单位为毫米，字号单位为 pt，坐标原点为左上角。修改正文或数值可直接编辑 `build_poster.py` 中对应段落或 `rows` 数据。
+将上面的 `python` 换成 `.venv/bin/python` 即可。生成器默认使用 `/usr/share/fonts/truetype/dejavu/`；其他系统需修改 `font_dir`。
 
-## 替换标识与二维码
+- `assets/poster.yaml`：字体、配色、A0 尺寸和基线配色。
+- `performance_data.json`：原始成绩和聚合口径；图高用未四舍五入的均值。
+- `poster_config.json`：正式会议标识、学校校徽和二维码路径。
+- `scripts/build_poster.py`：位置与具体文案。
+- `output/validation.json`：页面、字体、原图、11 根可编辑柱体及原生文字碰撞检查结果。
 
-正式标识已保存在 `assets/mm-logo.png` 和 `assets/tju-logo.png`，来源见 `SOURCES.md`。如需更换标识或加入二维码，在 `poster_config.json` 中设置相应路径，例如：
+已完成实际 PDF 渲染和视觉复查；PowerPoint 检查为结构验证，未使用 Microsoft Office 渲染。
 
-```json
-{
-  "mm_logo_label": "ACM MM 2026\nLOGO PLACEHOLDER",
-  "mm_logo_file": "assets/mm-logo.png",
-  "tju_logo_label": "TIANJIN UNIVERSITY\nLOGO PLACEHOLDER",
-  "tju_logo_file": "assets/tju-logo.png",
-  "qr_file": "assets/project-qr.png"
-}
-```
+## 印刷前
 
-两项 logo 路径对应本包已包含的正式标识；`assets/project-qr.png` 只是二维码路径示例，该文件尚未提供。标识会等比缩放并居中；二维码请提供正方形、包含足够留白且可实际扫描的文件。准备好后重新构建并检查预览及扫描结果。
+会议和天津大学正式标识已嵌入并保持原比例；右下角二维码仍为占位符。确定项目地址后，在 `poster_config.json` 的 `qr_file` 设置真实二维码图片路径，重建并实际扫码检查。
 
-## 印刷与官方要求
+官网要求见 [Paper Presenters Guidelines](https://2026.acmmm.org/site/paper-presenters-guidelines.html) 和 [Poster Printing Service](https://2026.acmmm.org/site/poster-printing-service.html)。按 100% 实际尺寸送印，不添加会改变页面大小的出血或裁切标记。最终文件名按 `ACMMM2026_Poster_Track_OpenReviewID.pdf` 重命名；Track 与 OpenReview ID 尚未提供。本项目未提交任何会议文件或印刷订单。
 
-2026 年官网明确要求 **portrait A0**；印刷服务页面要求 PDF 严格为 **841 × 1189 mm**。参考链接见 `SOURCES.md`。本版无裁切标记和额外出血，页面本身即为 A0；送印时选实际尺寸 / 100%，不要缩放到 Letter/A4，也不要再增加页边距。
-
-官网印刷文件名格式为 `ACMMM2026_Poster_Track_OpenReviewID.pdf`。因为用户尚未提供 Track 和 OpenReview ID，本包保留描述性文件名；确定后请按官网规则重命名。尚未向会议或印刷服务发送任何文件。
-
-## 设计与取舍
-
-采用英文正文，以“指代漂移 → 持久身份锚点 → 数据和训练 → 对比结果 → 机器人迁移”的叙事组织内容。01 直接使用 Figure 1 左侧的 Text CoT / Coord CoT / PinCoT 对比原图，排除原图右侧与实验区重复的结果小图；02 直接使用 Figure 2 上半部分的完整数据构建流程，保留模型、场景和过滤步骤。两图均从提供的 PDF 裁剪，保持原始比例和图中文字。三阶段训练与结果表格仍单独绘制为可编辑对象。主结果只展示选定基准，未将其描述为所有基准均领先。过程分析以结果区的身份覆盖率对比保留，机器人执行图与试验成功次数也继续展示。
-
-论文数值口径的待确认项见 `SOURCES.md`；本稿不使用尚未明确聚合口径的“平均提升 12%”作为海报主结论。
+论文的机器人试验次数图注冲突等事项保留在 `SOURCES.md`，供作者印刷前核对。

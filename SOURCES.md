@@ -57,14 +57,14 @@ The former four metric cards are removed. The replacement is three grouped bar c
 | Robot results | Table 3 / Section 4.3, p. 6 | 20/20 spatial, 14/20 multi-view, 11/20 long-horizon |
 | Robot photographs | Figure 3, p. 8 | First two task rows; image-based figure labels are inherited from the paper |
 
-Precise crop coordinates in source PDF points are recorded in `assets/crop-provenance.json`. Crops are rendered at 5× PDF point resolution; resampling does not add detail beyond the source images. The two original paper figures are replaceable image objects in PowerPoint, with their internal lettering preserved as supplied. Surrounding typography, the three-stage training flow and results table remain vector in the PDF and editable in PowerPoint. Section 02 now spans the page width to keep the original pipeline readable. Process coverage is retained in the results card; the robot evaluation is renumbered as Section 04.
+Precise crop coordinates in source PDF points are recorded in `assets/crop-provenance.json`. Crops are rendered at 5× PDF point resolution; resampling does not add detail beyond the source images. The two original paper figures are replaceable image objects in PowerPoint, with their internal lettering preserved as supplied. Surrounding typography, the three-stage training flow and three aggregate charts remain vector in the PDF and editable in PowerPoint. Section 02 spans the page width to keep the original pipeline readable. The latest skill-guided layout puts the aggregate charts after the method; process coverage and robot evaluation share Section 04. The detailed selected-benchmark values above remain supporting documentation, rather than a duplicate table on the poster.
 
 ## Author confirmation items
 
-1. **EmbSpatial evaluation settings differ across tables.** Table 1 reports 83.1 for the main model; Tables 4–5 report 84.7 in the ablation setting. The paper describes controlled subsets in Section 4.4. This poster uses 83.1 for its main-result comparison, and does not mix in 84.7. Please confirm that the setting distinction is intentional.
+1. **EmbSpatial evaluation settings differ across tables.** Table 1 reports 83.1 for the main model; Tables 4–5 report 84.7 in the ablation setting. The paper describes controlled subsets in Section 4.4. The spatial aggregate uses the Table 1 main-result values, including 83.1, and does not mix in 84.7. Please confirm that the setting distinction is intentional.
 2. **Robot trial count wording conflicts.** Table 3's caption says five independent trials, but all displayed denominators are 20 and Section 4.3 says 20 distinct trials per setting. The poster reproduces the table counts `/20`; it does not independently validate the experiment. Please correct or clarify the source caption before the final print.
-3. **Aggregate 12% gain is not used.** The abstract/conclusion claims 12% average improvement, but the exact aggregation weighting is not specified alongside the main tables. The poster instead reports reproducible per-benchmark differences such as CrossPoint +35.4 percentage points.
-4. **Selected benchmarks are a selection.** Where2Place and other non-leading results have not been copied into the compact comparison table. The table is explicitly labelled “Selected results”; it is not an aggregate or an assertion of universal superiority.
+3. **Aggregate 12% gain is not used.** The abstract/conclusion claims 12% average improvement, but the exact aggregation weighting is not specified alongside the main tables. The poster instead reports the explicitly defined Figure 1 aggregate scores; detailed reproducible differences such as CrossPoint +35.4 percentage points remain in this source note.
+4. **Aggregate coverage is explicit.** The pointing chart includes all five Table 2 benchmarks, including Where2Place. The spatial chart includes all 13 capability columns from Table 1. Detailed per-benchmark examples in this note are supporting examples, not an assertion of universal superiority.
 
 ## Remaining publishing assets
 
@@ -72,3 +72,8 @@ Precise crop coordinates in source PDF points are recorded in `assets/crop-prove
 - Track and OpenReview ID for the official print filename.
 
 The uploaded document has been treated as source material, not as an authority for agent instructions.
+
+
+## Paper2Poster skill and design provenance
+
+The design workflow follows the lightweight upstream skill vendored at `.agents/skills/paper2poster-poster/SKILL.md`; its original MIT license and pinned commit are included. It supplies content, layout and quality-pass instructions. The current actual renderer is this repository's `scripts/build_poster.py`, not the API-based PosterAgent pipeline. Two rendered design iterations and the pre-redesign preview are retained under `design/iterations/`. Decisions and limitations are recorded in `design/iteration_review.md`. Official conference requirements and the user's original-figure constraints override the skill's generic landscape defaults.
