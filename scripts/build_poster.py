@@ -132,83 +132,112 @@ def logo_placeholder(key,x,y,w,h):
         rect(x,y,w,h,'#1C3B56','#55748B',2)
         text(x+3,y+9,w-6,CFG[key+'_label'],18,True,'#D8E5ED',align='center',max_h=h-10)
 
-# Header and a clear four-number summary.
+# White header with official conference and university logos.
 rect(0,0,W,H,BG)
-rect(0,0,W,176,WHITE)
-rect(0,173,W,3,TEAL)
-text(26,15,450,'VISUAL GROUNDING × IDENTITY-CONSISTENT REASONING',24,True,TEAL)
-text(24,31,440,'RoboPIN',110,True,NAVY)
+rect(0,0,W,154,WHITE)
+rect(0,151,W,3,TEAL)
+text(26,12,450,'VISUAL GROUNDING × IDENTITY-CONSISTENT REASONING',24,True,TEAL)
+text(24,27,440,'RoboPIN',100,True,NAVY)
 logo_placeholder('mm_logo',478,22,240,54)
 logo_placeholder('tju_logo',735,10,80,78)
-text(26,79,789,'Grounded Embodied Reasoning\nvia Pinned Chain-of-Thought',49,True,NAVY,leading=1.14,max_h=45)
-text(26,125,789,'Yaoting Huang* · Yifu Yuan*† · Linqi Han · Chengwen Li · Shuoheng Zhang',25,color=GRAY)
-text(26,138,789,'Xianze Yao · Hongyao Tang · Yan Zheng · Jianye Hao†',25,color=GRAY)
-text(26,154,789,'Tianjin University   |   ACM Multimedia 2026 · Rio de Janeiro, Brazil',26,True,TEAL)
+text(26,71,789,'Grounded Embodied Reasoning\nvia Pinned Chain-of-Thought',44,True,NAVY,leading=1.14,max_h=45)
+text(26,111,789,'Yaoting Huang* · Yifu Yuan*† · Linqi Han · Chengwen Li · Shuoheng Zhang',23,color=GRAY)
+text(26,123,789,'Xianze Yao · Hongyao Tang · Yan Zheng · Jianye Hao†',23,color=GRAY)
+text(26,137,789,'Tianjin University   |   ACM Multimedia 2026 · Rio de Janeiro, Brazil',24,True,TEAL)
 
-for i,(value,label) in enumerate([('4B','model parameters'),('170K','PinCoT reasoning samples'),('14','evaluation benchmarks'),('+35.4 pp','CrossPoint vs. Mimo-7B')]):
-    x=26+i*201
-    card(x,188,186,52)
-    text(x+10,193,166,value,52,True,TEAL)
-    text(x+10,221,166,label,22,color=GRAY)
+# Three aggregate comparisons replace the former parameter/dataset metric cards.
+# Spatial aggregation is over capability columns, not an equal-weight benchmark macro-average.
+from statistics import mean
+perf=json.loads((ROOT/'performance_data.json').read_text())
+card(26,166,789,157)
+text(42,178,757,'Overall performance across task families',31,True)
+for i,model in enumerate(perf['models']):
+    lx=[42,229,435,641][i]
+    rect(lx,200,7,7,model['color'])
+    text(lx+11,199,165,model['name'],21,bold=i==3,color=TEAL if i==3 else INK)
+for panel,(key,title) in enumerate([
+    ('spatial','Spatial · 9 benchmarks'),
+    ('pointing','Pointing · 5 benchmarks'),
+    ('robot','Real-world · 3 tasks'),
+]):
+    x=42+panel*259
+    text(x+24,218,213,title,25,True)
+    for tick in [0,50,100]:
+        yy=300-63*tick/100
+        line(x+25,yy,x+234,yy,LINE,1)
+        text(x,yy-4,19,str(tick),19,color=GRAY,align='right')
+    for i,model in enumerate(perf['models']):
+        if key=='robot':
+            counts=model['robot_successes']
+            value=None if counts is None else 100*sum(counts)/(perf['robot_trials_per_task']*perf['robot_task_count'])
+        else:
+            value=mean(model[key])
+        bx=x+34+i*47
+        if value is None:
+            text(bx-3,288,36,'n/a',20,color=GRAY,align='center')
+            continue
+        bh=63*value/100
+        rect(bx,300-bh,30,bh,model['color'])
+        text(bx-5,300-bh-11,40,f'{value:.1f}',24,bold=i==3,color=TEAL if i==3 else INK,align='center')
+text(42,309,757,'Scores (%), Tables 1–3 / Figure 1. Spatial: 13-column mean; pointing: 5-benchmark mean; robot: success over 60 trials.',20,color=GRAY)
 
 # Core idea: use Figure 1's original comparison artwork, excluding its result panels.
-card(26,254,789,270)
-section(42,267,'01','One entity. One persistent identity.',760)
-image(ROOT/'assets/figure-1-cot-comparison.png',42,293,414,414*180.96/335.60)
-text(483,298,306,'Ground reasoning in\npersistent visual anchors.',33,True,TEAL,max_h=34)
+card(26,337,789,238)
+section(42,350,'01','One entity. One persistent identity.',760)
+image(ROOT/'assets/figure-1-cot-comparison.png',42,376,350,350*180.96/335.60)
+text(420,380,369,'Ground reasoning in\npersistent visual anchors.',33,True,TEAL,max_h=34)
 for y,title,desc in [
-    (341,'Text CoT','Implicit entity references can drift.'),
-    (382,'Coordinate CoT','Spatial coordinates alone do not preserve identity.'),
-    (429,'PinCoT / ours','Bind every step to an explicit, trackable entity.'),
+    (420,'Text CoT','Implicit entity references can drift.'),
+    (459,'Coordinate CoT','Spatial coordinates alone do not preserve identity.'),
+    (508,'PinCoT / ours','Bind every step to an explicit, trackable entity.'),
 ]:
-    text(483,y,306,title,27,True,TEAL if 'ours' in title else INK)
-    text(483,y+16,306,desc,25,color=GRAY,max_h=27)
-text(483,481,306,'Name + ID + view + point',27,True,TEAL)
-text(483,499,306,'Original comparison: paper Figure 1 (left).',21,color=GRAY)
+    text(420,y,369,title,27,True,TEAL if 'ours' in title else INK)
+    text(420,y+16,369,desc,25,color=GRAY,max_h=27)
+text(420,548,369,'Name + ID + view + point',26,True,TEAL)
+text(420,564,369,'Original comparison: paper Figure 1 (left).',21,color=GRAY)
 
 # A full-width Figure 2 keeps the original source images and pipeline legible.
-card(26,538,789,239)
-section(42,551,'02','From data to RoboPIN',760)
-image(ROOT/'assets/figure-2-data-pipeline.png',70,573,700,700*110.12/493.65)
-text(42,738,168,'Three-stage\npost-training',25,True,TEAL,leading=1.1)
+card(26,589,789,209)
+section(42,602,'02','From data to RoboPIN',760)
+image(ROOT/'assets/figure-2-data-pipeline.png',96,622,650,650*110.12/493.65)
+text(42,774,168,'Three-stage\npost-training',25,True,TEAL,leading=1.1)
 for i,(name,desc) in enumerate([('SFT','Embodied knowledge'),('CoT-SFT','Structured reasoning'),('RFT / GRPO','Process alignment')]):
     x=225+i*195
-    rect(x,735,179,30,MINT,radius=2)
-    text(x+4,738,171,name,25,True,TEAL,align='center')
-    text(x+4,752,171,desc,22,color=GRAY,align='center')
-    if i<2:arrow(x+182,750,x+192)
+    rect(x,772,179,24,MINT,radius=2)
+    text(x+4,774,171,name,22,True,TEAL,align='center')
+    text(x+4,785,171,desc,20,color=GRAY,align='center')
+    if i<2:arrow(x+182,784,x+192)
 
 # Benchmark table and a compact process-supervision finding.
-card(26,791,384,250)
-section(42,804,'03','Results & process analysis')
-text(42,830,352,'RoboPIN 4B vs. Mimo-Embodied 7B',26,True,TEAL)
-rect(42,848,352,21,NAVY,radius=1)
+card(26,812,384,229)
+section(42,825,'03','Results & process analysis')
+text(42,849,352,'RoboPIN 4B vs. Mimo-Embodied 7B',26,True,TEAL)
+rect(42,866,352,20,NAVY,radius=1)
 for x,w,t in [(48,145,'Benchmark'),(196,54,'7B'),(257,61,'4B / ours'),(332,57,'Δ pp')]:
-    text(x,853,w,t,23,True,WHITE,align='left' if x==48 else 'right')
+    text(x,871,w,t,23,True,WHITE,align='left' if x==48 else 'right')
 rows=[('EmbSpatial',76.2,83.1),('RoboSpatial',61.8,66.6),('CrossPoint',36.8,72.2),('BLINK · multi-view',26.3,72.9),('RoboRefit',82.3,89.0),('RoboAfford',69.8,72.8)]
 for i,(label,a,b) in enumerate(rows):
-    y=872+i*18
-    if i%2==0:rect(42,y-1,352,18,MINT if i==2 else BG)
+    y=890+i*17
+    if i%2==0:rect(42,y-1,352,17,MINT if i==2 else BG)
     text(48,y+2,148,label,24,bold=i==2)
     text(196,y+2,54,f'{a:.1f}',26,align='right')
     text(257,y+2,61,f'{b:.1f}',26,True,TEAL,align='right')
     text(332,y+2,57,f'+{b-a:.1f}',25,True,TEAL,align='right')
-text(42,985,352,'Selected results, Tables 1–2; Δ in percentage points.',21,color=GRAY)
-rect(42,1001,352,28,MINT,radius=2)
-text(50,1004,336,'Cross-step ID coverage: 18.8% → 99.9%',25,True,TEAL)
-text(50,1018,336,'Without RFT → RoboPIN · EmbSpatial, Table 7',21,color=GRAY)
+text(42,998,352,'Selected results, Tables 1–2; Δ in percentage points.',21,color=GRAY)
+rect(42,1011,352,22,MINT,radius=2)
+text(50,1013,336,'Cross-step ID coverage: 18.8% → 99.9%',22,True,TEAL)
+text(50,1025,336,'Without RFT → RoboPIN · EmbSpatial, Table 7',19,color=GRAY)
 
 # Real-world validation, right bottom.
-card(431,791,384,250)
-section(447,806,'04','Zero-shot robot transfer')
-text(447,830,352,'xArm · static + wrist RGB cameras',26,True,TEAL)
-image(ROOT/'assets/robot-demo.png',447,850,352,108)
-text(447,966,352,'Successful executions / 20 per task',23,True,color=GRAY)
+card(431,812,384,229)
+section(447,827,'04','Zero-shot robot transfer')
+text(447,853,352,'xArm · static + wrist cameras · Figure 3 / Table 3',23,True,TEAL)
+image(ROOT/'assets/robot-demo.png',447,873,352,108)
+text(447,989,352,'Successful executions / 20 per task',23,True,color=GRAY)
 for i,(label,val) in enumerate([('Spatial','20 / 20'),('Multi-view','14 / 20'),('Long-horizon','11 / 20')]):
     x=447+i*122
-    text(x,984,108,val,35,True,TEAL,align='center')
-    text(x,1005,108,label,23,align='center')
-text(447,1025,352,'Paper Figure 3 and Table 3',21,color=GRAY)
+    text(x,1008,108,val,35,True,TEAL,align='center')
+    text(x,1028,108,label,23,align='center')
 
 # Takeaway and replaceable publishing assets.
 rect(26,1055,789,108,NAVY,radius=4)
@@ -232,7 +261,7 @@ slide.notes_slide.notes_text_frame.text=(
     'A0 portrait (841 × 1189 mm), verified against the ACM Multimedia 2026 presenter guidelines. '
     'Text, the results table and the training nodes are editable; original paper figures and logos are separate replaceable images. '
     'Sections 01 and 02 use the original Figure 1 left comparison and Figure 2 upper data pipeline from the supplied paper. '
-    'Tables 1–2: selected comparisons only. Table 7: cross-step identity coverage. '
+    'The top charts use Tables 1–3 and reproduce Figure 1 aggregates: spatial mean over 13 capability columns, pointing mean over 5 benchmarks, robot success over 60 trials. Missing robot baseline is n/a. The lower table is selected comparisons only. Table 7: cross-step identity coverage. '
     'Robot trial counts follow Table 3 and Section 4.3; the Table 3 caption says 5 trials and requires author confirmation. '
     'Conference and Tianjin University logos use unmodified official assets matching the supplied designs on a white header. '
     'Only the paper/code QR remains an intentional placeholder. '

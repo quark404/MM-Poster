@@ -9,8 +9,8 @@
     "AAAAAA+DejaVuSans-Bold",
     "AAAAAA+DejaVuSans"
   ],
-  "editable_text_boxes": 84,
-  "pptx_shapes": 120,
+  "editable_text_boxes": 105,
+  "pptx_shapes": 162,
   "source_value_checks": "passed",
   "page_bounds": "passed",
   "pptx_archive_integrity": "passed",
@@ -24,6 +24,9 @@
     "assets/figure-2-data-pipeline.png"
   ],
   "paper_figure_aspect_ratios": "preserved",
+  "editable_performance_bars": 11,
+  "aggregate_chart_values": "verified against paper Figure 1 / Tables 1\u20133",
+  "old_metric_cards": "removed",
   "header_background": "white",
   "intentional_placeholders": [
     "paper/code QR"

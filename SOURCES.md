@@ -25,6 +25,22 @@ HTML copies of the pages used are retained in `assets/`. No conference submissio
 **RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought**.
 Author ordering follows the paper's ACM reference-format block on page 2.
 
+## Overall performance charts
+
+The former four metric cards are removed. The replacement is three grouped bar charts, redrawn as editable vector shapes. All axes start at zero and use the same 0–100 scale. These reproduce the aggregate values already shown in the right-hand plot of paper Figure 1, with the calculation made explicit:
+
+| Model | Spatial reasoning | Pointing | Real-world robot success (%) |
+|---|---:|---:|---:|
+| Embodied-R1 (3B) | 52.4 | 65.6 | n/a |
+| RoboBrain2.0 (7B) | 55.1 | 51.8 | 30.0 |
+| Mimo-Embodied (7B) | 58.7 | 62.1 | 16.7 |
+| RoboPIN (4B) | 68.0 | 67.9 | 75.0 |
+
+- Spatial: arithmetic mean over **13 capability columns** spanning 9 benchmarks in Table 1. It is not an equal-weight average of 9 benchmark scores, because MV-RoboBench and BLINK each have multiple reported columns.
+- Pointing: arithmetic mean over all 5 benchmarks in Table 2.
+- Robot: sum of successful executions across 3 task types divided by 60 trials (20 per task), using Table 3 and Section 4.3. Embodied-R1 has no reported result in Table 3; its entry is `n/a`, not zero.
+- Values are rounded to one decimal for labels; bar heights use the unrounded means. Raw table values are stored in `performance_data.json`. The poster preserves model sizes in the chart legend to identify baselines, while removing the former standalone parameter-count card.
+
 | Poster item | Source | Values / treatment |
 |---|---|---|
 | Model size, dataset size, benchmark count | Abstract, pp. 1–2 | 4B parameters; PIN-170K; 14 benchmarks |

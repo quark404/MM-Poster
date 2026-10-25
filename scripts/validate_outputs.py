@@ -16,8 +16,13 @@ size_mm = [page.rect.width*25.4/72, page.rect.height*25.4/72]
 assert abs(size_mm[0]-841) < .01 and abs(size_mm[1]-1189) < .01
 assert page.rotation == 0
 pdf_text = page.get_text()
-for item in ['RoboPIN', '170K', '35.4', '72.2', '83.1', '99.9%', '18.8%', '20 / 20', '14 / 20', '11 / 20', 'PLACEHOLDER']:
+for item in ['RoboPIN', '35.4', '72.2', '83.1', '99.9%', '18.8%', '20 / 20', '14 / 20', '11 / 20', 'PLACEHOLDER']:
     assert item in pdf_text, f'Missing expected source value: {item}'
+for removed in ['model parameters','PinCoT reasoning samples','evaluation benchmarks','CrossPoint vs. Mimo-7B']:
+    assert removed not in pdf_text, f'Old metric card remains: {removed}'
+chart_text=page.get_text(clip=fitz.Rect(26*72/25.4,166*72/25.4,815*72/25.4,323*72/25.4))
+for value in ['52.4','55.1','58.7','68.0','65.6','51.8','62.1','67.9','30.0','16.7','75.0','n/a']:
+    assert value in chart_text, f'Aggregate chart value missing: {value}'
 for block in page.get_text('dict')['blocks']:
     for row in block.get('lines', []):
         for span in row['spans']:
@@ -33,6 +38,8 @@ assert len(prs.slides) == 1
 assert abs(prs.slide_width / 36000 - 841) < .01
 assert abs(prs.slide_height / 36000 - 1189) < .01
 slide = prs.slides[0]
+chart_bars=[s for s in slide.shapes if s.shape_type==1 and s.top/36000>=237 and (s.top+s.height)/36000<=300.01 and s.height/36000>1]
+assert len(chart_bars)==11, f'Expected 11 editable bars and an unreported baseline: found {len(chart_bars)}'
 boxes=[s for s in slide.shapes if s.has_text_frame and s.text.strip()]
 native_text = '\n'.join(s.text for s in boxes)
 for item in ['CrossPoint', 'EmbSpatial', 'RoboRefit', 'SFT', 'CoT-SFT', 'RFT / GRPO', '18.8% → 99.9%']:
@@ -64,8 +71,9 @@ with ZipFile(out / 'RoboPIN_A0_editable.pptx') as z:
 page.get_pixmap(matrix=fitz.Matrix(.62,.62)).save(out / 'RoboPIN_preview.png')
 mm=72/25.4
 for name, bounds in [
-    ('detail-results.png', (26,791,410,1041)),
-    ('detail-original-figures.png', (26,254,815,777)),
+    ('detail-results.png', (26,812,410,1041)),
+    ('detail-original-figures.png', (26,337,815,798)),
+    ('detail-performance.png', (26,166,815,323)),
 ]:
     page.get_pixmap(matrix=fitz.Matrix(.75,.75),clip=fitz.Rect(*(v*mm for v in bounds))).save(out/name)
 report={
@@ -77,6 +85,9 @@ report={
     'embedded_logo_assets': logo_assets,
     'embedded_original_paper_figures': paper_figures,
     'paper_figure_aspect_ratios': 'preserved',
+    'editable_performance_bars': len(chart_bars),
+    'aggregate_chart_values': 'verified against paper Figure 1 / Tables 1–3',
+    'old_metric_cards': 'removed',
     'header_background': 'white',
     'intentional_placeholders': ['paper/code QR'],
 }

@@ -1,0 +1,39 @@
+{
+  "sources": {
+    "spatial": "Paper Table 1: arithmetic mean over 13 capability columns from 9 benchmarks; reproduces Figure 1.",
+    "pointing": "Paper Table 2: arithmetic mean over 5 pointing benchmarks; reproduces Figure 1.",
+    "robot": "Paper Table 3: sum of successful executions divided by 60 trials (20 per task); missing baseline remains null."
+  },
+  "models": [
+    {
+      "name": "Embodied-R1 (3B)",
+      "color": "#E6B544",
+      "spatial": [35.2, 82.7, 67.4, 76.3, 47.4, 51.8, 25.2, 21.5, 26.5, 40.6, 50.0, 76.9, 79.8],
+      "pointing": [66.0, 69.5, 39.7, 85.6, 67.2],
+      "robot_successes": null
+    },
+    {
+      "name": "RoboBrain2.0 (7B)",
+      "color": "#A99CC3",
+      "spatial": [38.5, 85.8, 76.3, 75.3, 54.2, 57.5, 26.0, 21.0, 26.0, 48.1, 46.5, 80.4, 80.7],
+      "pointing": [41.0, 63.6, 32.5, 70.4, 51.5],
+      "robot_successes": [12, 1, 5]
+    },
+    {
+      "name": "Mimo-Embodied (7B)",
+      "color": "#86A5BD",
+      "spatial": [46.8, 88.8, 76.2, 54.6, 61.8, 62.0, 36.8, 21.1, 34.0, 26.3, 83.2, 77.6, 94.4],
+      "pointing": [46.9, 63.6, 48.0, 82.3, 69.8],
+      "robot_successes": [7, 0, 3]
+    },
+    {
+      "name": "RoboPIN (4B)",
+      "color": "#007E87",
+      "spatial": [44.0, 85.5, 83.1, 78.0, 66.6, 56.1, 72.2, 26.0, 35.5, 72.9, 89.5, 87.4, 87.1],
+      "pointing": [65.0, 62.0, 50.5, 89.0, 72.8],
+      "robot_successes": [20, 14, 11]
+    }
+  ],
+  "robot_trials_per_task": 20,
+  "robot_task_count": 3
+}

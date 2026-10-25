@@ -12,6 +12,8 @@
 
 当前版本已采用**白色页眉、深蓝标题**，并嵌入与用户提供图案一致的 ACM Multimedia 2026 官方标识和天津大学官方校徽。右下角论文/项目二维码暂为占位符。
 
+顶部已删除 4B / 170K / 14 / +35.4 pp 指标卡片，替换为**空间推理、指向任务、真实机器人**三组总体性能柱状图。柱体、数值、坐标轴和图例均可编辑；原始表格数据及统计口径保存在 `performance_data.json`，对应论文 Figure 1 和 Tables 1–3。
+
 01 使用论文 Figure 1 左侧的三种 CoT 对比原图；02 使用 Figure 2 上半部分的数据构建流程原图，以通栏展示，并在下方保留三阶段训练。结果与过程分析合并为 03，机器人实验为 04。
 
 ![RoboPIN A0 poster preview](output/RoboPIN_preview.png)
@@ -23,16 +25,17 @@
 ## 交付文件
 
 - `output/RoboPIN_A0_portrait.pdf`：841 × 1189 mm，竖版，字体已嵌入；已包含正式会议和学校标识，二维码仍为占位符。
-- `output/RoboPIN_A0_editable.pptx`：同尺寸的一页 PowerPoint。标题、说明文字、结果表格、三阶段训练框及箭头可编辑；01/02 的论文原图、机器人图片和标识为可单独移动或替换的图片，原图内部文字不会被重新拆分成编辑对象。
+- `output/RoboPIN_A0_editable.pptx`：同尺寸的一页 PowerPoint。标题、说明文字、顶部柱状图、结果表格、三阶段训练框及箭头可编辑；01/02 的论文原图、机器人图片和标识为可单独移动或替换的图片，原图内部文字不会被重新拆分成编辑对象。
 - `output/RoboPIN_preview.png`：整体预览。
 - `output/validation.json`：实际产物检查结果。
 - `scripts/build_poster.py`：统一布局源文件，同时生成 PDF 与 PowerPoint。
 - `poster_config.json`：会议标识、天津大学标识及二维码的图片路径配置。
+- `performance_data.json`：总体性能图的四个模型原始数据、配色、机器人试验总数和数据来源；修改后重建即可更新柱状图。
 - `SOURCES.md`：官网要求、论文数据来源和待作者核实事项。
 
 ## 直接修改 PowerPoint
 
-打开 `output/RoboPIN_A0_editable.pptx` 即可修改正文、数据与各元素。版式为 A0 竖版，字号主要为 24–33 pt，标题 49–110 pt，注释及二维码占位文字为 21–23 pt。建议安装 DejaVu Sans，避免替换字体影响换行。
+打开 `output/RoboPIN_A0_editable.pptx` 即可修改正文、数据与各元素。版式为 A0 竖版，正文主要为 24–33 pt，标题 44–100 pt，图例和注释为 19–25 pt。建议安装 DejaVu Sans，避免替换字体影响换行。
 
 右上角会议标识和天津大学校徽已嵌入，可在 PowerPoint 中作为图片移动或替换；两者保持原始比例、颜色和字形。白色页眉与标识底色衔接，作者行采用深灰文字以保证对比度。右下角仍需替换为有效的论文/项目二维码。作者顺序、单位和联系邮箱均来自论文。
 
