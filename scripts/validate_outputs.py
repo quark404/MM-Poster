@@ -20,7 +20,7 @@ for item in ['RoboPIN', '68.0', '67.9', '75.0', '99.9%', '18.8%', '20 / 20', '14
     assert item in pdf_text, f'Missing expected source value: {item}'
 for removed in ['model parameters','PinCoT reasoning samples','evaluation benchmarks','CrossPoint vs. Mimo-7B']:
     assert removed not in pdf_text, f'Old metric card remains: {removed}'
-chart_text=page.get_text(clip=fitz.Rect(20*72/25.4,868*72/25.4,412*72/25.4,1168*72/25.4))
+chart_text=page.get_text(clip=fitz.Rect(14*72/25.4,858*72/25.4,414*72/25.4,1155*72/25.4))
 for value in ['52.4','55.1','58.7','68.0','65.6','51.8','62.1','67.9','30.0','16.7','75.0','n/a']:
     assert value in chart_text, f'Aggregate chart value missing: {value}'
 for block in page.get_text('dict')['blocks']:
@@ -47,7 +47,7 @@ assert len(prs.slides) == 1
 assert abs(prs.slide_width / 36000 - 841) < .01
 assert abs(prs.slide_height / 36000 - 1189) < .01
 slide = prs.slides[0]
-chart_bars=[s for s in slide.shapes if s.shape_type==1 and s.left/36000<412 and s.top/36000>=975 and (s.top+s.height)/36000<=1075.01 and s.height/36000>1]
+chart_bars=[s for s in slide.shapes if s.shape_type==1 and s.left/36000<414 and s.top/36000>=971 and (s.top+s.height)/36000<=1054.01 and s.height/36000>1]
 assert len(chart_bars)==11, f'Expected 11 editable bars and an unreported baseline: found {len(chart_bars)}'
 boxes=[s for s in slide.shapes if s.has_text_frame and s.text.strip()]
 native_text = '\n'.join(s.text for s in boxes)
@@ -72,7 +72,8 @@ for key in ['mm_logo_file', 'tju_logo_file']:
 assert 'LOGO PLACEHOLDER' not in pdf_text, 'Outdated logo placeholder remains'
 assert not any('LOGO PLACEHOLDER' in s.text for s in boxes)
 header_pixel = page.get_pixmap(matrix=fitz.Matrix(.1,.1)).pixel(1,1)
-assert header_pixel == (255,255,255), 'Header should be white'
+assert min(header_pixel)>=230, 'Title corner should remain light for readability'
+assert hashlib.sha256((root/'assets/rio-wave-background.png').read_bytes()).hexdigest() in embedded, 'Decorative background is missing'
 for s in slide.shapes:
     assert s.left >= 0 and s.top >= 0 and s.left+s.width <= prs.slide_width+1 and s.top+s.height <= prs.slide_height+1, s.name
 with ZipFile(out / 'RoboPIN_A0_editable.pptx') as z:
@@ -80,9 +81,9 @@ with ZipFile(out / 'RoboPIN_A0_editable.pptx') as z:
 page.get_pixmap(matrix=fitz.Matrix(.62,.62)).save(out / 'RoboPIN_preview.png')
 mm=72/25.4
 for name, bounds in [
-    ('detail-results.png', (20,862,821,1168)),
-    ('detail-original-figures.png', (20,157,821,862)),
-    ('detail-performance.png', (20,862,412,1168)),
+    ('detail-results.png', (14,851,827,1160)),
+    ('detail-original-figures.png', (14,168,827,851)),
+    ('detail-performance.png', (14,851,414,1160)),
 ]:
     page.get_pixmap(matrix=fitz.Matrix(.75,.75),clip=fitz.Rect(*(v*mm for v in bounds))).save(out/name)
 report={
@@ -98,8 +99,8 @@ report={
     'editable_performance_bars': len(chart_bars),
     'aggregate_chart_values': 'verified against paper Figure 1 / Tables 1–3',
     'old_metric_cards': 'removed',
-    'header_background': 'white',
-    'design': 'User-reference layout: Motivation / Key Insight, full-width Method, Experimental / Qualitative Results',
+    'header_background': 'Light Rio skyline with white title corner',
+    'design': 'User AI mockup reconstruction: Rio art, gradient rounded panels, native icons, numbered callouts and footer waves',
     'intentional_placeholders': ['paper/code QR'],
 }
 (out / 'validation.json').write_text(json.dumps(report, indent=2))

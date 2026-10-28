@@ -1,15 +1,18 @@
-# Reference-aligned layout
+# AI mockup reconstruction layout
 
-All dimensions are millimetres on an 841 × 1189 mm portrait page.
+Target: the latest user-supplied RoboPIN AI mockup. Portrait A0 remains 841 × 1189 mm. The mockup supplies specific decoration, proportions and visual hierarchy, not scientific ground truth.
 
-- Header: y 13–145; title and authors left, MM logo above TJU seal right, both on white.
-- Top row: equal 392 mm columns at x 20 and 429. Teal title bands y 163–188. Motivation content y 201–528; Key Insight content y 200–530.
-- Motivation: original Figure 1 left comparison, width 367; two explicit source-grounded problem statements beneath.
-- Key Insight: original Figure 2 camera views side by side, persistent ID labels and original normalized point coordinates; concept and brief explanation; one clearly labelled paper/code QR placeholder.
-- Method: full-width title band x 20, y 540, width 801; original Figure 2 upper pipeline at x 32, y 579, width 777; editable training flow at y 773; method summary beneath at y 829.
-- Bottom row: equal paired title bands y 868–893. Experimental chart area x 20–412, y 906–1157. Qualitative area x 429–821, y 907–1164.
-- Quantitative: four-model legend, three 0–100 grouped charts; missing robot baseline is n/a. All 11 bars remain editable. Cross-step ID coverage below.
-- Qualitative: Figure 3 robot sequence across the panel; original Figure 4 reasoning examples below-left; per-task robot successes below-right.
-- Footer: full-width teal closing band at y 1170–1189, with one concise conclusion.
+| Region | Rectangle in mm (x, y, w, h) | Treatment |
+|---|---|---|
+| Motivation | 14, 175, 434, 359 | Wide left rounded white panel; gradient header, bulb icon, original Figure 1; two numbered blue callouts |
+| Key Insight | 456, 175, 371, 359 | Narrower right rounded panel; target badge, paired source views, blue mechanism card, mint insight card, dashed QR frame |
+| Method | 14, 544, 813, 304 | Full-width gradient header with gear icon; Figure 2, three training tiles and concluding sentence |
+| Experimental | 14, 858, 400, 297 | Clipboard badge; four-model legend, three grouped charts and ID-coverage callout |
+| Qualitative | 422, 858, 405, 297 | Plot badge; original robot execution and reasoning images; per-task success counts |
+| Footer | y 1160–1189 | Layered waves with a native white conclusion |
 
-The user reference supplies composition and section roles only. No character artwork, original scientific data or SDO text is reused. Earlier editorial iterations remain archived for comparison.
+The title is enlarged to 155 pt, with 41 pt paper subtitle. All official logos are original assets; the TJU image uses a circular presentation clip. Section fills use a horizontal teal-to-green gradient, with consistent card radii and faint cyan outlines. Icons and gradients are native PDF / PPTX elements.
+
+The decorative page asset `assets/rio-wave-background.png` contains only generated background art. It is not a flattened poster, does not contain scientific claims and does not replace the source figures. Source qualitative Figure 4 is fitted with its original aspect ratio rather than adopting AI-redrawn words or a distorted source image. Its lower caption is separated from the image.
+
+Model scores and axis limits remain unchanged. The printed document remains exactly A0; the raster mockup is not used as a print page.

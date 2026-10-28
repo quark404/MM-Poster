@@ -8,7 +8,7 @@ RoboPIN · ACM Multimedia 2026 · **A0 竖版，841 × 1189 mm**
 - [印刷 PDF](output/RoboPIN_A0_portrait.pdf)
 - [可编辑 PowerPoint](output/RoboPIN_A0_editable.pptx)
 - [完整素材与源码包](output/RoboPIN_poster_package.zip)
-- [当前参考布局分析](design/reference_alignment.md) · [此前设计迭代](design/iteration_review.md)
+- [当前视觉模板重建说明](design/styled_mockup_alignment.md) · [上一轮布局映射](design/reference_alignment.md) · [此前设计迭代](design/iteration_review.md)
 - [科学数据来源与待核实项](SOURCES.md)
 
 在 GitHub 文件页点击 **Download raw file** 下载 PDF、PPTX 或 ZIP。
@@ -17,19 +17,17 @@ RoboPIN · ACM Multimedia 2026 · **A0 竖版，841 × 1189 mm**
 
 ## 当前设计
 
-已根据用户提供的 SDO 海报截图重排，保留其分区逻辑和横向标题栏，使用 RoboPIN 的青色学术配色，排除所有人物与乐队装饰：
+当前版本以用户最新提供的 **RoboPIN AI 视觉稿**为具体模板，重建其渐变圆角标题栏、图标、分区比例、浅色提示卡、里约剪影与底部波浪。不是仅替换标题或沿用之前的平面分栏版。
 
-| 位置 | 分区 | RoboPIN 内容 |
-|---|---|---|
-| 顶部 | 标题、作者、单位、标识 | 白色页眉与官方 MM / TJU 标识 |
-| 左上 | Motivation | Figure 1 原图；指代漂移、推理—答案脱节 |
-| 右上 | Key Insight | 持久身份；双视角原图、统一 obj_01、论文/代码二维码占位 |
-| 中间通栏 | Our Method | Figure 2 原流程图；SFT → CoT-SFT → RFT；方法总结 |
-| 左下 | Experimental Results | 三组总体柱状图；过程一致性对比 |
-| 右下 | Qualitative Results | Figure 3 机器人执行、Figure 4 推理示例、任务成功次数 |
-| 底部 | 一句话结论 | Persistent visual anchors make embodied reasoning traceable. |
+- 页眉：放大 RoboPIN 字标；右侧会议标识、圆形天津大学校徽及校名。
+- 左上 Motivation：原论文对比图，带圆形编号的两条浅蓝提示。
+- 右上 Key Insight：双视角、浅蓝机制卡、浅绿 Our insight、虚线二维码占位。
+- 中间通栏 Method：原流程图、浅青训练卡、方法总结。
+- 底部：带图标的 Experimental Results / Qualitative Results；底部波浪上的一句结论。
 
-顶部没有恢复 4B / 170K / 14 等指标卡片。总体数值 68.0 / 67.9 / 75.0、11 根可编辑柱体和统计口径保持一致。详情见 [参考布局映射](design/reference_alignment.md)。
+装饰背景通过图像工具参考用户视觉稿生成，仅含里约剪影、浅色波浪与页边装饰；文字、图表、渐变、图标和卡片继续用独立对象绘制，科研图像均来自原论文。二维码仍为占位符。
+
+[当前版本](output/RoboPIN_preview.png) · [视觉重建说明](design/styled_mockup_alignment.md) · [上版对照](design/iterations/05-before-styled.png)
 
 ## Paper2Poster skill
 

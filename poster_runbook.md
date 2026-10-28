@@ -2,7 +2,7 @@
 
 ## Current layout
 
-The latest user-supplied poster screenshot overrides the earlier editorial grid. Five named sections follow its composition: Motivation, Key Insight, Our Method, Experimental Results, Qualitative Results. See `design/reference_alignment.md`. All source constraints, A0 dimensions and data checks still apply.
+The latest user-supplied RoboPIN AI mockup overrides the earlier SDO reference and editorial grid, including decorative Rio art, rounded gradients and icons. See `design/styled_mockup_alignment.md`. Five named sections follow its composition: Motivation, Key Insight, Our Method, Experimental Results, Qualitative Results. See `design/reference_alignment.md`. All source constraints, A0 dimensions and data checks still apply.
 
 ## What was actually run
 
