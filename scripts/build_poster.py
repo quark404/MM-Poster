@@ -134,115 +134,120 @@ def logo_placeholder(key,x,y,w,h):
         rect(x,y,w,h,'#1C3B56','#55748B',2)
         text(x+3,y+9,w-6,CFG[key+'_label'],18,True,'#D8E5ED',align='center',max_h=h-10)
 
-# A white editorial canvas, with one clear narrative and restrained rules.
+# Reference-aligned structure: paired motivation/insight, full method, paired results.
+def band(x,y,w,title):
+    rect(x,y,w,25,TEAL)
+    text(x+8,y+4,w-16,title,STYLE['section_title_font_size'],True,WHITE,align='center',max_h=17)
+
 rect(0,0,W,H,WHITE)
-text(30,15,421,'ACM MULTIMEDIA 2026  /  EMBODIED REASONING',22,True,TEAL)
-text(28,32,423,'RoboPIN',100,True,NAVY)
-logo_placeholder('mm_logo',476,27,244,54)
-logo_placeholder('tju_logo',738,11,73,76)
-text(30,80,781,'Grounded Embodied Reasoning\nvia Pinned Chain-of-Thought',STYLE['poster_title_font_size'],True,NAVY,leading=1.13,max_h=43)
-text(30,126,781,'Yaoting Huang* · Yifu Yuan*† · Linqi Han · Chengwen Li · Shuoheng Zhang',STYLE['poster_author_font_size'],color=GRAY)
-text(30,139,781,'Xianze Yao · Hongyao Tang · Yan Zheng · Jianye Hao†',STYLE['poster_author_font_size'],color=GRAY)
-text(30,156,781,'Tianjin University   ·   Rio de Janeiro, Brazil   ·   10–14 November 2026',25,True,TEAL)
-line(30,179,811,179,TEAL,2.5)
+text(20,13,560,'RoboPIN',77,True,NAVY)
+text(22,52,600,'Grounded Embodied Reasoning\nvia Pinned Chain-of-Thought',STYLE['poster_title_font_size'],True,NAVY,leading=1.12,max_h=34)
+text(22,90,690,'Yaoting Huang* · Yifu Yuan*† · Linqi Han · Chengwen Li · Shuoheng Zhang',STYLE['poster_author_font_size'],color=INK)
+text(22,103,690,'Xianze Yao · Hongyao Tang · Yan Zheng · Jianye Hao†',STYLE['poster_author_font_size'],color=INK)
+text(22,119,680,'Tianjin University · ACM Multimedia 2026 · Rio de Janeiro, Brazil',24,True,TEAL)
+text(22,135,650,'quark404@tju.edu.cn · yuanyf@tju.edu.cn   |   * Equal contribution   † Corresponding authors',19,color=GRAY)
+logo_placeholder('mm_logo',598,14,217,49)
+logo_placeholder('tju_logo',746,73,70,68)
 
-# 01: the original source comparison is the hero, with one focused explanation.
-section(30,197,'01','Reason with a persistent visual anchor')
-image(ROOT/'assets/figure-1-cot-comparison.png',30,232,484,484*180.96/335.60)
-rect(546,232,265,261,NAVY,radius=2)
-text(564,250,229,'THE CORE IDEA',23,True,'#90DED5')
-text(564,274,229,'One entity.\nOne persistent ID.',37,True,WHITE,leading=1.14,max_h=35)
-text(564,317,229,'a = (name, id, view, point)',21,color='#90DED5',mono=True)
-for y,title,desc in [
-    (343,'Introduce anchor','name · ID · view · point'),
-    (411,'Reuse identity','across steps and views'),
-]:
-    rect(564,y,229,44,'#1B3B54','#4B687D',2)
-    text(575,y+8,207,title,28,True,WHITE)
-    text(575,y+27,207,desc,25,color='#DEEBF2')
-line(678.5,391,678.5,406,'#90DED5',2.5)
-line(675,402,678.5,406,'#90DED5',2.5)
-line(682,402,678.5,406,'#90DED5',2.5)
-text(564,474,229,'Visual evidence stays traceable.',22,color='#90DED5')
+# Top-left: explicit motivation, grounded in the original comparison and introduction.
+band(20,163,392,'Motivation')
+image(ROOT/'assets/figure-1-cot-comparison.png',32,201,367,367*180.96/335.60)
+text(32,404,367,'Paper Figure 1 · comparing three CoT paradigms',20,color=GRAY)
+text(32,425,367,'1. Reference drift',26,True,TEAL)
+text(32,443,367,'Textual references can switch between similar objects during multi-step reasoning.',25,max_h=30)
+text(32,480,367,'2. Reasoning–answer misalignment',26,True,TEAL)
+text(32,498,367,'A correct intermediate analysis can still end on the wrong object, especially across views.',25,max_h=30)
 
-# 02: full-width original pipeline and a compact, editable training strip.
-section(30,516,'02','How RoboPIN learns to stay grounded')
-image(ROOT/'assets/figure-2-data-pipeline.png',40,552,761,761*110.12/493.65)
-text(30,742,145,'Three-stage\npost-training',25,True,TEAL,leading=1.1)
+# Top-right: the same visual entity maintains an identity across two views.
+band(429,163,392,'Key Insight: Persistent Identity')
+for file,x,px,py in [('view-0.png',446,.634,.576),('view-1.png',649,.844,.706)]:
+    text(x,200,147,'VIEW 0' if x==446 else 'VIEW 1',22,True,TEAL)
+    image(ROOT/'assets'/file,x,216,147,111)
+    circle(x+147*px,216+111*py,3.8)
+    rect(x+5,221,70,13,TEAL,radius=1)
+    text(x+7,222,66,'obj_01',23,True,WHITE,align='center')
+arrow(603,269,637)
+text(441,341,367,'Same entity. Same ID. Different views.',27,True,TEAL)
+text(441,367,367,'Reasoning anchor = name + ID + view + point.',26,True,max_h=27)
+text(441,405,367,'Introduce the anchor once; reuse its identity throughout the reasoning chain.',26,max_h=30)
+text(441,452,271,'Our insight',26,True,TEAL)
+text(441,471,271,'Persistent IDs connect visual grounding, intermediate steps and the final answer.',25,max_h=42)
+qr=CFG.get('qr_file')
+if qr and (ROOT/qr).is_file():
+    image(ROOT/qr,744,448,64,64)
+else:
+    rect(744,448,64,64,WHITE,LINE,1)
+    text(750,467,52,'QR\nPLACEHOLDER',17,True,GRAY,align='center',leading=1.4)
+text(738,519,76,'PAPER / CODE',18,True,GRAY,align='center')
+
+# Central full-width method, keeping the original source diagram.
+band(20,540,801,'Our Method: RoboPIN / PinCoT')
+image(ROOT/'assets/figure-2-data-pipeline.png',32,579,777,777*110.12/493.65)
+text(32,782,137,'Three-stage\npost-training',25,True,TEAL,leading=1.1)
 for i,(name,desc) in enumerate([('SFT','Embodied knowledge'),('CoT-SFT','Structured reasoning'),('RFT / GRPO','Process alignment')]):
-    x=195+i*207
-    rect(x,735,195,40,'#F1F6F7',radius=2)
-    text(x+5,741,185,name,27,True,TEAL,align='center')
-    text(x+5,759,185,desc,23,color=GRAY,align='center')
-    if i<2:arrow(x+198,755,x+205)
+    x=183+i*212
+    rect(x,773,199,40,'#EDF5F5',radius=2)
+    text(x+5,779,189,name,27,True,TEAL,align='center')
+    text(x+5,797,189,desc,23,color=GRAY,align='center')
+    if i<2:arrow(x+202,793,x+209)
+text(32,829,777,'PinCoT binds visual evidence to persistent identities. PIN-170K supplies structured traces; process rewards supervise grounding and identity consistency.',27,True,leading=1.16,max_h=30)
 
-# 03: identical scientific data, with one accent colour and a larger plotting area.
+# Bottom-left: quantitative evidence in three grouped, editable mini-charts.
 from statistics import mean
 perf=json.loads((ROOT/'performance_data.json').read_text())
-section(30,797,'03','Grounding improves embodied reasoning')
+band(20,868,392,'Experimental Results')
 for i,model in enumerate(perf['models']):
-    model['display_color'] = TEAL if i==3 else TOKENS['baseline_chart_colors'][i]
-    lx=[30,229,435,641][i]
-    rect(lx,829,7,7,model['display_color'])
-    text(lx+11,828,168,model['name'],22,bold=i==3,color=TEAL if i==3 else INK)
-for panel,(key,title,sub) in enumerate([
-    ('spatial','Spatial reasoning','13 capability columns · 9 benchmarks'),
-    ('pointing','Pointing','5 benchmark mean'),
-    ('robot','Real-world robots','60 executions · 3 tasks'),
-]):
-    x=30+panel*267
-    text(x+25,849,224,title,29,True,NAVY)
-    text(x+25,867,224,sub,20,color=GRAY)
+    model['display_color']=TEAL if i==3 else TOKENS['baseline_chart_colors'][i]
+    lx=32+(i%2)*196; ly=906+(i//2)*16
+    rect(lx,ly+1,6,6,model['display_color'])
+    text(lx+10,ly,177,model['name'],20,bold=i==3,color=TEAL if i==3 else INK)
+for panel,(key,title) in enumerate([('spatial','Spatial'),('pointing','Pointing'),('robot','Robot')]):
+    x=28+panel*127
+    text(x+16,948,107,title,24,True,NAVY,align='center')
     for tick in [0,50,100]:
-        yy=981-94*tick/100
-        line(x+25,yy,x+247,yy,'#DDE6EB',1)
-        text(x,yy-4,19,str(tick),20,color=GRAY,align='right')
+        yy=1075-100*tick/100
+        line(x+16,yy,x+119,yy,'#DDE6EB',1)
+        text(x-2,yy-3,14,str(tick),16,color=GRAY,align='right')
     for i,model in enumerate(perf['models']):
         if key=='robot':
             counts=model['robot_successes']
             value=None if counts is None else 100*sum(counts)/(perf['robot_trials_per_task']*perf['robot_task_count'])
-        else:
-            value=mean(model[key])
-        bx=x+36+i*50
+        else:value=mean(model[key])
+        bx=x+20+i*25
         if value is None:
-            text(bx-4,968,38,'n/a',21,color=GRAY,align='center')
-            continue
-        bh=94*value/100
-        rect(bx,981-bh,33,bh,model['display_color'])
-        text(bx-6,981-bh-13,45,f'{value:.1f}',29,bold=i==3,color=TEAL if i==3 else INK,align='center')
-text(30,993,781,'Scores (%) · Tables 1–3 / Figure 1. Spatial and pointing: arithmetic means. Robot: overall execution success.',21,color=GRAY)
+            text(bx-3,1061,22,'n/a',18,color=GRAY,align='center');continue
+        bh=value
+        rect(bx,1075-bh,18,bh,model['display_color'])
+        text(bx-4,1075-bh-11,26,f'{value:.1f}',20,bold=i==3,color=TEAL if i==3 else INK,align='center')
+text(32,1087,367,'Scores (%) · Figure 1 / Tables 1–3. Spatial: 13-column mean; pointing: 5-benchmark mean; robot: success over 60 trials.',20,color=GRAY,max_h=28)
+rect(32,1122,367,35,'#EDF5F5',radius=2)
+text(42,1126,347,'18.8% → 99.9% cross-step ID coverage',25,True,TEAL)
+text(42,1143,347,'Without RFT → RoboPIN · EmbSpatial, Table 7',20,color=GRAY)
 
-# 04: deployment evidence and process consistency share a compact closing band.
-section(30,1020,'04','Reliable execution and consistent entity tracking')
-image(ROOT/'assets/robot-demo.png',30,1053,300,300*154.71/504.40)
-text(30,1151,300,'Zero-shot xArm execution · Figure 3',21,color=GRAY)
-text(355,1049,315,'Successful executions / 20 per task',22,True,GRAY)
+# Bottom-right: original physical execution and grounded reasoning examples.
+band(429,868,392,'Qualitative Results')
+image(ROOT/'assets/robot-demo.png',441,907,367,367*154.71/504.40)
+image(ROOT/'assets/figure-4-qualitative.png',441,1030,201,201*146.20/240.25)
+text(660,1032,148,'Zero-shot xArm',25,True,TEAL)
 for i,(label,val) in enumerate([('Spatial','20 / 20'),('Multi-view','14 / 20'),('Long-horizon','11 / 20')]):
-    x=355+i*108
-    text(x,1070,100,val,32,True,TEAL,align='center')
-    text(x,1090,100,label,22,align='center')
-rect(355,1112,315,42,'#EDF5F5',radius=2)
-text(365,1117,295,'18.8% → 99.9%',34,True,TEAL)
-text(365,1138,295,'Cross-step ID coverage · w/o RFT → RoboPIN',21,color=GRAY)
-qr=CFG.get('qr_file')
-text(717,1049,94,'PAPER / CODE',20,True,GRAY,align='center')
-if qr and (ROOT/qr).is_file():
-    image(ROOT/qr,724,1067,80,80)
-else:
-    rect(724,1067,80,80,WHITE,LINE,1)
-    text(731,1090,66,'QR\nPLACEHOLDER',20,True,GRAY,align='center',leading=1.35)
-line(30,1168,811,1168,LINE,1.2)
-text(30,1175,410,'quark404@tju.edu.cn  ·  yuanyf@tju.edu.cn',21,color=GRAY)
-text(459,1175,352,'* Equal contribution   † Corresponding authors',18,color=GRAY,align='right')
+    yy=1055+i*25
+    text(660,yy,148,label,21,color=GRAY)
+    text(660,yy+10,148,val,25,True,TEAL)
+text(660,1133,148,'Successes per task\nTable 3',19,color=GRAY,leading=1.1)
+text(441,1156,367,'Figure 3: execution · Figure 4: grounded reasoning',18,color=GRAY)
+
+# Reference-style closing statement, without character decorations.
+rect(0,1170,W,19,TEAL)
+text(20,1173,801,'Persistent visual anchors make embodied reasoning traceable.',26,True,WHITE,align='center')
 
 for item in audit:
     if item['x']<0 or item['y']<0 or item['x']+item['width']>W+.01 or item['y']+item['height']>H:
         raise ValueError(f'Content outside page: {item}')
 c.showPage();c.save()
 slide.notes_slide.notes_text_frame.text=(
-    'A0 portrait 841 × 1189 mm. Iterated using the upstream Paper2Poster lightweight skill and visual review. '
+    'A0 portrait 841 × 1189 mm. Layout aligned to the user-supplied SDO poster screenshot: Motivation and Key Insight above a full-width Method, then Experimental and Qualitative Results. Character decorations and all SDO-specific scientific content are excluded. '
     'The external API-based PosterAgent generator was not run. '
-    'The original Figure 1 comparison is the main visual; Figure 2 upper pipeline is preserved. '
+    'Original Figure 1 comparison and Figure 2 pipeline are preserved. The qualitative panel adds the original Figure 4 reasoning examples. '
     'Three grouped bar charts reproduce paper Figure 1 and Tables 1–3: spatial mean over 13 capability columns, '
     'pointing mean over 5 benchmarks, robot successes over 60 trials. Missing robot baseline is n/a. '
     'The detailed selected-benchmark table is retained in the source notes rather than repeated on this poster. '

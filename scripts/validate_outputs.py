@@ -20,7 +20,7 @@ for item in ['RoboPIN', '68.0', '67.9', '75.0', '99.9%', '18.8%', '20 / 20', '14
     assert item in pdf_text, f'Missing expected source value: {item}'
 for removed in ['model parameters','PinCoT reasoning samples','evaluation benchmarks','CrossPoint vs. Mimo-7B']:
     assert removed not in pdf_text, f'Old metric card remains: {removed}'
-chart_text=page.get_text(clip=fitz.Rect(30*72/25.4,797*72/25.4,811*72/25.4,1010*72/25.4))
+chart_text=page.get_text(clip=fitz.Rect(20*72/25.4,868*72/25.4,412*72/25.4,1168*72/25.4))
 for value in ['52.4','55.1','58.7','68.0','65.6','51.8','62.1','67.9','30.0','16.7','75.0','n/a']:
     assert value in chart_text, f'Aggregate chart value missing: {value}'
 for block in page.get_text('dict')['blocks']:
@@ -47,15 +47,15 @@ assert len(prs.slides) == 1
 assert abs(prs.slide_width / 36000 - 841) < .01
 assert abs(prs.slide_height / 36000 - 1189) < .01
 slide = prs.slides[0]
-chart_bars=[s for s in slide.shapes if s.shape_type==1 and s.top/36000>=887 and (s.top+s.height)/36000<=981.01 and s.height/36000>1]
+chart_bars=[s for s in slide.shapes if s.shape_type==1 and s.left/36000<412 and s.top/36000>=975 and (s.top+s.height)/36000<=1075.01 and s.height/36000>1]
 assert len(chart_bars)==11, f'Expected 11 editable bars and an unreported baseline: found {len(chart_bars)}'
 boxes=[s for s in slide.shapes if s.has_text_frame and s.text.strip()]
 native_text = '\n'.join(s.text for s in boxes)
-for item in ['Spatial reasoning', 'Pointing', 'Real-world robots', 'SFT', 'CoT-SFT', 'RFT / GRPO', '18.8% → 99.9%']:
+for item in ['Motivation', 'Key Insight: Persistent Identity', 'Our Method: RoboPIN / PinCoT', 'Experimental Results', 'Qualitative Results', 'Spatial', 'Pointing', 'Robot', 'SFT', 'CoT-SFT', 'RFT / GRPO', '18.8% → 99.9%']:
     assert item in native_text, f'Expected editable content is missing: {item}'
 config = json.loads((root / 'poster_config.json').read_text())
 embedded = {hashlib.sha256(s.image.blob).hexdigest() for s in slide.shapes if s.shape_type == 13}
-paper_figures=['assets/figure-1-cot-comparison.png','assets/figure-2-data-pipeline.png']
+paper_figures=['assets/figure-1-cot-comparison.png','assets/figure-2-data-pipeline.png','assets/figure-4-qualitative.png']
 for asset in paper_figures:
     assert hashlib.sha256((root/asset).read_bytes()).hexdigest() in embedded, f'Original paper figure missing: {asset}'
     from PIL import Image
@@ -80,9 +80,9 @@ with ZipFile(out / 'RoboPIN_A0_editable.pptx') as z:
 page.get_pixmap(matrix=fitz.Matrix(.62,.62)).save(out / 'RoboPIN_preview.png')
 mm=72/25.4
 for name, bounds in [
-    ('detail-results.png', (26,790,815,1010)),
-    ('detail-original-figures.png', (26,190,815,780)),
-    ('detail-performance.png', (26,790,815,1010)),
+    ('detail-results.png', (20,862,821,1168)),
+    ('detail-original-figures.png', (20,157,821,862)),
+    ('detail-performance.png', (20,862,412,1168)),
 ]:
     page.get_pixmap(matrix=fitz.Matrix(.75,.75),clip=fitz.Rect(*(v*mm for v in bounds))).save(out/name)
 report={
@@ -99,7 +99,7 @@ report={
     'aggregate_chart_values': 'verified against paper Figure 1 / Tables 1–3',
     'old_metric_cards': 'removed',
     'header_background': 'white',
-    'design': 'Paper2Poster skill-guided editorial layout; two rendered iterations',
+    'design': 'User-reference layout: Motivation / Key Insight, full-width Method, Experimental / Qualitative Results',
     'intentional_placeholders': ['paper/code QR'],
 }
 (out / 'validation.json').write_text(json.dumps(report, indent=2))

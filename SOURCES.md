@@ -57,7 +57,7 @@ The former four metric cards are removed. The replacement is three grouped bar c
 | Robot results | Table 3 / Section 4.3, p. 6 | 20/20 spatial, 14/20 multi-view, 11/20 long-horizon |
 | Robot photographs | Figure 3, p. 8 | First two task rows; image-based figure labels are inherited from the paper |
 
-Precise crop coordinates in source PDF points are recorded in `assets/crop-provenance.json`. Crops are rendered at 5× PDF point resolution; resampling does not add detail beyond the source images. The two original paper figures are replaceable image objects in PowerPoint, with their internal lettering preserved as supplied. Surrounding typography, the three-stage training flow and three aggregate charts remain vector in the PDF and editable in PowerPoint. Section 02 spans the page width to keep the original pipeline readable. The latest skill-guided layout puts the aggregate charts after the method; process coverage and robot evaluation share Section 04. The detailed selected-benchmark values above remain supporting documentation, rather than a duplicate table on the poster.
+Precise crop coordinates in source PDF points are recorded in `assets/crop-provenance.json`. Crops are rendered at 5× PDF point resolution; resampling does not add detail beyond the source images. The two original paper figures are replaceable image objects in PowerPoint, with their internal lettering preserved as supplied. Surrounding typography, the three-stage training flow and three aggregate charts remain vector in the PDF and editable in PowerPoint. Section 02 spans the page width to keep the original pipeline readable. The latest reference-aligned layout places aggregate charts in the bottom-left Experimental Results panel and robot examples in the bottom-right Qualitative Results panel; cross-step ID coverage is retained below the charts. The detailed selected-benchmark values above remain supporting documentation, rather than a duplicate table on the poster.
 
 ## Author confirmation items
 
@@ -77,3 +77,10 @@ The uploaded document has been treated as source material, not as an authority f
 ## Paper2Poster skill and design provenance
 
 The design workflow follows the lightweight upstream skill vendored at `.agents/skills/paper2poster-poster/SKILL.md`; its original MIT license and pinned commit are included. It supplies content, layout and quality-pass instructions. The current actual renderer is this repository's `scripts/build_poster.py`, not the API-based PosterAgent pipeline. Two rendered design iterations and the pre-redesign preview are retained under `design/iterations/`. Decisions and limitations are recorded in `design/iteration_review.md`. Official conference requirements and the user's original-figure constraints override the skill's generic landscape defaults.
+
+
+## User-supplied layout reference — 2026-10-28
+
+The user supplied a visible screenshot of an SDO poster. The current layout follows its section arrangement: Motivation / Key Insight, full-width Our Method, Experimental / Qualitative Results, and a concluding band. No character artwork, SDO scientific claims or third-party data are included. See `design/reference_alignment.md`.
+
+Qualitative examples now include an additional unmodified crop of Figure 4 on page 8, stored as `assets/figure-4-qualitative.png`. The Key Insight panel reuses the source Figure 2 microwave views and its published obj_01 points [634,576] and [844,706]. Native identity labels and point overlays explain the published example; they are not new experimental predictions.

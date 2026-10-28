@@ -1,5 +1,9 @@
 # Runbook
 
+## Current layout
+
+The latest user-supplied poster screenshot overrides the earlier editorial grid. Five named sections follow its composition: Motivation, Key Insight, Our Method, Experimental Results, Qualitative Results. See `design/reference_alignment.md`. All source constraints, A0 dimensions and data checks still apply.
+
 ## What was actually run
 
 The upstream lightweight skill is installed in `.agents/skills/paper2poster-poster/`; its original instruction, references, metadata, license and source commit are retained. The source paper already follows the upstream folder convention at `assets/paper.pdf`; the per-paper `assets/poster.yaml` sits alongside it.

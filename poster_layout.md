@@ -1,19 +1,15 @@
-# Layout brief
+# Reference-aligned layout
 
-## Grid and hierarchy
+All dimensions are millimetres on an 841 × 1189 mm portrait page.
 
-A0 portrait, 841 × 1189 mm. Outer horizontal margin 30 mm. White background; navy title; one teal accent. Four full-width sections follow a single top-to-bottom reading order. Section headings use small unboxed indices and thin horizontal rules, avoiding repeated dashboard-style cards.
+- Header: y 13–145; title and authors left, MM logo above TJU seal right, both on white.
+- Top row: equal 392 mm columns at x 20 and 429. Teal title bands y 163–188. Motivation content y 201–528; Key Insight content y 200–530.
+- Motivation: original Figure 1 left comparison, width 367; two explicit source-grounded problem statements beneath.
+- Key Insight: original Figure 2 camera views side by side, persistent ID labels and original normalized point coordinates; concept and brief explanation; one clearly labelled paper/code QR placeholder.
+- Method: full-width title band x 20, y 540, width 801; original Figure 2 upper pipeline at x 32, y 579, width 777; editable training flow at y 773; method summary beneath at y 829.
+- Bottom row: equal paired title bands y 868–893. Experimental chart area x 20–412, y 906–1157. Qualitative area x 429–821, y 907–1164.
+- Quantitative: four-model legend, three 0–100 grouped charts; missing robot baseline is n/a. All 11 bars remain editable. Cross-step ID coverage below.
+- Qualitative: Figure 3 robot sequence across the panel; original Figure 4 reasoning examples below-left; per-task robot successes below-right.
+- Footer: full-width teal closing band at y 1170–1189, with one concise conclusion.
 
-1. Header, y 15–179 mm: wordmark / full paper title left, official conference and TJU logos right, authors and venue beneath.
-2. Main visual, y 197–493: original Figure 1 left crop, 484 mm wide at x 30, with the source aspect ratio preserved. A navy explanation panel at x 546 presents the persistent-anchor concept in two linked steps.
-3. Method, y 516–775: original Figure 2 upper pipeline, 761 mm wide at x 40. Editable SFT → CoT-SFT → RFT strip beneath it.
-4. Results, y 797–1005: three equal-width grouped charts. All share a 0–100 axis; baseline colours are muted blue-grey; RoboPIN alone uses saturated teal. The plotting area is 94 mm high. Model names, values and aggregation captions remain explicit.
-5. Evidence and close, y 1020–1184: robot image left; per-task successes and cross-step identity coverage centre; labelled QR placeholder right; contact footer.
-
-## Content budget
-
-Keep the hero image obvious. Original figure labels supply the detailed comparisons; surrounding copy explains one concept rather than repeating every cell. Detailed per-benchmark tables move to `SOURCES.md` because the aggregate charts already provide the visual comparison requested by the user.
-
-## Style configuration
-
-`assets/poster.yaml` stores both supported upstream fields and a namespaced `robopin` block consumed by the local renderer. The local renderer controls exact coordinates and A0 dimensions. Upstream PosterAgent's automatic layout would require another proof before publication.
+The user reference supplies composition and section roles only. No character artwork, original scientific data or SDO text is reused. Earlier editorial iterations remain archived for comparison.

@@ -1,602 +1,610 @@
 [
   {
-    "text": "ACM MULTIMEDIA 2026  /  EMBODIED REASONING",
-    "x": 30,
-    "y": 15,
-    "width": 421,
+    "text": "RoboPIN",
+    "x": 20,
+    "y": 13,
+    "width": 560,
+    "height": 33.13994444444444,
+    "size_pt": 77
+  },
+  {
+    "text": "Grounded Embodied Reasoning\nvia Pinned Chain-of-Thought",
+    "x": 22,
+    "y": 52,
+    "width": 600,
+    "height": 29.238222222222223,
+    "size_pt": 37
+  },
+  {
+    "text": "Yaoting Huang* · Yifu Yuan*† · Linqi Han · Chengwen Li · Shuoheng Zhang",
+    "x": 22,
+    "y": 90,
+    "width": 690,
     "height": 9.468555555555554,
     "size_pt": 22
   },
   {
-    "text": "RoboPIN",
-    "x": 28,
-    "y": 32,
-    "width": 423,
-    "height": 43.038888888888884,
-    "size_pt": 100
-  },
-  {
-    "text": "Grounded Embodied Reasoning\nvia Pinned Chain-of-Thought",
-    "x": 30,
-    "y": 80,
-    "width": 781,
-    "height": 36.67477777777777,
-    "size_pt": 46
-  },
-  {
-    "text": "Yaoting Huang* · Yifu Yuan*† · Linqi Han · Chengwen Li · Shuoheng Zhang",
-    "x": 30,
-    "y": 126,
-    "width": 781,
-    "height": 10.329333333333333,
-    "size_pt": 24
-  },
-  {
     "text": "Xianze Yao · Hongyao Tang · Yan Zheng · Jianye Hao†",
-    "x": 30,
-    "y": 139,
-    "width": 781,
+    "x": 22,
+    "y": 103,
+    "width": 690,
+    "height": 9.468555555555554,
+    "size_pt": 22
+  },
+  {
+    "text": "Tianjin University · ACM Multimedia 2026 · Rio de Janeiro, Brazil",
+    "x": 22,
+    "y": 119,
+    "width": 680,
     "height": 10.329333333333333,
     "size_pt": 24
   },
   {
-    "text": "Tianjin University   ·   Rio de Janeiro, Brazil   ·   10–14 November 2026",
-    "x": 30,
-    "y": 156,
-    "width": 781,
-    "height": 10.759722222222221,
-    "size_pt": 25
+    "text": "quark404@tju.edu.cn · yuanyf@tju.edu.cn   |   * Equal contribution   † Corresponding authors",
+    "x": 22,
+    "y": 135,
+    "width": 650,
+    "height": 8.177388888888888,
+    "size_pt": 19
   },
   {
-    "text": "01",
-    "x": 30,
-    "y": 199,
-    "width": 23,
-    "height": 10.329333333333333,
-    "size_pt": 24
-  },
-  {
-    "text": "Reason with a persistent visual anchor",
-    "x": 61,
-    "y": 197,
-    "width": 750,
+    "text": "Motivation",
+    "x": 28,
+    "y": 167,
+    "width": 376,
     "height": 14.63322222222222,
     "size_pt": 34
   },
   {
-    "text": "THE CORE IDEA",
-    "x": 564,
-    "y": 250,
-    "width": 229,
-    "height": 9.898944444444442,
-    "size_pt": 23
+    "text": "Paper Figure 1 · comparing three CoT paradigms",
+    "x": 32,
+    "y": 404,
+    "width": 367,
+    "height": 8.607777777777777,
+    "size_pt": 20
   },
   {
-    "text": "One entity.\nOne persistent ID.",
-    "x": 564,
-    "y": 274,
-    "width": 229,
-    "height": 29.76033333333333,
-    "size_pt": 37
+    "text": "1. Reference drift",
+    "x": 32,
+    "y": 425,
+    "width": 367,
+    "height": 11.19011111111111,
+    "size_pt": 26
   },
   {
-    "text": "a = (name, id, view, point)",
-    "x": 564,
-    "y": 317,
-    "width": 229,
-    "height": 9.038166666666665,
-    "size_pt": 21
-  },
-  {
-    "text": "Introduce anchor",
-    "x": 575,
-    "y": 351,
-    "width": 207,
-    "height": 12.050888888888887,
-    "size_pt": 28
-  },
-  {
-    "text": "name · ID · view · point",
-    "x": 575,
-    "y": 370,
-    "width": 207,
-    "height": 10.759722222222221,
+    "text": "Textual references can switch between similar objects during multi-step reasoning.",
+    "x": 32,
+    "y": 443,
+    "width": 367,
+    "height": 21.519444444444442,
     "size_pt": 25
   },
   {
-    "text": "Reuse identity",
-    "x": 575,
-    "y": 419,
-    "width": 207,
-    "height": 12.050888888888887,
-    "size_pt": 28
+    "text": "2. Reasoning–answer misalignment",
+    "x": 32,
+    "y": 480,
+    "width": 367,
+    "height": 11.19011111111111,
+    "size_pt": 26
   },
   {
-    "text": "across steps and views",
-    "x": 575,
-    "y": 438,
-    "width": 207,
-    "height": 10.759722222222221,
+    "text": "A correct intermediate analysis can still end on the wrong object, especially across views.",
+    "x": 32,
+    "y": 498,
+    "width": 367,
+    "height": 21.519444444444442,
     "size_pt": 25
   },
   {
-    "text": "Visual evidence stays traceable.",
-    "x": 564,
-    "y": 474,
-    "width": 229,
+    "text": "Key Insight: Persistent Identity",
+    "x": 437,
+    "y": 167,
+    "width": 376,
+    "height": 14.63322222222222,
+    "size_pt": 34
+  },
+  {
+    "text": "VIEW 0",
+    "x": 446,
+    "y": 200,
+    "width": 147,
     "height": 9.468555555555554,
     "size_pt": 22
   },
   {
-    "text": "02",
-    "x": 30,
-    "y": 518,
-    "width": 23,
-    "height": 10.329333333333333,
-    "size_pt": 24
+    "text": "obj_01",
+    "x": 453,
+    "y": 222,
+    "width": 66,
+    "height": 9.898944444444442,
+    "size_pt": 23
   },
   {
-    "text": "How RoboPIN learns to stay grounded",
-    "x": 61,
-    "y": 516,
-    "width": 750,
+    "text": "VIEW 1",
+    "x": 649,
+    "y": 200,
+    "width": 147,
+    "height": 9.468555555555554,
+    "size_pt": 22
+  },
+  {
+    "text": "obj_01",
+    "x": 656,
+    "y": 222,
+    "width": 66,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "Same entity. Same ID. Different views.",
+    "x": 441,
+    "y": 341,
+    "width": 367,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "Reasoning anchor = name + ID + view + point.",
+    "x": 441,
+    "y": 367,
+    "width": 367,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "Introduce the anchor once; reuse its identity throughout the reasoning chain.",
+    "x": 441,
+    "y": 405,
+    "width": 367,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "Our insight",
+    "x": 441,
+    "y": 452,
+    "width": 271,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "Persistent IDs connect visual grounding, intermediate steps and the final answer.",
+    "x": 441,
+    "y": 471,
+    "width": 271,
+    "height": 21.519444444444442,
+    "size_pt": 25
+  },
+  {
+    "text": "QR\nPLACEHOLDER",
+    "x": 750,
+    "y": 467,
+    "width": 52,
+    "height": 16.792222222222218,
+    "size_pt": 17
+  },
+  {
+    "text": "PAPER / CODE",
+    "x": 738,
+    "y": 519,
+    "width": 76,
+    "height": 7.747,
+    "size_pt": 18
+  },
+  {
+    "text": "Our Method: RoboPIN / PinCoT",
+    "x": 28,
+    "y": 544,
+    "width": 785,
     "height": 14.63322222222222,
     "size_pt": 34
   },
   {
     "text": "Three-stage\npost-training",
-    "x": 30,
-    "y": 742,
-    "width": 145,
+    "x": 32,
+    "y": 782,
+    "width": 137,
     "height": 19.40277777777778,
     "size_pt": 25
   },
   {
     "text": "SFT",
-    "x": 200,
-    "y": 741,
-    "width": 185,
+    "x": 188,
+    "y": 779,
+    "width": 189,
     "height": 11.620499999999998,
     "size_pt": 27
   },
   {
     "text": "Embodied knowledge",
-    "x": 200,
-    "y": 759,
-    "width": 185,
+    "x": 188,
+    "y": 797,
+    "width": 189,
     "height": 9.898944444444442,
     "size_pt": 23
   },
   {
     "text": "CoT-SFT",
-    "x": 407,
-    "y": 741,
-    "width": 185,
+    "x": 400,
+    "y": 779,
+    "width": 189,
     "height": 11.620499999999998,
     "size_pt": 27
   },
   {
     "text": "Structured reasoning",
-    "x": 407,
-    "y": 759,
-    "width": 185,
+    "x": 400,
+    "y": 797,
+    "width": 189,
     "height": 9.898944444444442,
     "size_pt": 23
   },
   {
     "text": "RFT / GRPO",
-    "x": 614,
-    "y": 741,
-    "width": 185,
+    "x": 612,
+    "y": 779,
+    "width": 189,
     "height": 11.620499999999998,
     "size_pt": 27
   },
   {
     "text": "Process alignment",
-    "x": 614,
-    "y": 759,
-    "width": 185,
+    "x": 612,
+    "y": 797,
+    "width": 189,
     "height": 9.898944444444442,
     "size_pt": 23
   },
   {
-    "text": "03",
-    "x": 30,
-    "y": 799,
-    "width": 23,
-    "height": 10.329333333333333,
-    "size_pt": 24
+    "text": "PinCoT binds visual evidence to persistent identities. PIN-170K supplies structured traces; process rewards supervise grounding and identity consistency.",
+    "x": 32,
+    "y": 829,
+    "width": 777,
+    "height": 22.097999999999995,
+    "size_pt": 27
   },
   {
-    "text": "Grounding improves embodied reasoning",
-    "x": 61,
-    "y": 797,
-    "width": 750,
+    "text": "Experimental Results",
+    "x": 28,
+    "y": 872,
+    "width": 376,
     "height": 14.63322222222222,
     "size_pt": 34
   },
   {
     "text": "Embodied-R1 (3B)",
-    "x": 41,
-    "y": 828,
-    "width": 168,
-    "height": 9.468555555555554,
-    "size_pt": 22
+    "x": 42,
+    "y": 906,
+    "width": 177,
+    "height": 8.607777777777777,
+    "size_pt": 20
   },
   {
     "text": "RoboBrain2.0 (7B)",
-    "x": 240,
-    "y": 828,
-    "width": 168,
-    "height": 9.468555555555554,
-    "size_pt": 22
+    "x": 238,
+    "y": 906,
+    "width": 177,
+    "height": 8.607777777777777,
+    "size_pt": 20
   },
   {
     "text": "Mimo-Embodied (7B)",
-    "x": 446,
-    "y": 828,
-    "width": 168,
-    "height": 9.468555555555554,
-    "size_pt": 22
+    "x": 42,
+    "y": 922,
+    "width": 177,
+    "height": 8.607777777777777,
+    "size_pt": 20
   },
   {
     "text": "RoboPIN (4B)",
-    "x": 652,
-    "y": 828,
-    "width": 168,
-    "height": 9.468555555555554,
-    "size_pt": 22
-  },
-  {
-    "text": "Spatial reasoning",
-    "x": 55,
-    "y": 849,
-    "width": 224,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "13 capability columns · 9 benchmarks",
-    "x": 55,
-    "y": 867,
-    "width": 224,
+    "x": 238,
+    "y": 922,
+    "width": 177,
     "height": 8.607777777777777,
     "size_pt": 20
   },
   {
-    "text": "0",
-    "x": 30,
-    "y": 977.0,
-    "width": 19,
-    "height": 8.607777777777777,
-    "size_pt": 20
-  },
-  {
-    "text": "50",
-    "x": 30,
-    "y": 930.0,
-    "width": 19,
-    "height": 8.607777777777777,
-    "size_pt": 20
-  },
-  {
-    "text": "100",
-    "x": 30,
-    "y": 883.0,
-    "width": 19,
-    "height": 8.607777777777777,
-    "size_pt": 20
-  },
-  {
-    "text": "52.4",
-    "x": 60,
-    "y": 918.7367692307693,
-    "width": 45,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "55.1",
-    "x": 110,
-    "y": 916.206,
-    "width": 45,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "58.7",
-    "x": 160,
-    "y": 912.7858461538461,
-    "width": 45,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "68.0",
-    "x": 210,
-    "y": 904.0872307692308,
-    "width": 45,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "Pointing",
-    "x": 322,
-    "y": 849,
-    "width": 224,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "5 benchmark mean",
-    "x": 322,
-    "y": 867,
-    "width": 224,
-    "height": 8.607777777777777,
-    "size_pt": 20
-  },
-  {
-    "text": "0",
-    "x": 297,
-    "y": 977.0,
-    "width": 19,
-    "height": 8.607777777777777,
-    "size_pt": 20
-  },
-  {
-    "text": "50",
-    "x": 297,
-    "y": 930.0,
-    "width": 19,
-    "height": 8.607777777777777,
-    "size_pt": 20
-  },
-  {
-    "text": "100",
-    "x": 297,
-    "y": 883.0,
-    "width": 19,
-    "height": 8.607777777777777,
-    "size_pt": 20
-  },
-  {
-    "text": "65.6",
-    "x": 327,
-    "y": 906.336,
-    "width": 45,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "51.8",
-    "x": 377,
-    "y": 919.308,
-    "width": 45,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "62.1",
-    "x": 427,
-    "y": 909.6072,
-    "width": 45,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "67.9",
-    "x": 477,
-    "y": 904.2116,
-    "width": 45,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "Real-world robots",
-    "x": 589,
-    "y": 849,
-    "width": 224,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "60 executions · 3 tasks",
-    "x": 589,
-    "y": 867,
-    "width": 224,
-    "height": 8.607777777777777,
-    "size_pt": 20
-  },
-  {
-    "text": "0",
-    "x": 564,
-    "y": 977.0,
-    "width": 19,
-    "height": 8.607777777777777,
-    "size_pt": 20
-  },
-  {
-    "text": "50",
-    "x": 564,
-    "y": 930.0,
-    "width": 19,
-    "height": 8.607777777777777,
-    "size_pt": 20
-  },
-  {
-    "text": "100",
-    "x": 564,
-    "y": 883.0,
-    "width": 19,
-    "height": 8.607777777777777,
-    "size_pt": 20
-  },
-  {
-    "text": "n/a",
-    "x": 596,
-    "y": 968,
-    "width": 38,
-    "height": 9.038166666666665,
-    "size_pt": 21
-  },
-  {
-    "text": "30.0",
-    "x": 644,
-    "y": 939.8,
-    "width": 45,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "16.7",
-    "x": 694,
-    "y": 952.3333333333334,
-    "width": 45,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "75.0",
-    "x": 744,
-    "y": 897.5,
-    "width": 45,
-    "height": 12.481277777777777,
-    "size_pt": 29
-  },
-  {
-    "text": "Scores (%) · Tables 1–3 / Figure 1. Spatial and pointing: arithmetic means. Robot: overall execution success.",
-    "x": 30,
-    "y": 993,
-    "width": 781,
-    "height": 9.038166666666665,
-    "size_pt": 21
-  },
-  {
-    "text": "04",
-    "x": 30,
-    "y": 1022,
-    "width": 23,
+    "text": "Spatial",
+    "x": 44,
+    "y": 948,
+    "width": 107,
     "height": 10.329333333333333,
     "size_pt": 24
   },
   {
-    "text": "Reliable execution and consistent entity tracking",
-    "x": 61,
-    "y": 1020,
-    "width": 750,
-    "height": 14.63322222222222,
-    "size_pt": 34
+    "text": "0",
+    "x": 26,
+    "y": 1072.0,
+    "width": 14,
+    "height": 6.886222222222221,
+    "size_pt": 16
   },
   {
-    "text": "Zero-shot xArm execution · Figure 3",
-    "x": 30,
-    "y": 1151,
-    "width": 300,
-    "height": 9.038166666666665,
-    "size_pt": 21
+    "text": "50",
+    "x": 26,
+    "y": 1022.0,
+    "width": 14,
+    "height": 6.886222222222221,
+    "size_pt": 16
   },
   {
-    "text": "Successful executions / 20 per task",
-    "x": 355,
-    "y": 1049,
-    "width": 315,
-    "height": 9.468555555555554,
-    "size_pt": 22
+    "text": "100",
+    "x": 26,
+    "y": 972.0,
+    "width": 14,
+    "height": 6.886222222222221,
+    "size_pt": 16
   },
   {
-    "text": "20 / 20",
-    "x": 355,
-    "y": 1070,
-    "width": 100,
-    "height": 13.772444444444442,
-    "size_pt": 32
-  },
-  {
-    "text": "Spatial",
-    "x": 355,
-    "y": 1090,
-    "width": 100,
-    "height": 9.468555555555554,
-    "size_pt": 22
-  },
-  {
-    "text": "14 / 20",
-    "x": 463,
-    "y": 1070,
-    "width": 100,
-    "height": 13.772444444444442,
-    "size_pt": 32
-  },
-  {
-    "text": "Multi-view",
-    "x": 463,
-    "y": 1090,
-    "width": 100,
-    "height": 9.468555555555554,
-    "size_pt": 22
-  },
-  {
-    "text": "11 / 20",
-    "x": 571,
-    "y": 1070,
-    "width": 100,
-    "height": 13.772444444444442,
-    "size_pt": 32
-  },
-  {
-    "text": "Long-horizon",
-    "x": 571,
-    "y": 1090,
-    "width": 100,
-    "height": 9.468555555555554,
-    "size_pt": 22
-  },
-  {
-    "text": "18.8% → 99.9%",
-    "x": 365,
-    "y": 1117,
-    "width": 295,
-    "height": 14.63322222222222,
-    "size_pt": 34
-  },
-  {
-    "text": "Cross-step ID coverage · w/o RFT → RoboPIN",
-    "x": 365,
-    "y": 1138,
-    "width": 295,
-    "height": 9.038166666666665,
-    "size_pt": 21
-  },
-  {
-    "text": "PAPER / CODE",
-    "x": 717,
-    "y": 1049,
-    "width": 94,
+    "text": "52.4",
+    "x": 44,
+    "y": 1011.5923076923077,
+    "width": 26,
     "height": 8.607777777777777,
     "size_pt": 20
   },
   {
-    "text": "QR\nPLACEHOLDER",
-    "x": 731,
-    "y": 1090,
-    "width": 66,
-    "height": 19.049999999999997,
+    "text": "55.1",
+    "x": 69,
+    "y": 1008.9,
+    "width": 26,
+    "height": 8.607777777777777,
     "size_pt": 20
   },
   {
-    "text": "quark404@tju.edu.cn  ·  yuanyf@tju.edu.cn",
-    "x": 30,
-    "y": 1175,
-    "width": 410,
+    "text": "58.7",
+    "x": 94,
+    "y": 1005.2615384615385,
+    "width": 26,
+    "height": 8.607777777777777,
+    "size_pt": 20
+  },
+  {
+    "text": "68.0",
+    "x": 119,
+    "y": 996.0076923076923,
+    "width": 26,
+    "height": 8.607777777777777,
+    "size_pt": 20
+  },
+  {
+    "text": "Pointing",
+    "x": 171,
+    "y": 948,
+    "width": 107,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "0",
+    "x": 153,
+    "y": 1072.0,
+    "width": 14,
+    "height": 6.886222222222221,
+    "size_pt": 16
+  },
+  {
+    "text": "50",
+    "x": 153,
+    "y": 1022.0,
+    "width": 14,
+    "height": 6.886222222222221,
+    "size_pt": 16
+  },
+  {
+    "text": "100",
+    "x": 153,
+    "y": 972.0,
+    "width": 14,
+    "height": 6.886222222222221,
+    "size_pt": 16
+  },
+  {
+    "text": "65.6",
+    "x": 171,
+    "y": 998.4,
+    "width": 26,
+    "height": 8.607777777777777,
+    "size_pt": 20
+  },
+  {
+    "text": "51.8",
+    "x": 196,
+    "y": 1012.2,
+    "width": 26,
+    "height": 8.607777777777777,
+    "size_pt": 20
+  },
+  {
+    "text": "62.1",
+    "x": 221,
+    "y": 1001.88,
+    "width": 26,
+    "height": 8.607777777777777,
+    "size_pt": 20
+  },
+  {
+    "text": "67.9",
+    "x": 246,
+    "y": 996.14,
+    "width": 26,
+    "height": 8.607777777777777,
+    "size_pt": 20
+  },
+  {
+    "text": "Robot",
+    "x": 298,
+    "y": 948,
+    "width": 107,
+    "height": 10.329333333333333,
+    "size_pt": 24
+  },
+  {
+    "text": "0",
+    "x": 280,
+    "y": 1072.0,
+    "width": 14,
+    "height": 6.886222222222221,
+    "size_pt": 16
+  },
+  {
+    "text": "50",
+    "x": 280,
+    "y": 1022.0,
+    "width": 14,
+    "height": 6.886222222222221,
+    "size_pt": 16
+  },
+  {
+    "text": "100",
+    "x": 280,
+    "y": 972.0,
+    "width": 14,
+    "height": 6.886222222222221,
+    "size_pt": 16
+  },
+  {
+    "text": "n/a",
+    "x": 299,
+    "y": 1061,
+    "width": 22,
+    "height": 7.747,
+    "size_pt": 18
+  },
+  {
+    "text": "30.0",
+    "x": 323,
+    "y": 1034.0,
+    "width": 26,
+    "height": 8.607777777777777,
+    "size_pt": 20
+  },
+  {
+    "text": "16.7",
+    "x": 348,
+    "y": 1047.3333333333333,
+    "width": 26,
+    "height": 8.607777777777777,
+    "size_pt": 20
+  },
+  {
+    "text": "75.0",
+    "x": 373,
+    "y": 989.0,
+    "width": 26,
+    "height": 8.607777777777777,
+    "size_pt": 20
+  },
+  {
+    "text": "Scores (%) · Figure 1 / Tables 1–3. Spatial: 13-column mean; pointing: 5-benchmark mean; robot: success over 60 trials.",
+    "x": 32,
+    "y": 1087,
+    "width": 367,
+    "height": 17.215555555555554,
+    "size_pt": 20
+  },
+  {
+    "text": "18.8% → 99.9% cross-step ID coverage",
+    "x": 42,
+    "y": 1126,
+    "width": 347,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Without RFT → RoboPIN · EmbSpatial, Table 7",
+    "x": 42,
+    "y": 1143,
+    "width": 347,
+    "height": 8.607777777777777,
+    "size_pt": 20
+  },
+  {
+    "text": "Qualitative Results",
+    "x": 437,
+    "y": 872,
+    "width": 376,
+    "height": 14.63322222222222,
+    "size_pt": 34
+  },
+  {
+    "text": "Zero-shot xArm",
+    "x": 660,
+    "y": 1032,
+    "width": 148,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Spatial",
+    "x": 660,
+    "y": 1055,
+    "width": 148,
     "height": 9.038166666666665,
     "size_pt": 21
   },
   {
-    "text": "* Equal contribution   † Corresponding authors",
-    "x": 459,
-    "y": 1175,
-    "width": 352,
+    "text": "20 / 20",
+    "x": 660,
+    "y": 1065,
+    "width": 148,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Multi-view",
+    "x": 660,
+    "y": 1080,
+    "width": 148,
+    "height": 9.038166666666665,
+    "size_pt": 21
+  },
+  {
+    "text": "14 / 20",
+    "x": 660,
+    "y": 1090,
+    "width": 148,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Long-horizon",
+    "x": 660,
+    "y": 1105,
+    "width": 148,
+    "height": 9.038166666666665,
+    "size_pt": 21
+  },
+  {
+    "text": "11 / 20",
+    "x": 660,
+    "y": 1115,
+    "width": 148,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Successes per task\nTable 3",
+    "x": 660,
+    "y": 1133,
+    "width": 148,
+    "height": 14.74611111111111,
+    "size_pt": 19
+  },
+  {
+    "text": "Figure 3: execution · Figure 4: grounded reasoning",
+    "x": 441,
+    "y": 1156,
+    "width": 367,
     "height": 7.747,
     "size_pt": 18
+  },
+  {
+    "text": "Persistent visual anchors make embodied reasoning traceable.",
+    "x": 20,
+    "y": 1173,
+    "width": 801,
+    "height": 11.19011111111111,
+    "size_pt": 26
   }
 ]

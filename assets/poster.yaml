@@ -1,8 +1,8 @@
 # A0 portrait; venue constraints override the upstream landscape default.
-main_text_font_size: 28
+main_text_font_size: 25
 section_title_font_size: 34
-poster_title_font_size: 46
-poster_author_font_size: 24
+poster_title_font_size: 37
+poster_author_font_size: 22
 title_text_color: [16, 43, 70]
 title_fill_color: null
 main_text_color: [24, 51, 75]

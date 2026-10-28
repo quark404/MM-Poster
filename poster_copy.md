@@ -1,37 +1,31 @@
-# Poster copy
+# Poster copy — reference-aligned revision
 
-## Title block
+## Motivation
 
-RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought
+1. Reference drift: textual references can switch between similar objects during multi-step reasoning.
+2. Reasoning–answer misalignment: a correct intermediate analysis can still end on the wrong object, especially across views.
 
-Yaoting Huang*, Yifu Yuan*†, Linqi Han, Chengwen Li, Shuoheng Zhang, Xianze Yao, Hongyao Tang, Yan Zheng, Jianye Hao†
+Visual: original Figure 1 left comparison.
 
-Tianjin University · ACM Multimedia 2026 · Rio de Janeiro, Brazil · 10–14 November 2026
+## Key Insight: Persistent Identity
 
-## 01 — Reason with a persistent visual anchor
+Same entity. Same ID. Different views.
 
-One entity. One persistent ID.
+Reasoning anchor = name + ID + view + point.
 
-a = (name, id, view, point)
+Introduce the anchor once; reuse its identity throughout the reasoning chain. Persistent IDs connect visual grounding, intermediate steps and the final answer.
 
-- Introduce anchor: name, ID, view and point.
-- Reuse identity across reasoning steps and viewpoints.
-- Visual evidence stays traceable.
+Visual: the microwave view pair from Figure 2; `obj_01` in both views. Paper/code QR is a labelled placeholder.
 
-Visual: original paper Figure 1 left comparison.
+## Our Method: RoboPIN / PinCoT
 
-## 02 — How RoboPIN learns to stay grounded
+Original Figure 2 data-construction pipeline.
 
-Visual: original Figure 2 upper pipeline, preserving semantic parsing, point grounding, reverse verification, generation and filtering.
+SFT: embodied knowledge → CoT-SFT: structured reasoning → RFT / GRPO: process alignment.
 
-Three-stage post-training:
-- SFT: embodied knowledge.
-- CoT-SFT: structured reasoning.
-- RFT / GRPO: process alignment.
+PinCoT binds visual evidence to persistent identities. PIN-170K supplies structured traces; process rewards supervise grounding and identity consistency.
 
-## 03 — Grounding improves embodied reasoning
-
-Original aggregate scores from Figure 1 / Tables 1–3:
+## Experimental Results
 
 | Model | Spatial | Pointing | Robot |
 |---|---:|---:|---:|
@@ -40,17 +34,18 @@ Original aggregate scores from Figure 1 / Tables 1–3:
 | Mimo-Embodied (7B) | 58.7 | 62.1 | 16.7 |
 | RoboPIN (4B) | 68.0 | 67.9 | 75.0 |
 
-All charts use a zero baseline and a 0–100 scale. Spatial is the arithmetic mean over 13 capability columns spanning 9 benchmarks; pointing over 5 benchmarks; robot success over 60 executions.
+Spatial: 13-column mean / 9 benchmarks. Pointing: 5-benchmark mean. Robot: overall success over 60 executions. Source: Figure 1 / Tables 1–3.
 
-## 04 — Reliable execution and consistent entity tracking
+Cross-step ID coverage: 18.8% without RFT → 99.9% with RoboPIN (Table 7).
 
-Zero-shot xArm execution, Figure 3:
-- Spatial: 20 / 20.
-- Multi-view: 14 / 20.
-- Long-horizon: 11 / 20.
+## Qualitative Results
 
-Cross-step identity coverage: 18.8% without RFT → 99.9% with RoboPIN (Table 7).
+Original Figure 3 execution sequences and Figure 4 grounded reasoning examples.
 
-Contact: quark404@tju.edu.cn · yuanyf@tju.edu.cn.
+Zero-shot xArm successes: spatial 20/20, multi-view 14/20, long-horizon 11/20 (Table 3).
 
-* Equal contribution. † Corresponding authors. Paper/code QR remains a labelled placeholder.
+## Closing statement
+
+Persistent visual anchors make embodied reasoning traceable.
+
+Title, author order, university, official logos and contact addresses continue to follow the supplied paper and verified branding.

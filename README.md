@@ -8,7 +8,7 @@ RoboPIN · ACM Multimedia 2026 · **A0 竖版，841 × 1189 mm**
 - [印刷 PDF](output/RoboPIN_A0_portrait.pdf)
 - [可编辑 PowerPoint](output/RoboPIN_A0_editable.pptx)
 - [完整素材与源码包](output/RoboPIN_poster_package.zip)
-- [本次设计分析与迭代记录](design/iteration_review.md)
+- [当前参考布局分析](design/reference_alignment.md) · [此前设计迭代](design/iteration_review.md)
 - [科学数据来源与待核实项](SOURCES.md)
 
 在 GitHub 文件页点击 **Download raw file** 下载 PDF、PPTX 或 ZIP。
@@ -17,9 +17,19 @@ RoboPIN · ACM Multimedia 2026 · **A0 竖版，841 × 1189 mm**
 
 ## 当前设计
 
-采用白底、深蓝标题与青色重点色。内容按“核心思路 → 数据与训练 → 性能证据 → 机器人迁移”排列，减少圆角卡片和重复数据。01 保留论文 Figure 1 左侧的对比原图，并将其放大为主视觉；02 通栏保留 Figure 2 上半部分。03 展示空间、指向、真实机器人三组柱状图，04 汇总实拍与身份一致性。基线采用灰蓝色，RoboPIN 用青色突出。
+已根据用户提供的 SDO 海报截图重排，保留其分区逻辑和横向标题栏，使用 RoboPIN 的青色学术配色，排除所有人物与乐队装饰：
 
-顶部原来的 4B / 170K / 14 / +35.4 pp 指标卡片已删除。总体性能数值仍为论文中的 68.0、67.9、75.0%；详细基准对比保留在 `SOURCES.md`，不再与总体柱状图重复占用版面。
+| 位置 | 分区 | RoboPIN 内容 |
+|---|---|---|
+| 顶部 | 标题、作者、单位、标识 | 白色页眉与官方 MM / TJU 标识 |
+| 左上 | Motivation | Figure 1 原图；指代漂移、推理—答案脱节 |
+| 右上 | Key Insight | 持久身份；双视角原图、统一 obj_01、论文/代码二维码占位 |
+| 中间通栏 | Our Method | Figure 2 原流程图；SFT → CoT-SFT → RFT；方法总结 |
+| 左下 | Experimental Results | 三组总体柱状图；过程一致性对比 |
+| 右下 | Qualitative Results | Figure 3 机器人执行、Figure 4 推理示例、任务成功次数 |
+| 底部 | 一句话结论 | Persistent visual anchors make embodied reasoning traceable. |
+
+顶部没有恢复 4B / 170K / 14 等指标卡片。总体数值 68.0 / 67.9 / 75.0、11 根可编辑柱体和统计口径保持一致。详情见 [参考布局映射](design/reference_alignment.md)。
 
 ## Paper2Poster skill
 
