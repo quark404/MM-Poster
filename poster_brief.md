@@ -11,3 +11,8 @@
 - Branding: light Rio header art, original conference and TJU logos, navy text, teal-to-green rounded headers, pale blue/mint callouts and bottom waves.
 - Outstanding: real QR, Track/OpenReview ID and source-paper robot-caption trial-count clarification.
 - Execution: local tested renderer with Paper2Poster skill guidance; external API-based PosterAgent unexecuted.
+
+
+## Latest module refinement
+
+The user subsequently requested several iterations and better information density. Three actual variants (clean, balanced, mechanism) supersede strict mockup imitation as the immediate objective. Keep the five-panel story, source data and no-number-caption preference. Select V3 as the working main version after visual review; retain V1/V2 for user comparison. See `design/variants/README.md`.

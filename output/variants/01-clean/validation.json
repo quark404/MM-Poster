@@ -1,0 +1,38 @@
+{
+  "pdf_pages": 1,
+  "page_mm": [
+    841.0000013563367,
+    1189.0001207139755
+  ],
+  "orientation": "portrait",
+  "embedded_fonts": [
+    "AAAAAA+DejaVuSans-Bold",
+    "AAAAAA+DejaVuSans"
+  ],
+  "editable_text_boxes": 77,
+  "pptx_shapes": 161,
+  "source_value_checks": "passed",
+  "native_text_collisions": "none",
+  "page_bounds": "passed",
+  "pptx_archive_integrity": "passed",
+  "visual_review": "PDF preview inspected; PowerPoint not rendered in Office in this environment",
+  "embedded_logo_assets": [
+    "assets/mm-logo.png",
+    "assets/tju-logo.png"
+  ],
+  "embedded_original_paper_figures": [
+    "assets/figure-1-cot-comparison.png",
+    "assets/figure-2-data-pipeline.png",
+    "assets/figure-4-qualitative.png"
+  ],
+  "paper_figure_aspect_ratios": "preserved",
+  "editable_performance_bars": 11,
+  "aggregate_chart_values": "verified against paper Figure 1 / Tables 1\u20133",
+  "old_metric_cards": "removed",
+  "header_background": "Light Rio skyline with white title corner",
+  "layout_variant": "clean",
+  "design": "Module refinement series: clean / balanced / mechanism",
+  "intentional_placeholders": [
+    "paper/code QR"
+  ]
+}

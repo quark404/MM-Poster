@@ -1,0 +1,12 @@
+{
+  "variant": "clean",
+  "chart_region": [
+    14,
+    858,
+    414,
+    1155
+  ],
+  "plot_top": 971,
+  "plot_bottom": 1054,
+  "qualitative_asset": "assets/figure-4-qualitative.png"
+}

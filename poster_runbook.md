@@ -1,6 +1,10 @@
 # Runbook
 
-## Current layout
+## Current variants
+
+The latest task requests module and density optimization. Default output now selects the mechanism variant. Use `--variant clean|balanced|mechanism` and `--output-dir output/variants/<name>` on the builder; pass the same output directory to the validator. The validator reads the generated layout metadata. Comparison and commands are in `design/variants/README.md`.
+
+## Earlier visual target
 
 The latest user-supplied RoboPIN AI mockup overrides the earlier SDO reference and editorial grid, including decorative Rio art, rounded gradients and icons. See `design/styled_mockup_alignment.md`. Five named sections follow its composition: Motivation, Key Insight, Our Method, Experimental Results, Qualitative Results. See `design/reference_alignment.md`. All source constraints, A0 dimensions and data checks still apply.
 

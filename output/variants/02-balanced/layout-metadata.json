@@ -1,0 +1,12 @@
+{
+  "variant": "balanced",
+  "chart_region": [
+    14,
+    766,
+    414,
+    1155
+  ],
+  "plot_top": 875,
+  "plot_bottom": 985,
+  "qualitative_asset": "assets/figure-4-two-examples.png"
+}

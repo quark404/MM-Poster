@@ -15,19 +15,21 @@ RoboPIN · ACM Multimedia 2026 · **A0 竖版，841 × 1189 mm**
 
 ![Current RoboPIN poster](output/RoboPIN_preview.png)
 
-## 当前设计
+## 当前版本与三版对照
 
-当前版本以用户最新提供的 **RoboPIN AI 视觉稿**为具体模板，重建其渐变圆角标题栏、图标、分区比例、浅色提示卡、里约剪影与底部波浪。不是仅替换标题或沿用之前的平面分栏版。
+已完成三轮模块优化，主文件采用 **V3：机制与证据版**。保留 Rio / 青绿视觉基调和五模块框架，压缩标题及重复说明，把空间还给实验与可阅读的案例。
 
-- 页眉：放大 RoboPIN 字标；右侧会议标识、圆形天津大学校徽及校名。
-- 左上 Motivation：原论文对比图，带圆形编号的两条浅蓝提示。
-- 右上 Key Insight：双视角、浅蓝机制卡、浅绿 Our insight、虚线二维码占位。
-- 中间通栏 Method：原流程图、浅青训练卡、方法总结。
-- 底部：带图标的 Experimental Results / Qualitative Results；底部波浪上的一句结论。
+| 版本 | 重点 | 预览 | PDF | PowerPoint |
+|---|---|---|---|---|
+| V1 精简版 | 去掉大装饰图标，统一标题与对齐 | [预览](design/variants/01-clean.png) | [PDF](output/variants/01-clean/RoboPIN_A0_portrait.pdf) | [PPTX](output/variants/01-clean/RoboPIN_A0_editable.pptx) |
+| V2 均衡版 | 压缩上部；放大实验图、定性案例；增加精选基准表 | [预览](design/variants/02-balanced.png) | [PDF](output/variants/02-balanced/RoboPIN_A0_portrait.pdf) | [PPTX](output/variants/02-balanced/RoboPIN_A0_editable.pptx) |
+| V3 机制与证据版（主版本） | 增加跨视角锚点坐标与四类 RFT 奖励；保留 V2 的可读性改善 | [预览](design/variants/03-mechanism.png) | [PDF](output/RoboPIN_A0_portrait.pdf) | [PPTX](output/RoboPIN_A0_editable.pptx) |
 
-装饰背景通过图像工具参考用户视觉稿生成，仅含里约剪影、浅色波浪与页边装饰；文字、图表、渐变、图标和卡片继续用独立对象绘制，科研图像均来自原论文。二维码仍为占位符。图下 Figure / Fig / Table 等编号说明已移除，数据来源保留在 `SOURCES.md`。
+[模块优化分析与对照](design/variants/README.md) · [优化前](design/variants/00-before.png)
 
-[当前版本](output/RoboPIN_preview.png) · [视觉重建说明](design/styled_mockup_alignment.md) · [上版对照](design/iterations/05-before-styled.png)
+原图和真实数据未改写。三版均保留 11 根可编辑柱体、A0 竖版、正式标识及二维码占位；打印页上没有恢复 Figure / Table 编号说明。V2 / V3 将定性图改为原论文中的两组代表案例放大展示，完整三组仍在 V1 和原论文中。
+
+源码包包含主版 PDF/PPTX、全部源码、三版预览及验证记录；其他版本的大型 PDF/PPTX 单独放在上表链接中，避免在 ZIP 内重复打包。
 
 ## Paper2Poster skill
 
@@ -53,7 +55,7 @@ PowerPoint 中的文字、柱状图、坐标轴、数值、训练流程均可编
 
 ```bash
 python scripts/prepare_assets.py
-python scripts/build_poster.py
+python scripts/build_poster.py --variant mechanism
 python scripts/validate_outputs.py
 ```
 
@@ -69,7 +71,7 @@ python -m venv .venv
 - `assets/poster.yaml`：字体、配色、A0 尺寸和基线配色。
 - `performance_data.json`：原始成绩和聚合口径；图高用未四舍五入的均值。
 - `poster_config.json`：正式会议标识、学校校徽和二维码路径。
-- `scripts/build_poster.py`：位置与具体文案。
+- `scripts/build_poster.py`：位置与具体文案；支持 `--variant clean|balanced|mechanism` 和 `--output-dir`，默认 mechanism。
 - `output/validation.json`：页面、字体、原图、11 根可编辑柱体及原生文字碰撞检查结果。
 
 已完成实际 PDF 渲染和视觉复查；PowerPoint 检查为结构验证，未使用 Microsoft Office 渲染。

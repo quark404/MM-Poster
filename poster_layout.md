@@ -1,18 +1,17 @@
-# AI mockup reconstruction layout
+# Module-refined layout
 
-Target: the latest user-supplied RoboPIN AI mockup. Portrait A0 remains 841 × 1189 mm. The mockup supplies specific decoration, proportions and visual hierarchy, not scientific ground truth.
+Portrait A0, 841 × 1189 mm. Three rendered variants are retained under `output/variants/`. Default: mechanism (V3).
 
-| Region | Rectangle in mm (x, y, w, h) | Treatment |
-|---|---|---|
-| Motivation | 14, 175, 434, 359 | Wide left rounded white panel; gradient header, bulb icon, original Figure 1; two numbered blue callouts |
-| Key Insight | 456, 175, 371, 359 | Narrower right rounded panel; target badge, paired source views, blue mechanism card, mint insight card, dashed QR frame |
-| Method | 14, 544, 813, 304 | Full-width gradient header with gear icon; Figure 2, three training tiles and concluding sentence |
-| Experimental | 14, 858, 400, 297 | Clipboard badge; four-model legend, three grouped charts and ID-coverage callout |
-| Qualitative | 422, 858, 405, 297 | Plot badge; original robot execution and reasoning images; per-task success counts |
-| Footer | y 1160–1189 | Layered waves with a native white conclusion |
+## Compact versions V2 / V3
 
-The title is enlarged to 155 pt, with 41 pt paper subtitle. All official logos are original assets; the TJU image uses a circular presentation clip. Section fills use a horizontal teal-to-green gradient, with consistent card radii and faint cyan outlines. Icons and gradients are native PDF / PPTX elements.
+- Header: y10–146. Brand 112 pt, subtitle 36 pt, authors 23 pt. Official logos and Rio background retained.
+- Motivation: x14, y153, w434, h328; original comparison 384 mm wide; two concise issue strips.
+- Key Insight: x456, y153, w371, h328; published source views; V3 shows identity, view and exact source points; anchor introduction / identity reuse beneath.
+- Method: x14, y491, w813, h265; original pipeline 750 mm wide; training tiles and one concise summary. V3 summary names all four RFT reward components.
+- Experimental: x14, y766, w400, h389; 110 mm chart plot height; three selected benchmark rows; cross-step identity coverage beneath.
+- Qualitative: x422, y766, w405, h389; original robot sequence, three aligned success counts, two source reasoning cases at 379 mm wide.
+- Footer: native conclusion over the background waves.
 
-The decorative page asset `assets/rio-wave-background.png` contains only generated background art. It is not a flattened poster, does not contain scientific claims and does not replace the source figures. Source qualitative Figure 4 is fitted with its original aspect ratio rather than adopting AI-redrawn words or a distorted source image. Its lower caption is separated from the image.
+V1 retains the previous large top/method proportions while simplifying heading decoration. This gives a controlled comparison rather than three different colour themes. No variant restores Figure / Table number captions.
 
-Model scores and axis limits remain unchanged. The printed document remains exactly A0; the raster mockup is not used as a print page.
+Source photographs / diagram crops keep their aspect ratios. The V2/V3 qualitative crop intentionally selects the first two complete cases; the full three-case image remains in the source assets and V1.
