@@ -32,3 +32,8 @@
 [重建前](iterations/05-before-styled.png) · [首轮样式稿](iterations/06-styled-draft.png) · [当前预览](../output/RoboPIN_preview.png)
 
 实际检查包括 A0 尺寸、字体嵌入、原生文字碰撞、图像宽高比、背景与 logo 嵌入、11 根柱体和实验数值。另作视觉检查：校徽圆形裁切、图注与图片间距、提示条对齐。未运行 Microsoft Office 渲染或物理打样。
+
+
+## 后续微调
+
+按用户要求，移除印刷页面上的 Figure 1 / Figure 3 / Figure 4 图下说明及 Table 编号引用；保留图内内容、分区标题、分数单位和聚合口径。科学溯源继续保留在 `SOURCES.md` 和 PowerPoint 备注中。

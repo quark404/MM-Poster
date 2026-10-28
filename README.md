@@ -25,7 +25,7 @@ RoboPIN · ACM Multimedia 2026 · **A0 竖版，841 × 1189 mm**
 - 中间通栏 Method：原流程图、浅青训练卡、方法总结。
 - 底部：带图标的 Experimental Results / Qualitative Results；底部波浪上的一句结论。
 
-装饰背景通过图像工具参考用户视觉稿生成，仅含里约剪影、浅色波浪与页边装饰；文字、图表、渐变、图标和卡片继续用独立对象绘制，科研图像均来自原论文。二维码仍为占位符。
+装饰背景通过图像工具参考用户视觉稿生成，仅含里约剪影、浅色波浪与页边装饰；文字、图表、渐变、图标和卡片继续用独立对象绘制，科研图像均来自原论文。二维码仍为占位符。图下 Figure / Fig / Table 等编号说明已移除，数据来源保留在 `SOURCES.md`。
 
 [当前版本](output/RoboPIN_preview.png) · [视觉重建说明](design/styled_mockup_alignment.md) · [上版对照](design/iterations/05-before-styled.png)
 

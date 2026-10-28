@@ -207,7 +207,6 @@ text(718,108,111,'Tianjin University',26,True,NAVY)
 # Motivation: mockup-aligned wide left card with two numbered callouts.
 panel(14,175,434,359,'Motivation','bulb',38)
 image(ROOT/'assets/figure-1-cot-comparison.png',26,216,410,410*180.96/335.60)
-text(26,445,410,'Figure 1: comparing three CoT paradigms',18,color=GRAY)
 for yy,num,title,desc in [
     (459,'1','Reference drift','Textual references can switch between similar objects during multi-step reasoning.'),
     (495,'2','Reasoning–answer misalignment','A correct intermediate analysis can still end on the wrong object, especially across views.'),
@@ -286,10 +285,10 @@ for pp,(key,title) in enumerate([('spatial','Spatial'),('pointing','Pointing'),(
         bh=.83*value
         rect(bx,1054-bh,18,bh,model['display_color'])
         text(bx-4,1054-bh-11,26,f'{value:.1f}',20,bold=i==3,color=TEAL if i==3 else INK,align='center')
-text(26,1068,376,'Scores (%) · Figure 1 / Tables 1–3. Spatial: 13-column mean; pointing: 5-benchmark mean; robot: success over 60 trials.',19,color=GRAY,max_h=23)
+text(26,1068,376,'Scores (%) · Spatial: 13-column mean; pointing: 5-benchmark mean; robot: success over 60 trials.',19,color=GRAY,max_h=23)
 gradient_box(26,1096,376,47,'#E8F7F5','#EDF9FC',radius=6)
 text(38,1105,352,'18.8% → 99.9% cross-step ID coverage',27,True,TEAL)
-text(38,1127,352,'Without RFT → RoboPIN · EmbSpatial, Table 7',21,color=GRAY)
+text(38,1127,352,'Without RFT → RoboPIN · EmbSpatial',21,color=GRAY)
 
 panel(422,858,405,297,'Qualitative Results','chart',36)
 image(ROOT/'assets/robot-demo.png',435,902,379,379*154.71/504.40)
@@ -299,8 +298,7 @@ for i,(label,val) in enumerate([('Spatial','20 / 20'),('Multi-view','14 / 20'),(
     yy=1049+i*27
     text(691,yy,123,label,20,color=GRAY)
     text(691,yy+11,123,val,27,True,TEAL)
-text(691,1134,123,'Successes per task\nTable 3',18,color=GRAY,leading=1.05)
-text(435,1149,250,'Figure 3: execution · Figure 4: grounded reasoning',17,color=GRAY)
+text(691,1134,123,'Successes per task',18,color=GRAY,leading=1.05)
 
 # The wave art stays visible at the page edge, with a native conclusion on top.
 text(45,1170,751,'Persistent visual anchors make embodied reasoning traceable.',27,True,WHITE,align='center')

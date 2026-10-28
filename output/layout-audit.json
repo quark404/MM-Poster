@@ -64,14 +64,6 @@
     "size_pt": 38
   },
   {
-    "text": "Figure 1: comparing three CoT paradigms",
-    "x": 26,
-    "y": 445,
-    "width": 410,
-    "height": 7.747,
-    "size_pt": 18
-  },
-  {
     "text": "1",
     "x": 37,
     "y": 465,
@@ -520,11 +512,11 @@
     "size_pt": 20
   },
   {
-    "text": "Scores (%) · Figure 1 / Tables 1–3. Spatial: 13-column mean; pointing: 5-benchmark mean; robot: success over 60 trials.",
+    "text": "Scores (%) · Spatial: 13-column mean; pointing: 5-benchmark mean; robot: success over 60 trials.",
     "x": 26,
     "y": 1068,
     "width": 376,
-    "height": 16.354777777777777,
+    "height": 8.177388888888888,
     "size_pt": 19
   },
   {
@@ -536,7 +528,7 @@
     "size_pt": 27
   },
   {
-    "text": "Without RFT → RoboPIN · EmbSpatial, Table 7",
+    "text": "Without RFT → RoboPIN · EmbSpatial",
     "x": 38,
     "y": 1127,
     "width": 352,
@@ -608,20 +600,12 @@
     "size_pt": 27
   },
   {
-    "text": "Successes per task\nTable 3",
+    "text": "Successes per task",
     "x": 691,
     "y": 1134,
     "width": 123,
-    "height": 13.335,
+    "height": 6.6675,
     "size_pt": 18
-  },
-  {
-    "text": "Figure 3: execution · Figure 4: grounded reasoning",
-    "x": 435,
-    "y": 1149,
-    "width": 250,
-    "height": 7.31661111111111,
-    "size_pt": 17
   },
   {
     "text": "Persistent visual anchors make embodied reasoning traceable.",
