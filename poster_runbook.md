@@ -1,8 +1,8 @@
 # Runbook
 
-## Current variants
+## Current output
 
-The latest task requests module and density optimization. Default output now selects the mechanism variant. Use `--variant clean|balanced|mechanism` and `--output-dir output/variants/<name>` on the builder; pass the same output directory to the validator. The validator reads the generated layout metadata. Comparison and commands are in `design/variants/README.md`.
+Default `source` layout generates HTML, PPTX and PDF with original performance artwork, all three robot execution rows, reward ablations and cumulative training-stage results. Archived earlier variants remain in `output/variants`; rebuild them from historical Git commits if needed. `--output-dir` selects the output folder for all current generation and validation scripts.
 
 ## Earlier visual target
 
@@ -19,9 +19,10 @@ cd /workspace/MM-Poster
 python scripts/prepare_assets.py
 python scripts/build_poster.py
 python scripts/validate_outputs.py
+python scripts/render_html.py
 ```
 
-This path requires no remote model credentials. The output is exactly A0 portrait. Native text, chart bars and training shapes are editable; paper figures are retained as images.
+This path requires no remote model credentials. The output is exactly A0 portrait. Native text, ablation tables and training shapes are editable; performance and paper figures are original images. HTML embeds every font and picture and works offline. Chromium prints an additional HTML PDF.
 
 ## Optional full upstream PosterAgent execution — NOT RUN
 
@@ -52,8 +53,10 @@ Upstream YAML precedence also deserves attention: the current implementation rea
 - Inspect the complete poster at reduced scale for reading order and visual balance.
 - Inspect the source figures and chart details at larger scale.
 - Validate the actual one-page PDF dimensions and font embedding.
-- Compare native chart labels with Figure 1 / Tables 1–3, keep the unreported robot baseline as n/a.
-- Validate 11 editable bars; check logo and original-figure bytes in the PPTX.
+- Validate the original Figure 1 performance crop and all three Figure 3 robot rows by image identity and visual inspection.
+- Compare editable ablation text with Tables 5 and 6; preserve the Point dip at CoT-SFT.
+- Check logo and original-figure bytes in the PPTX.
+- Render HTML offline in Chromium, check text bounds and image loading, print one A0 page and inspect its preview.
 - Check native text collisions, all page bounds and PPTX archive integrity.
 - Keep the QR placeholder visible until a real project link and QR are supplied.
 - Microsoft Office rendering and a physical print proof remain separate from the checks run here.

@@ -1,0 +1,16 @@
+{
+  "native_text_blocks": 68,
+  "images": 10,
+  "bounds_issues": [],
+  "overflow_issues": [],
+  "external_assets": [],
+  "pdf_pages": 1,
+  "page_mm": [
+    841.0000013563367,
+    1189.0000345865885
+  ],
+  "media_box_normalized": true,
+  "offline": "passed",
+  "mobile_fit": "passed",
+  "browser_errors": []
+}

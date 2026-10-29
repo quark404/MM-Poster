@@ -61,5 +61,23 @@
       558.2,
       238.4
     ]
+  },
+  "performance-original": {
+    "page": 1,
+    "bbox_pdf_points": [
+      392.0,
+      337.88,
+      558.2,
+      444.0
+    ]
+  },
+  "robot-three-rows": {
+    "page": 8,
+    "bbox_pdf_points": [
+      53.8,
+      83.69,
+      551.0,
+      315.5
+    ]
   }
 }

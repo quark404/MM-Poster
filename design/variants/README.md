@@ -1,3 +1,5 @@
+> Historical comparison only. The [current HTML/PPT version](../../README.md) supersedes these variants.
+
 # 三版模块优化对照
 
 用户反馈：目前显得别扭，信息密度和美观度不足。此次保留原始参考的五模块逻辑，实际生成并查看三套 PDF/PPTX，而非只讨论设计。

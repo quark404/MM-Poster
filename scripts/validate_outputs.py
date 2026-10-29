@@ -22,14 +22,12 @@ size_mm = [page.rect.width*25.4/72, page.rect.height*25.4/72]
 assert abs(size_mm[0]-841) < .01 and abs(size_mm[1]-1189) < .01
 assert page.rotation == 0
 pdf_text = page.get_text()
-for item in ['RoboPIN', '68.0', '67.9', '75.0', '99.9%', '18.8%', '20 / 20', '14 / 20', '11 / 20', 'PLACEHOLDER']:
+for item in ['RoboPIN', '84.7', '82.0', '82.7', '57.0', '62.0', '67.7', '66.0', '63.6', '67.9', '20 / 20', '14 / 20', '11 / 20', 'PLACEHOLDER']:
     assert item in pdf_text, f'Missing expected source value: {item}'
 for removed in ['model parameters','PinCoT reasoning samples','evaluation benchmarks','CrossPoint vs. Mimo-7B']:
     assert removed not in pdf_text, f'Old metric card remains: {removed}'
 assert not re.search(r'\b(?:Figure|Fig\.?|Tables?)\s*\d',pdf_text), 'Removed number captions have returned'
-chart_text=page.get_text(clip=fitz.Rect(*(v*72/25.4 for v in meta['chart_region'])))
-for value in ['52.4','55.1','58.7','68.0','65.6','51.8','62.1','67.9','30.0','16.7','75.0','n/a']:
-    assert value in chart_text, f'Aggregate chart value missing: {value}'
+assert 'cross-step' not in pdf_text.lower()
 for block in page.get_text('dict')['blocks']:
     for row in block.get('lines', []):
         for span in row['spans']:
@@ -54,15 +52,13 @@ assert len(prs.slides) == 1
 assert abs(prs.slide_width / 36000 - 841) < .01
 assert abs(prs.slide_height / 36000 - 1189) < .01
 slide = prs.slides[0]
-chart_bars=[s for s in slide.shapes if s.shape_type==1 and s.left/36000<414 and s.top/36000>=meta['plot_top'] and (s.top+s.height)/36000<=meta['plot_bottom']+.01 and s.height/36000>1]
-assert len(chart_bars)==11, f'Expected 11 editable bars and an unreported baseline: found {len(chart_bars)}'
 boxes=[s for s in slide.shapes if s.has_text_frame and s.text.strip()]
 native_text = '\n'.join(s.text for s in boxes)
-for item in ['Motivation', 'Key Insight: Persistent Identity', 'Our Method: RoboPIN / PinCoT', 'Experimental Results', 'Qualitative Results', 'Spatial', 'Pointing', 'Robot', 'SFT', 'CoT-SFT', 'RFT / GRPO', '18.8% → 99.9%']:
+for item in ['Motivation', 'Key Insight: Persistent Identity', 'Our Method: RoboPIN / PinCoT', 'Experimental Results', 'Qualitative Results', 'Spatial', 'SFT', 'CoT-SFT', 'RFT / GRPO', 'Reward design', 'Training stages', 'w/o Pin', 'w/o Consistency', '+ CoT-SFT', '+ RFT']:
     assert item in native_text, f'Expected editable content is missing: {item}'
 config = json.loads((root / 'poster_config.json').read_text())
 embedded = {hashlib.sha256(s.image.blob).hexdigest() for s in slide.shapes if s.shape_type == 13}
-paper_figures=['assets/figure-1-cot-comparison.png','assets/figure-2-data-pipeline.png',meta['qualitative_asset']]
+paper_figures=['assets/figure-1-cot-comparison.png','assets/figure-2-data-pipeline.png',meta['qualitative_asset'],meta['performance_asset'],meta['robot_asset']]
 for asset in paper_figures:
     assert hashlib.sha256((root/asset).read_bytes()).hexdigest() in embedded, f'Original paper figure missing: {asset}'
     from PIL import Image
@@ -103,12 +99,14 @@ report={
     'embedded_logo_assets': logo_assets,
     'embedded_original_paper_figures': paper_figures,
     'paper_figure_aspect_ratios': 'preserved',
-    'editable_performance_bars': len(chart_bars),
-    'aggregate_chart_values': 'verified against paper Figure 1 / Tables 1–3',
+    'performance_chart': 'Original paper crop; no redrawn bars',
+    'robot_rows': 3,
+    'ablation_source': 'Tables 5 and 6; editable table text',
+    'aggregate_chart_values': 'Original Figure 1 image retained',
     'old_metric_cards': 'removed',
     'header_background': 'Light Rio skyline with white title corner',
     'layout_variant': meta['variant'],
-    'design': 'Module refinement series: clean / balanced / mechanism',
+    'design': 'Source figures, complete robot sequences, reward and training ablations',
     'intentional_placeholders': ['paper/code QR'],
 }
 (out / 'validation.json').write_text(json.dumps(report, indent=2))

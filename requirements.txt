@@ -3,3 +3,4 @@ python-pptx==1.0.2
 PyMuPDF==1.26.6
 Pillow==12.3.0
 PyYAML==6.0.3
+playwright==1.62.0

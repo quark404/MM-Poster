@@ -1,12 +1,12 @@
 {
-  "variant": "mechanism",
+  "variant": "source",
   "chart_region": [
     14,
-    766,
+    735,
     414,
     1155
   ],
-  "plot_top": 875,
-  "plot_bottom": 985,
-  "qualitative_asset": "assets/figure-4-two-examples.png"
+  "qualitative_asset": "assets/figure-4-two-examples.png",
+  "performance_asset": "assets/performance-original.png",
+  "robot_asset": "assets/robot-three-rows.png"
 }

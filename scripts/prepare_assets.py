@@ -14,6 +14,8 @@ crops = {
     'figure-4-two-examples': (7, (53.80, 363.32, 294.05, 460.00)),
     'figure-4-qualitative': (7, (53.80, 363.32, 294.05, 509.52)),
     'robot-demo': (7, (53.80, 83.69, 558.20, 238.4)),
+    'performance-original': (0, (392.00, 337.88, 558.20, 444.00)),
+    'robot-three-rows': (7, (53.80, 83.69, 551.00, 315.50)),
 }
 for name, (page, box) in crops.items():
     doc[page].get_pixmap(matrix=fitz.Matrix(5, 5), clip=fitz.Rect(box), alpha=False).save(

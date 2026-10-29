@@ -27,7 +27,7 @@ Author ordering follows the paper's ACM reference-format block on page 2.
 
 ## Overall performance charts
 
-The former four metric cards are removed. The replacement is three grouped bar charts, redrawn as editable vector shapes. All axes start at zero and use the same 0–100 scale. These reproduce the aggregate values already shown in the right-hand plot of paper Figure 1, with the calculation made explicit:
+The current poster uses the original right-hand plot from paper Figure 1. It is a direct crop, not redrawn. The following calculation notes document its values without adding them as poster footnotes:
 
 | Model | Spatial reasoning | Pointing | Real-world robot success (%) |
 |---|---:|---:|---:|
@@ -39,7 +39,7 @@ The former four metric cards are removed. The replacement is three grouped bar c
 - Spatial: arithmetic mean over **13 capability columns** spanning 9 benchmarks in Table 1. It is not an equal-weight average of 9 benchmark scores, because MV-RoboBench and BLINK each have multiple reported columns.
 - Pointing: arithmetic mean over all 5 benchmarks in Table 2.
 - Robot: sum of successful executions across 3 task types divided by 60 trials (20 per task), using Table 3 and Section 4.3. Embodied-R1 has no reported result in Table 3; its entry is `n/a`, not zero.
-- Values are rounded to one decimal for labels; bar heights use the unrounded means. Raw table values are stored in `performance_data.json`. The poster preserves model sizes in the chart legend to identify baselines, while removing the former standalone parameter-count card.
+- Values and bar heights are retained unchanged in the source crop. Raw table values are stored in `performance_data.json`. The poster preserves model sizes in the chart legend to identify baselines, while removing the former standalone parameter-count card.
 
 | Poster item | Source | Values / treatment |
 |---|---|---|
@@ -55,9 +55,22 @@ The former four metric cards are removed. The replacement is three grouped bar c
 | Comparison baseline | Tables 1–2 | Mimo-Embodied 7B vs. RoboPIN 4B; deltas are percentage points, not relative percentages |
 | Process analysis | Table 7, p. 7 | Cross-step ID coverage 18.8% without RFT vs. 99.9% with RoboPIN; anchor correctness 89.1% |
 | Robot results | Table 3 / Section 4.3, p. 6 | 20/20 spatial, 14/20 multi-view, 11/20 long-horizon |
-| Robot photographs | Figure 3, p. 8 | First two task rows; image-based figure labels are inherited from the paper |
+| Robot photographs | Figure 3, p. 8 | All three task rows, including long-horizon manipulation; source image labels retained |
 
-Precise crop coordinates in source PDF points are recorded in `assets/crop-provenance.json`. Crops are rendered at 5× PDF point resolution; resampling does not add detail beyond the source images. The two original paper figures are replaceable image objects in PowerPoint, with their internal lettering preserved as supplied. Surrounding typography, the three-stage training flow and three aggregate charts remain vector in the PDF and editable in PowerPoint. Section 02 spans the page width to keep the original pipeline readable. The latest reference-aligned layout places aggregate charts in the bottom-left Experimental Results panel and robot examples in the bottom-right Qualitative Results panel; cross-step ID coverage is retained below the charts. The detailed selected-benchmark values above remain supporting documentation, rather than a duplicate table on the poster.
+Precise crop coordinates are recorded in `assets/crop-provenance.json`. Crops use 5× PDF point resolution; this does not add detail beyond the source. Current performance and paper figures are independent replaceable images in PPTX and HTML. Surrounding text, training nodes and ablation tables remain native editable elements. The cross-step coverage panel and selected-benchmark table have been removed.
+
+## Current ablation evidence
+
+| Content | Source | Values |
+|---|---|---|
+| Reward ablation | Table 5, PDF page 7 | EmbSpatial: full reward 84.7; w/o Pin 82.0; w/o Consistency 82.7 |
+| Cumulative training, spatial | Table 6, PDF page 7 | SFT 57.0; + CoT-SFT 62.0; + RFT 67.7 |
+| Cumulative training, pointing | Table 6, PDF page 7 | SFT 66.0; + CoT-SFT 63.6; + RFT 67.9 |
+| Training spatial improvement | Table 6 subtraction | 67.7 − 57.0 = +10.7 percentage points |
+
+The Table 6 controlled spatial average 67.7 is distinct from the main Figure 1 score 68.0. Pointing is not monotonic across training stages; no such claim is made. Only Pin and Consistency removals are tabulated in the paper, so no fabricated Format/Accuracy ablation is added.
+
+Current crop bounds: performance page 1 `[392.00,337.88,558.20,444.00]`; complete robot visualization page 8 `[53.80,83.69,551.00,315.50]`. The bottom bound includes all six long-horizon frames and excludes the figure caption.
 
 ## Author confirmation items
 
@@ -91,6 +104,6 @@ Qualitative examples now include an additional unmodified crop of Figure 4 on pa
 The latest user-supplied RoboPIN AI image supersedes the earlier SDO screenshot as the visual target. `assets/rio-wave-background.png` is a background-only asset generated by the image tool from that reference; the prompt removed all text, logos, photos, charts and panels, retaining only decorative Rio/edge wave art. It supplies no scientific evidence. Section gradients and icons are native shapes; figures and measurements still come from the supplied paper. See `design/styled_mockup_alignment.md`.
 
 
-## Module refinement variants
+## Historical module refinement variants
 
-Three rendered versions now exist: clean, balanced and mechanism (default). V2/V3 restore three explicitly selected benchmark comparisons whose values were already recorded above. The native anchor-point strings in V3 use the previously cited Figure 2 coordinates. Its RFT summary names the four terms from Equation 1. The larger qualitative crop selects the first two complete Figure 4 cases on PDF page 8, bbox `[53.80,363.32,294.05,460.00]` PDF points. Full and partial crops remain in assets, with provenance. No new experimental results are asserted.
+Three rendered versions now exist: clean, balanced and mechanism (previous default). V2/V3 restore three explicitly selected benchmark comparisons whose values were already recorded above. The native anchor-point strings in V3 use the previously cited Figure 2 coordinates. Its RFT summary names the four terms from Equation 1. The larger qualitative crop selects the first two complete Figure 4 cases on PDF page 8, bbox `[53.80,363.32,294.05,460.00]` PDF points. Full and partial crops remain in assets, with provenance. No new experimental results are asserted.

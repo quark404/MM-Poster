@@ -36,11 +36,25 @@ PinCoT binds visual evidence to persistent identities. PIN-170K supplies structu
 
 Spatial: 13-column mean / 9 benchmarks. Pointing: 5-benchmark mean. Robot: overall success over 60 executions. Source: Figure 1 / Tables 1–3.
 
-Cross-step ID coverage: 18.8% without RFT → 99.9% with RoboPIN (Table 7).
+The performance chart is the original paper image. Supporting aggregation details above are documentation only.
+
+### Ablation studies
+
+Reward design (EmbSpatial): full reward 84.7; without Pin 82.0; without Consistency 82.7.
+
+| Cumulative stage | Spatial | Point |
+|---|---:|---:|
+| SFT | 57.0 | 66.0 |
+| + CoT-SFT | 62.0 | 63.6 |
+| + RFT | 67.7 | 67.9 |
+
+Spatial reasoning: +10.7 points from SFT to RFT.
+
+Sources: Tables 5 and 6. The controlled ablation setting is separate from the main performance plot. Source references do not appear as numbered poster captions.
 
 ## Qualitative Results
 
-Original Figure 3 execution sequences and Figure 4 grounded reasoning examples.
+All three original Figure 3 execution rows and Figure 4 grounded reasoning examples.
 
 Zero-shot xArm successes: spatial 20/20, multi-view 14/20, long-horizon 11/20 (Table 3).
 
@@ -49,11 +63,3 @@ Zero-shot xArm successes: spatial 20/20, multi-view 14/20, long-horizon 11/20 (T
 Persistent visual anchors make embodied reasoning traceable.
 
 Title, author order, university, official logos and contact addresses continue to follow the supplied paper and verified branding.
-
-
-## Latest V3 additions
-
-- Anchor example: `obj_01 · view 0 · point [634,576]`; `obj_01 · view 1 · point [844,706]`.
-- RFT rewards format, identity consistency, pin localization and final-answer correctness.
-- Explicitly selected benchmark rows compare Mimo-Embodied 7B and RoboPIN 4B: CrossPoint 36.8 / 72.2, BLINK multi-view 26.3 / 72.9, EmbSpatial 76.2 / 83.1.
-- Qualitative presentation uses two larger representative reasoning examples, not all three thumbnail rows.
