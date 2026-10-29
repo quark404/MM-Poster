@@ -9,6 +9,7 @@ doc = fitz.open(root / 'assets/paper.pdf')
 crops = {
     'figure-1-cot-comparison': (0, (53.80, 337.88, 389.40, 518.84)),
     'figure-2-data-pipeline': (2, (57.83, 84.48, 551.48, 194.60)),
+    'figure-2-full-method': (2, (53.80, 84.48, 551.48, 282.00)),
     'figure-2-reasoning-example': (2, (53.80, 194.60, 551.48, 282.00)),
     'view-0': (2, (60.82, 229.00, 120.23, 275.05)),
     'view-1': (2, (124.20, 229.00, 180.32, 275.05)),

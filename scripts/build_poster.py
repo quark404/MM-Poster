@@ -49,7 +49,7 @@ slide = prs.slides.add_slide(prs.slide_layouts[6])
 c = canvas.Canvas(str(OUT / 'RoboPIN_A0_portrait.pdf'), pagesize=(W*MM,H*MM), initialFontName='Regular')
 c.setTitle('RoboPIN — Grounded Embodied Reasoning via Pinned Chain-of-Thought')
 c.setAuthor('Yaoting Huang et al. — Tianjin University')
-c.setSubject('ACM Multimedia 2026 | A0 portrait | official logos | QR placeholder')
+c.setSubject('ACM Multimedia 2026 | A0 portrait | official logos')
 audit = []
 html = HTMLPoster(W,H)
 
@@ -184,67 +184,29 @@ text(22,416,398,
      28,True,leading=1.18,max_h=37,highlights=('object A','object B','reasoning-to-answer misalignment'))
 
 panel(442,153,385,288,'Key Insight: Persistent Identity','',42)
-# A conceptual contrast, rather than duplicating the worked example in Method.
-text(454,191,360,'Implicit references',26,True)
-for i,label in enumerate(['a cup','it','the target']):
-    xx=454+i*126
-    rect(xx,210,104,25,'#F3F4F5',LINE,lw=1)
-    text(xx+3,215,98,label,25,True,align='center')
-    if i<2:arrow(xx+108,223,xx+120,color=GRAY)
-text(454,240,360,'Which instance is carried forward?',22,color=GRAY,align='center')
-text(454,261,360,'PinCoT: persistent identity',26,True)
-for i in range(3):
-    xx=454+i*126
-    rect(xx,280,104,25,'#FFF0F3',TEAL,lw=1)
-    text(xx+3,285,98,'obj_01',25,True,TEAL,align='center')
-    if i<2:arrow(xx+108,293,xx+120)
-text(454,316,360,
+for file,x,px,py in [('view-0.png',452,.634,.576),('view-1.png',665,.844,.706)]:
+    text(x,191,148,'View 0' if x==452 else 'View 1',24,True,align='center')
+    with Image.open(ROOT/'assets'/file) as im: vh=148*im.height/im.width
+    image(ROOT/'assets'/file,x,207,148,vh)
+    circle(x+148*px,207+vh*py,3.8,fill='#007E87')
+    rect(x+5,212,69,13,'#007E87')
+    text(x+7,213,65,'obj_01',23,True,WHITE,align='center')
+arrow(617,263,648,color=INK)
+text(452,332,365,'From isolated grounding to persistent anchors',29,True,align='center')
+text(454,350,360,
      '• Spatial references are usually isolated annotations, without explicit identity tracking during reasoning.',
      28,True,leading=1.16,max_h=36,highlights=('isolated annotations','identity tracking'))
-text(454,349,360,
+text(454,383,360,
      '• PinCoT binds each entity to a name, ID, view and point. Later steps reuse the same ID.',
      28,True,leading=1.16,max_h=36,highlights=('name, ID, view and point','same ID'))
-text(454,382,280,
+text(454,416,360,
      '• Our insight: visual anchors act as persistent reasoning variables, making each step traceable to visual evidence.',
      28,True,leading=1.16,max_h=48,highlights=('Our insight:','persistent reasoning','variables'))
-qr=CFG.get('qr_file')
-if qr and (ROOT/qr).is_file():image(ROOT/qr,758,391,52,52)
-else:
-    rect(758,391,52,42,WHITE,'#BAC2C8',lw=1.2)
-    text(762,403,44,'QR\nPLACEHOLDER',16,True,GRAY,align='center')
-text(750,437,68,'PAPER / CODE',17,True,align='center')
-
+# Entire original Figure 2 artwork: upper data pipeline and lower CoT example.
 panel(14,451,813,314,'Our Method: RoboPIN / PinCoT','',35)
-text(22,487,793,'A. How PinCoT Reasons',32,True,TEAL)
-# Recompose the published Figure 2 example with its source views and editable CoT.
-for xx,label in [(22,'1. Observe'),(225,'2. Introduce an anchor'),(428,'3. Reuse identity'),(631,'4. Ground the answer')]:
-    text(xx,508,185,label,27,True,max_h=15)
-text(22,526,185,'How did the camera rotate\nbetween the two views?',23,True,leading=1.12,max_h=25)
-for file,x,view,px,py in [('view-0.png',22,0,.634,.576),('view-1.png',117,1,.844,.706)]:
-    with Image.open(ROOT/'assets'/file) as im: vh=86*im.height/im.width
-    yy=617-vh
-    image(ROOT/'assets'/file,x,yy,86,vh)
-    circle(x+86*px,yy+vh*py,2.3)
-    text(x,619,86,f'View {view}',19,True,align='center')
-rect(225,528,185,41,'#FFF4F6')
-text(230,533,175,'<obj name="microwave"\n id="obj_01" img_idx="0"\n point="[634,576]">',24,leading=1.2,max_h=34,highlights=('obj_01',))
-text(225,581,185,'Introduce the entity once\nwith identity, view and point.\nThen refer to it by obj_01.',25,True,leading=1.17,max_h=36,highlights=('obj_01',))
-text(428,531,185,'Same obj_01, new view:',25,True,highlights=('obj_01',))
-text(428,550,185,'View 0: [634,576]\nView 1: [844,706]',25,leading=1.19,max_h=28)
-text(428,584,185,'Its x-coordinate increases\nfrom 634 to 844: the object\nappears to shift right.',25,True,leading=1.17,max_h=36,highlights=('634 to 844','shift right'))
-text(631,531,185,'In this example, apparent\nobject motion is opposite\nto camera motion.',25,True,leading=1.17,max_h=36)
-rect(631,581,185,37,'#FFF0F3')
-text(637,586,173,'Answer',21,True)
-text(637,600,173,'Movement left',30,True,TEAL,max_h=17)
-for xx in [211,414,617]:arrow(xx,574,xx+10,color=INK)
-line(22,633,816,633,LINE,1.2)
-text(22,640,793,'B. Data Construction & Training',32,True,TEAL)
-image(ROOT/'assets/figure-2-data-pipeline.png',22,659,480,480*110.12/493.65)
-line(519,663,519,760,LINE,1.2)
-text(535,662,275,'Learning to reason with anchors',26,True)
-for yy,name,desc in [(686,'SFT','Embodied knowledge'),(710,'CoT-SFT','Learn PinCoT traces'),(734,'RFT / GRPO','Align reasoning and answers')]:
-    text(535,yy,100,name,25,True,TEAL)
-    text(642,yy,174,desc,23,max_h=23)
+method_asset=ROOT/'assets/figure-2-full-method.png'
+with Image.open(method_asset) as im: method_h=700*im.height/im.width
+image(method_asset,70.5,486,700,method_h)
 
 panel(14,775,400,380,'Experimental Results','clipboard',33)
 # Preserve the actual published plot, including its original legend and labels.
@@ -289,16 +251,16 @@ for item in audit:
 c.showPage();c.save()
 slide.notes_slide.notes_text_frame.text=(
     'A0 portrait 841 × 1189 mm. SDO reference restyle: Comic Neue Bold headings, Open Sans body, coral bars, white background. HTML/CSS and native PowerPoint share the same layout. '
-    'The Method first recomposes the published Figure 2 lower CoT example with original views, one full anchor tag, the published coordinates and source-specific camera-motion reasoning. Data construction and progressive training are shown separately underneath. The Key Insight diagram is conceptual, not a new experimental result. '
+    'Method uses one unchanged crop of the full Figure 2 artwork: data construction above, the original CoT reasoning example below. Key Insight restores the earlier paired-view explanation. No QR code, QR placeholder or paper/code label is included. '
     'Performance is the untouched plot cropped from paper Figure 1. Robot visualization includes all three rows of Figure 3. '
     'Reward ablation: Table 5, controlled EmbSpatial setting (84.7 / 82.0 / 82.7). '
     'Cumulative training: Table 6, Spatial 57.0 / 62.0 / 67.7, Point 66.0 / 63.6 / 67.9. '
     'The controlled ablation averages are distinct from the headline results; Point does not improve monotonically. '
     'No cross-step coverage panel. Text and ablation tables are editable; paper images and logos are replaceable pictures. '
-    'Trial-count discrepancy in the source caption remains documented in SOURCES.md. QR is a placeholder.'
+    'Trial-count discrepancy in the source caption remains documented in SOURCES.md. No QR is included.'
 )
 prs.save(str(OUT/'RoboPIN_A0_editable.pptx'))
 html.save(OUT/'RoboPIN_A0.html',font_dir)
-(OUT/'layout-metadata.json').write_text(json.dumps({'variant':'reasoning-first','method_region':[14,451,827,768],'chart_region':[14,775,414,1155],'qualitative_asset':'assets/figure-4-two-examples.png','performance_asset':'assets/performance-original.png','robot_asset':'assets/robot-three-rows.png'},indent=2))
+(OUT/'layout-metadata.json').write_text(json.dumps({'variant':'original-full-method','method_asset':'assets/figure-2-full-method.png','method_region':[14,451,827,768],'chart_region':[14,775,414,1155],'qualitative_asset':'assets/figure-4-two-examples.png','performance_asset':'assets/performance-original.png','robot_asset':'assets/robot-three-rows.png'},indent=2))
 (OUT/'layout-audit.json').write_text(json.dumps(audit,indent=2,ensure_ascii=False))
 print(f'Built {OUT}/RoboPIN_A0_portrait.pdf and RoboPIN_A0_editable.pptx ({len(audit)} text blocks).')

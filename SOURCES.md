@@ -117,3 +117,7 @@ The latest user request explicitly returns to the SDO screenshot's typography an
 The Method is now grounded in **both halves** of Figure 2 on PDF page 3. Its first part recomposes the microwave camera-motion example with original views and editable, condensed prose. The anchor `obj_01`, coordinates [634,576] and [844,706], the increase in x, and the answer “movement left” all come directly from that example. The camera-motion explanation is explicitly limited to this example. A complete source crop is retained as `assets/figure-2-reasoning-example.png`; its bounds are recorded in crop provenance.
 
 The original upper data-construction pipeline is displayed separately in Part B; SFT / CoT-SFT / RFT roles follow Section 3.3. Key Insight now uses a conceptual reference-chain schematic, not a new empirical comparison. Details and exact source mapping: [design/method_revision.md](design/method_revision.md).
+
+## Superseding user correction: full original method artwork, no QR
+
+The user rejected the custom Method redraw. Current output directly embeds `assets/figure-2-full-method.png`, cropped from PDF page 3 at `[53.80,84.48,551.48,282.00]`. Both the upper data-construction pipeline and the lower concrete CoT example are preserved together without rewriting. The numbered caption is excluded. Key Insight restores the preceding paired-view explanation. The user explicitly requests no QR: there is no pending QR publishing asset, placeholder or PAPER / CODE label. Earlier notes about a required QR or a custom four-step Method are superseded.

@@ -8,9 +8,9 @@
 - Qualitative: restore all three robot rows, including long-horizon manipulation; show two full reasoning cases below.
 - Ablation: reward terms and cumulative SFT / CoT-SFT / RFT performance, preserving the Point score dip.
 - Simplification: remove cross-step coverage, extra coordinate strings, selected benchmark comparisons and numbered captions.
-- Outstanding: real QR and final print filename identifiers.
+- Outstanding: final print filename identifiers. No QR code or QR placeholder is wanted.
 - Implementation: shared local renderer, lightweight Paper2Poster skill workflow; full API-based PosterAgent unexecuted.
 
 The latest request prioritizes representative original-paper prose beneath Motivation and Key Insight. The prior card-based Rio styling is superseded.
 
-Latest method priority: distinguish how PinCoT reasons from how its supervision is constructed. Present the original microwave example as a four-step editable explanation; keep data construction and training in a separate lower band. Key Insight remains conceptual to avoid duplicate imagery.
+Latest user correction: restore the paired-view Key Insight and use the complete original Figure 2 artwork in Method (upper pipeline and lower CoT example together). Remove all QR placeholders and paper/code labels. The previous four-step redraw is superseded.

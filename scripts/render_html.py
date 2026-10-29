@@ -31,7 +31,9 @@ with sync_playwright() as p:
     assert not report['bounds_issues'],report['bounds_issues']
     assert not report['overflow_issues'],report['overflow_issues']
     assert not report['external_assets'],report['external_assets']
-    assert 'cross-step' not in report.pop('body_text').lower()
+    body_text=report.pop('body_text')
+    assert 'cross-step' not in body_text.lower()
+    assert all(label not in body_text for label in ['PLACEHOLDER','PAPER / CODE','A. How PinCoT Reasons','B. Data Construction & Training'])
     page.locator('#frame').screenshot(path=str(out/'RoboPIN_HTML_preview.png'))
     page.pdf(path=str(out/'RoboPIN_A0_HTML.pdf'),prefer_css_page_size=True,print_background=True)
     # Also check screen layout at a phone width.

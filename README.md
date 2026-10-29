@@ -15,17 +15,16 @@ GitHub 不直接运行 HTML；在文件页面点击 **Download raw file**，保�
 
 ![Latest HTML poster](output/RoboPIN_HTML_preview.png)
 
-## 本轮修改：先讲推理，再讲数据与训练
+## 当前版本：恢复 Key Insight，Method 使用完整论文原图
 
 [查看 Our Method 局部大图](output/detail-method.png)
 
-- **A. How PinCoT Reasons**：用论文中的微波炉跨视角案例，按“观察 → 建立锚点 → 复用身份 → 得到答案”呈现具体 CoT。保留原始照片、`obj_01`、两组坐标和论文结论，完整 XML 标签只展示一次。
-- **B. Data Construction & Training**：下方保留原始数据构造图，旁边独立介绍 SFT、CoT-SFT、RFT / GRPO。
-- **Key Insight**：改为“隐式引用 / 持续保留 ID”的概念示意，不重复放 Method 的照片。
-- 方法区从 234 mm 增加到 314 mm；压缩上方和结果区的布局，保留完整三行真机图、原始性能图及两组消融表。
-- 延续参考图的白底、珊瑚红平直标题条、Comic Neue Bold 标题和 Open Sans 正文。重排后的 CoT 文案及箭头在 PPT 中可编辑。
+- **Key Insight** 恢复此前的双视角照片、obj_01 标记与三条说明。
+- **Our Method** 直接使用论文图 2 的完整原图：上方数据构造流程，下方具体 CoT 推理示例。删除上一版自行重画的四步骤及 A/B 分区。
+- 删除二维码占位框和 PAPER / CODE 标签，不预留二维码位置。
+- 保留珊瑚红标题条、Comic Neue Bold 标题和 Open Sans 正文。
 
-[方法与原文对应说明](design/method_revision.md) · [字体与文案设计依据](design/reference_typography.md)
+[方法原图说明](design/method_revision.md)
 
 ### 保留的论文证据
 
@@ -41,7 +40,7 @@ GitHub 不直接运行 HTML；在文件页面点击 **Download raw file**，保�
 
 **HTML** 是真实 HTML/CSS 元素，正文可选择；不是整页图片或 PDF 嵌入。自带缩放适配及打印按钮。可以直接编辑 HTML 的文字与样式，或修改共享生成器后重建。
 
-**PPTX** 的文字、消融表格单元内容、卡片、训练节点和箭头可编辑；性能图、论文插图、徽标与背景是独立可替换图片，图内元素不再重绘。编辑 PPT 前请安装 [字体目录](assets/fonts) 中的三个 TTF 文件，避免字体替换；字体也已包含在源码包内。HTML 和 PDF 已嵌入字体。
+**PPTX** 的文字、消融表格单元内容及周边版式可编辑；完整 Method、性能图、论文插图和徽标是独立可替换图片，图内元素保留论文原样。编辑 PPT 前请安装 [字体目录](assets/fonts) 中的三个 TTF 文件，避免字体替换；字体也已包含在源码包内。HTML 和 PDF 已嵌入字体。
 
 直接修改 HTML/PPTX 后请另存文件；生成器不会反向读取这些修改，重新运行会覆盖生成产物。
 
@@ -62,7 +61,7 @@ HTML 渲染另需系统 Chromium（默认 `/usr/bin/chromium`）。标题和正�
 - `scripts/prepare_assets.py`：从论文提取原图；精确位置记录在 `assets/crop-provenance.json`。
 - `scripts/render_html.py`：Chromium 离线渲染、截图、打印 PDF、文字边界及手机宽度检查。
 - `output/validation.json` / `output/html-validation.json`：最新验证记录。
-- `poster_config.json`：正式会议标识、学校校徽与二维码路径。
+- `poster_config.json`：正式会议标识与学校校徽路径。
 
 已检查 PDF 字体、页面尺寸、文字碰撞、图片比例和 PPTX 中的原图字节；HTML 已实际浏览器渲染并检查。PPTX 完成结构检查，尚未在 Microsoft Office 中渲染。
 
@@ -78,4 +77,4 @@ ZIP 包含当前 HTML、PPTX、主 PDF、预览、素材和重建源码。为避
 
 ## 印刷信息
 
-二维码仍为占位符；提供真实链接后可替换。会议要求见 [Paper Presenters Guidelines](https://2026.acmmm.org/site/paper-presenters-guidelines.html) 和 [Poster Printing Service](https://2026.acmmm.org/site/poster-printing-service.html)。最终文件按 `ACMMM2026_Poster_Track_OpenReviewID.pdf` 命名，Track 与 OpenReview ID 待补充。本项目未提交会议文件或印刷订单。
+本版不放二维码，也不保留占位符。会议要求见 [Paper Presenters Guidelines](https://2026.acmmm.org/site/paper-presenters-guidelines.html) 和 [Poster Printing Service](https://2026.acmmm.org/site/poster-printing-service.html)。最终文件按 `ACMMM2026_Poster_Track_OpenReviewID.pdf` 命名，Track 与 OpenReview ID 待补充。本项目未提交会议文件或印刷订单。

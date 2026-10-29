@@ -22,7 +22,7 @@ size_mm = [page.rect.width*25.4/72, page.rect.height*25.4/72]
 assert abs(size_mm[0]-841) < .01 and abs(size_mm[1]-1189) < .01
 assert page.rotation == 0
 pdf_text = page.get_text()
-for item in ['RoboPIN', '84.7', '82.0', '82.7', '57.0', '62.0', '67.7', '66.0', '63.6', '67.9', '20 / 20', '14 / 20', '11 / 20', 'PLACEHOLDER']:
+for item in ['RoboPIN', '84.7', '82.0', '82.7', '57.0', '62.0', '67.7', '66.0', '63.6', '67.9', '20 / 20', '14 / 20', '11 / 20']:
     assert item in pdf_text, f'Missing expected source value: {item}'
 for removed in ['model parameters','PinCoT reasoning samples','evaluation benchmarks','CrossPoint vs. Mimo-7B']:
     assert removed not in pdf_text, f'Old metric card remains: {removed}'
@@ -57,15 +57,13 @@ assert abs(prs.slide_height / 36000 - 1189) < .01
 slide = prs.slides[0]
 boxes=[s for s in slide.shapes if s.has_text_frame and s.text.strip()]
 native_text = '\n'.join(s.text for s in boxes)
-for item in ['Motivation', 'Key Insight: Persistent Identity', 'Our Method: RoboPIN / PinCoT', 'Experimental Results', 'Qualitative Results', 'Spatial', 'SFT', 'CoT-SFT', 'RFT / GRPO', 'Reward design', 'Training stages', 'w/o Pin', 'w/o Consistency', '+ CoT-SFT', '+ RFT']:
+for item in ['Motivation', 'Key Insight: Persistent Identity', 'Our Method: RoboPIN / PinCoT', 'Experimental Results', 'Qualitative Results', 'Spatial', 'SFT', 'CoT-SFT', 'Reward design', 'Training stages', 'w/o Pin', 'w/o Consistency', '+ CoT-SFT', '+ RFT']:
     assert item in native_text, f'Expected editable content is missing: {item}'
-method_text=page.get_text(clip=fitz.Rect(*(v*72/25.4 for v in meta['method_region'])))
-for item in ['A. How PinCoT Reasons','B. Data Construction & Training','obj_01','[634,576]','[844,706]','Movement left']:
-    assert item in method_text, f'Missing method evidence: {item}'
-assert method_text.count('<obj')==1, 'Show one full anchor tag, then reuse its identity'
+for removed in ['PLACEHOLDER','PAPER / CODE','A. How PinCoT Reasons','B. Data Construction & Training','Implicit references']:
+    assert removed not in native_text, f'Removed content returned: {removed}'
 config = json.loads((root / 'poster_config.json').read_text())
 embedded = {hashlib.sha256(s.image.blob).hexdigest() for s in slide.shapes if s.shape_type == 13}
-paper_figures=['assets/figure-1-cot-comparison.png','assets/figure-2-data-pipeline.png','assets/view-0.png','assets/view-1.png',meta['qualitative_asset'],meta['performance_asset'],meta['robot_asset']]
+paper_figures=['assets/figure-1-cot-comparison.png',meta['method_asset'],'assets/view-0.png','assets/view-1.png',meta['qualitative_asset'],meta['performance_asset'],meta['robot_asset']]
 for asset in paper_figures:
     assert hashlib.sha256((root/asset).read_bytes()).hexdigest() in embedded, f'Original paper figure missing: {asset}'
     from PIL import Image
@@ -74,7 +72,7 @@ for asset in paper_figures:
     matching=[s for s in slide.shapes if s.shape_type == 13 and hashlib.sha256(s.image.blob).hexdigest()==hashlib.sha256((root/asset).read_bytes()).hexdigest()]
     assert all(abs((s.width/s.height)/ratio-1)<.005 for s in matching), f'Figure stretched: {asset}'
     if asset in ['assets/view-0.png','assets/view-1.png']:
-        assert len(matching)==1 and 451<=matching[0].top/36000<633, 'Worked example should appear only in Method'
+        assert len(matching)==1 and 190<=matching[0].top/36000<330, 'Paired source views must be restored in Key Insight'
 logo_assets=[]
 for key in ['mm_logo_file', 'tju_logo_file']:
     asset = config.get(key)
@@ -113,14 +111,14 @@ report={
     'paper_figure_aspect_ratios': 'preserved',
     'performance_chart': 'Original paper crop; no redrawn bars',
     'robot_rows': 3,
-    'method': 'Published CoT example with one full anchor tag; data construction and training separated',
+    'method': 'Full original Figure 2 artwork, including upper pipeline and lower reasoning example',
     'ablation_source': 'Tables 5 and 6; editable table text',
     'aggregate_chart_values': 'Original Figure 1 image retained',
     'old_metric_cards': 'removed',
     'header_background': 'Plain white; coral flat section bars',
     'layout_variant': meta['variant'],
     'design': 'SDO reference typography: Comic Neue headings, Open Sans body, coral inline emphasis',
-    'intentional_placeholders': ['paper/code QR'],
+    'intentional_placeholders': [],
 }
 (out / 'validation.json').write_text(json.dumps(report, indent=2))
 print(json.dumps(report, indent=2))

@@ -1,5 +1,6 @@
 {
-  "variant": "reasoning-first",
+  "variant": "original-full-method",
+  "method_asset": "assets/figure-2-full-method.png",
   "method_region": [
     14,
     451,
