@@ -6,7 +6,7 @@ RoboPIN · ACM Multimedia 2026 · **A0 竖版，841 × 1189 mm**
 
 - [HTML 版预览](output/RoboPIN_HTML_preview.png)
 - [单文件 HTML](output/RoboPIN_A0.html)：下载后用浏览器打开，图片和字体已内嵌，无需联网。
-- [可编辑 PowerPoint](output/RoboPIN_A0_editable.pptx)
+- [可编辑 PowerPoint](output/RoboPIN_A0_editable.pptx) · [配套字体安装包](output/RoboPIN_fonts.zip)
 - [PPT 配套预览](output/RoboPIN_preview.png) · [印刷 PDF](output/RoboPIN_A0_portrait.pdf)
 - [HTML 导出 PDF](output/RoboPIN_A0_HTML.pdf)
 - [当前版本与源码包](output/RoboPIN_poster_package.zip)
@@ -15,7 +15,15 @@ GitHub 不直接运行 HTML；在文件页面点击 **Download raw file**，保�
 
 ![Latest HTML poster](output/RoboPIN_HTML_preview.png)
 
-## 本轮修改
+## 本轮修改：按 SDO 参考图重排
+
+- 白底、珊瑚红平直标题条、居中手写感标题；去掉大号品牌字、Rio 背景和圆角卡片。
+- 标题采用 **Comic Neue Bold**，正文采用 **Open Sans**；黑色加粗正文中的关键短语用珊瑚红强调。
+- Motivation 改为原图下两段编号说明，直接阐述引用漂移和“分析对象 A，却指向对象 B”。
+- Key Insight 改为“图示 → 一句概括 → 三条论述”，Our insight 融入最后一条，不再重复成独立卡片。
+- 原文依据见 [本轮设计与文案映射](design/reference_typography.md)。
+
+### 保留的论文证据
 
 - 性能图直接裁取论文首页原图，保留原始柱体、图例、数值和标签。
 - 真机展示恢复完整三行：空间、多视角、长时序任务。
@@ -29,7 +37,7 @@ GitHub 不直接运行 HTML；在文件页面点击 **Download raw file**，保�
 
 **HTML** 是真实 HTML/CSS 元素，正文可选择；不是整页图片或 PDF 嵌入。自带缩放适配及打印按钮。可以直接编辑 HTML 的文字与样式，或修改共享生成器后重建。
 
-**PPTX** 的文字、消融表格单元内容、卡片、训练节点和箭头可编辑；性能图、论文插图、徽标与背景是独立可替换图片，图内元素不再重绘。建议安装 DejaVu Sans，避免字体替换影响布局。
+**PPTX** 的文字、消融表格单元内容、卡片、训练节点和箭头可编辑；性能图、论文插图、徽标与背景是独立可替换图片，图内元素不再重绘。编辑 PPT 前请安装 [字体目录](assets/fonts) 中的三个 TTF 文件，避免字体替换；字体也已包含在源码包内。HTML 和 PDF 已嵌入字体。
 
 直接修改 HTML/PPTX 后请另存文件；生成器不会反向读取这些修改，重新运行会覆盖生成产物。
 
@@ -43,7 +51,7 @@ python scripts/validate_outputs.py
 python scripts/render_html.py
 ```
 
-HTML 渲染另需系统 Chromium（默认 `/usr/bin/chromium`）。字体默认位于 `/usr/share/fonts/truetype/dejavu/`。以上脚本均支持常用 Linux 环境，生成和验证脚本可使用 `--output-dir` 指定输出目录。
+HTML 渲染另需系统 Chromium（默认 `/usr/bin/chromium`）。标题和正文字体随仓库存放于 `assets/fonts/`，备用等宽字体使用系统 DejaVu Sans Mono。以上脚本均支持常用 Linux 环境，生成和验证脚本可使用 `--output-dir` 指定输出目录。
 
 - `scripts/build_poster.py`：共享版式、文案；生成 PDF、PPTX 和 HTML。
 - `scripts/html_poster.py`：原生 HTML/CSS 元素、内嵌字体和图片。

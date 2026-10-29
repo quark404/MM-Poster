@@ -3,6 +3,9 @@
 from pathlib import Path
 from zipfile import ZipFile, ZIP_DEFLATED
 root=Path(__file__).resolve().parents[1]
+with ZipFile(root/'output/RoboPIN_fonts.zip','w',ZIP_DEFLATED) as z:
+    for path in sorted((root/'assets/fonts').iterdir()):
+        if path.is_file():z.write(path,path.name)
 bundle=root/'output/RoboPIN_poster_package.zip'
 main_outputs={'RoboPIN_A0.html','RoboPIN_A0_editable.pptx','RoboPIN_A0_portrait.pdf','RoboPIN_preview.png'}
 with ZipFile(bundle,'w',ZIP_DEFLATED,compresslevel=6) as z:

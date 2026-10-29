@@ -41,7 +41,10 @@ for block in page.get_text('dict')['blocks']:
 for i,a in enumerate(native_spans):
     for b in native_spans[i+1:]:
         overlap=fitz.Rect(a['bbox']) & fitz.Rect(b['bbox'])
-        assert overlap.is_empty or overlap.get_area()<1, f"Native text collision: {a['text']} / {b['text']}"
+        # Adjacent colored PDF runs can differ by a few hundredths of a point
+        # between the renderer's advance widths and MuPDF's font metrics.
+        same_baseline_seam = overlap.width < .1 and abs(a['origin'][1]-b['origin'][1]) < .01
+        assert overlap.is_empty or overlap.get_area()<1 or same_baseline_seam, f"Native text collision: {a['text']} / {b['text']}"
 fonts=[]
 for font in page.get_fonts():
     xref, ext, kind, base, *_ = font
@@ -76,7 +79,9 @@ assert 'LOGO PLACEHOLDER' not in pdf_text, 'Outdated logo placeholder remains'
 assert not any('LOGO PLACEHOLDER' in s.text for s in boxes)
 header_pixel = page.get_pixmap(matrix=fitz.Matrix(.1,.1)).pixel(1,1)
 assert min(header_pixel)>=230, 'Title corner should remain light for readability'
-assert hashlib.sha256((root/'assets/rio-wave-background.png').read_bytes()).hexdigest() in embedded, 'Decorative background is missing'
+assert hashlib.sha256((root/'assets/rio-wave-background.png').read_bytes()).hexdigest() not in embedded, 'Superseded decorative background returned'
+assert not any(s.text.strip() == 'Our insight' for s in boxes), 'Duplicate insight heading returned'
+assert any('Comic Neue' == p.font.name for s in boxes for p in s.text_frame.paragraphs), 'Reference heading font missing'
 for s in slide.shapes:
     assert s.left >= 0 and s.top >= 0 and s.left+s.width <= prs.slide_width+1 and s.top+s.height <= prs.slide_height+1, s.name
 with ZipFile(out / 'RoboPIN_A0_editable.pptx') as z:
@@ -104,9 +109,9 @@ report={
     'ablation_source': 'Tables 5 and 6; editable table text',
     'aggregate_chart_values': 'Original Figure 1 image retained',
     'old_metric_cards': 'removed',
-    'header_background': 'Light Rio skyline with white title corner',
+    'header_background': 'Plain white; coral flat section bars',
     'layout_variant': meta['variant'],
-    'design': 'Source figures, complete robot sequences, reward and training ablations',
+    'design': 'SDO reference typography: Comic Neue headings, Open Sans body, coral inline emphasis',
     'intentional_placeholders': ['paper/code QR'],
 }
 (out / 'validation.json').write_text(json.dumps(report, indent=2))

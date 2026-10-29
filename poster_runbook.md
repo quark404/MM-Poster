@@ -4,9 +4,9 @@
 
 Default `source` layout generates HTML, PPTX and PDF with original performance artwork, all three robot execution rows, reward ablations and cumulative training-stage results. Archived earlier variants remain in `output/variants`; rebuild them from historical Git commits if needed. `--output-dir` selects the output folder for all current generation and validation scripts.
 
-## Earlier visual target
+## Current visual target
 
-The latest user-supplied RoboPIN AI mockup overrides the earlier SDO reference and editorial grid, including decorative Rio art, rounded gradients and icons. See `design/styled_mockup_alignment.md`. Five named sections follow its composition: Motivation, Key Insight, Our Method, Experimental Results, Qualitative Results. See `design/reference_alignment.md`. All source constraints, A0 dimensions and data checks still apply.
+The user's renewed SDO screenshot now governs typography and prose. Use plain white, flat coral section strips, centered Comic Neue Bold headings and Open Sans body copy with coral phrase emphasis. No anime art. The earlier Rio mockup is superseded. See `design/reference_typography.md` for source excerpts and decisions.
 
 ## What was actually run
 
@@ -22,7 +22,7 @@ python scripts/validate_outputs.py
 python scripts/render_html.py
 ```
 
-This path requires no remote model credentials. The output is exactly A0 portrait. Native text, ablation tables and training shapes are editable; performance and paper figures are original images. HTML embeds every font and picture and works offline. Chromium prints an additional HTML PDF.
+This path requires no remote model credentials. The output is exactly A0 portrait. Native text, inline phrase colors, ablation tables and layout shapes are editable; performance and paper figures are original images. HTML embeds every font and picture and works offline. Chromium prints an additional HTML PDF.
 
 ## Optional full upstream PosterAgent execution — NOT RUN
 

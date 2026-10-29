@@ -2,28 +2,27 @@
 
 ## Motivation
 
-1. Reference drift: textual references can switch between similar objects during multi-step reasoning.
-2. Reasoning–answer misalignment: a correct intermediate analysis can still end on the wrong object, especially across views.
+1. Text-based references can drift between similar objects. Coordinate-only grounding lacks explicit identity tracking.
+2. A model may correctly analyze object A, then silently point to object B. This reasoning-to-answer misalignment breaks reliable visual grounding.
 
-Visual: original Figure 1 left comparison.
+Visual: original Figure 1 left comparison. Prose condensed from Introduction and Section 3.1; no numbered figure caption on the poster.
 
 ## Key Insight: Persistent Identity
 
-Same entity. Same ID. Different views.
+From isolated grounding to persistent anchors
 
-Reasoning anchor = name + ID + view + point.
+- Spatial references are usually isolated annotations, without explicit identity tracking during reasoning.
+- PinCoT binds each entity to a name, ID, view and point. Later steps reuse the same ID.
+- Our insight: visual anchors act as persistent reasoning variables, making each step traceable to visual evidence.
 
-Introduce the anchor once; reuse its identity throughout the reasoning chain. Persistent IDs connect visual grounding, intermediate steps and the final answer.
-
-Visual: the microwave view pair from Figure 2; `obj_01` in both views. Paper/code QR is a labelled placeholder.
+Visual: source microwave views with obj_01 in both views. QR remains a placeholder. There is no separate Our insight card.
 
 ## Our Method: RoboPIN / PinCoT
 
-Original Figure 2 data-construction pipeline.
+We propose PinCoT, which pins every reasoning step to visual evidence through persistent identity-aware anchors.
+RoboPIN learns this representation through SFT, CoT-SFT and process-supervised RFT / GRPO.
 
-SFT: embodied knowledge → CoT-SFT: structured reasoning → RFT / GRPO: process alignment.
-
-PinCoT binds visual evidence to persistent identities. PIN-170K supplies structured traces; process rewards supervise grounding and identity consistency.
+Visual: original Figure 2 upper pipeline.
 
 ## Experimental Results
 
@@ -60,6 +59,6 @@ Zero-shot xArm successes: spatial 20/20, multi-view 14/20, long-horizon 11/20 (T
 
 ## Closing statement
 
-Persistent visual anchors make embodied reasoning traceable.
+Persistent Visual Anchors · Consistent Reasoning · Grounded Answers
 
 Title, author order, university, official logos and contact addresses continue to follow the supplied paper and verified branding.

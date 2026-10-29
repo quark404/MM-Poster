@@ -107,3 +107,7 @@ The latest user-supplied RoboPIN AI image supersedes the earlier SDO screenshot 
 ## Historical module refinement variants
 
 Three rendered versions now exist: clean, balanced and mechanism (previous default). V2/V3 restore three explicitly selected benchmark comparisons whose values were already recorded above. The native anchor-point strings in V3 use the previously cited Figure 2 coordinates. Its RFT summary names the four terms from Equation 1. The larger qualitative crop selects the first two complete Figure 4 cases on PDF page 8, bbox `[53.80,363.32,294.05,460.00]` PDF points. Full and partial crops remain in assets, with provenance. No new experimental results are asserted.
+
+## Current SDO typography / prose revision
+
+The latest user request explicitly returns to the SDO screenshot's typography and paragraph structure. It overrides the earlier Rio-card style. Current output uses white, coral flat bars, Comic Neue Bold headings and Open Sans body. The short prose beneath Motivation, Key Insight and Method is condensed from Introduction and Sections 2.2, 3.1 and 3.3; exact supporting excerpts are mapped in [design/reference_typography.md](design/reference_typography.md). No new scientific result is introduced. Licenses and font files are in `assets/fonts`.

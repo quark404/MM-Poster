@@ -25,10 +25,11 @@ class HTMLPoster:
         length = math.hypot(x2-x1,y2-y1)
         self.nodes.append(f'<div aria-hidden="true" style="{self.box(x1,y1,length,0)}border-top:{lw}pt solid {color};transform-origin:0 0;transform:rotate({angle}deg)"></div>')
 
-    def text(self, x, y, w, lines, size, bold, color, leading, mono, align):
-        family = 'PosterMono' if mono else 'PosterSans'
-        css = self.box(x,y,w,len(lines)*size*leading*25.4/72)
-        self.nodes.append(f'<div class="copy" style="{css}font-family:{family};font-size:{size}pt;font-weight:{700 if bold else 400};color:{color};line-height:{size*leading}pt;text-align:{align};white-space:pre">'+escape('\n'.join(lines))+'</div>')
+    def text(self, x, y, w, lines, size, bold, color, leading, mono, align, heading=False, colored_lines=None):
+        family = 'PosterHeading' if heading else ('PosterMono' if mono else 'PosterSans')
+        css = self.box(x,y,w,len(lines)*size*leading*25.4/72+4)
+        content='\n'.join(''.join(f'<span style="color:{col}">{escape(part)}</span>' for part,col in line) for line in colored_lines) if colored_lines else escape('\n'.join(lines))
+        self.nodes.append(f'<div class="copy" style="{css}font-family:{family};font-size:{size}pt;font-weight:{700 if bold else 400};color:{color};line-height:{size*leading}pt;text-align:{align};white-space:pre">'+content+'</div>')
 
     def image(self, file, x, y, w, h, round_image=False):
         file = Path(file)
@@ -42,7 +43,7 @@ class HTMLPoster:
 
     def save(self, path, font_dir):
         fonts=''
-        for family, filename, weight in [('PosterSans','DejaVuSans.ttf',400),('PosterSans','DejaVuSans-Bold.ttf',700),('PosterMono','DejaVuSansMono.ttf',400)]:
+        for family, filename, weight in [('PosterSans','OpenSans-Regular.ttf',400),('PosterSans','OpenSans-Bold.ttf',700),('PosterHeading','ComicNeue-Bold.ttf',700)]:
             encoded=base64.b64encode((font_dir/filename).read_bytes()).decode()
             fonts+=f'@font-face{{font-family:{family};font-weight:{weight};src:url(data:font/ttf;base64,{encoded}) format("truetype");}}'
         html='''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RoboPIN · A0 Poster</title><style>'''+fonts+f'''

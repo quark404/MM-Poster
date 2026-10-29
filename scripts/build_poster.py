@@ -28,19 +28,20 @@ STYLE = yaml.safe_load((ROOT/'assets/poster.yaml').read_text())
 TOKENS = STYLE['robopin']
 W, H = TOKENS['width_mm'], TOKENS['height_mm']
 MM = 72 / 25.4
-NAVY = '#'+''.join(f'{v:02X}' for v in STYLE['title_text_color'])
-TEAL = '#'+''.join(f'{v:02X}' for v in TOKENS['accent_rgb'])
+NAVY = '#222222'
+TEAL = '#E54C64'
 MINT = '#E4F3F0'
-INK = '#18334B'
+INK = '#222222'
 GRAY = '#566B7C'
 BG = '#F0F4F7'
 LINE = '#D5E0E7'
 WHITE = '#FFFFFF'
 BLUE = '#5782A3'
 AMBER = '#B2711D'
-font_dir = Path('/usr/share/fonts/truetype/dejavu')
-for name, file in [('Regular','DejaVuSans.ttf'),('Bold','DejaVuSans-Bold.ttf'),('Mono','DejaVuSansMono.ttf')]:
+font_dir = ROOT/'assets/fonts'
+for name, file in [('Regular','OpenSans-Regular.ttf'),('Bold','OpenSans-Bold.ttf'),('Heading','ComicNeue-Bold.ttf')]:
     pdfmetrics.registerFont(TTFont(name, str(font_dir / file)))
+pdfmetrics.registerFont(TTFont('Mono','/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf'))
 
 prs = Presentation()
 prs.slide_width, prs.slide_height = Mm(W), Mm(H)
@@ -76,8 +77,8 @@ def line(x1,y1,x2,y2,color=LINE,lw=1.5):
     s=slide.shapes.add_connector(MSO_CONNECTOR.STRAIGHT,Mm(x1),Mm(y1),Mm(x2),Mm(y2))
     s.line.color.rgb=rgb(color); s.line.width=Pt(lw)
 
-def text(x,y,w,value,size=28,bold=False,color=INK,leading=1.22,mono=False,align='left',max_h=None):
-    font='Mono' if mono else ('Bold' if bold else 'Regular')
+def text(x,y,w,value,size=28,bold=False,color=INK,leading=1.22,mono=False,align='left',max_h=None,heading=False,highlights=()):
+    font='Heading' if heading else ('Mono' if mono else ('Bold' if bold else 'Regular'))
     lines=[]
     for para in value.split('\n'):
         if not para:
@@ -92,12 +93,19 @@ def text(x,y,w,value,size=28,bold=False,color=INK,leading=1.22,mono=False,align=
     height=len(lines)*size*leading/MM
     if max_h is not None and height>max_h:
         raise ValueError(f'Text overflows box: {value[:50]} ({height:.1f}>{max_h} mm)')
+    import re
+    def runs(t):
+        if not highlights:return [(t,color)]
+        pattern='('+'|'.join(re.escape(h) for h in sorted(highlights,key=len,reverse=True))+')'
+        return [(part,TEAL if part in highlights else color) for part in re.split(pattern,t) if part]
     for i,t in enumerate(lines):
         tw=pdfmetrics.stringWidth(t,font,size)
         if tw>w*MM+0.1:raise ValueError(f'Text too wide: {t}')
         tx=x*MM + ((w*MM-tw)/2 if align=='center' else (w*MM-tw if align=='right' else 0))
-        c.setFillColor(HexColor(color));c.setFont(font,size)
-        c.drawString(tx,(H-y)*MM-size*0.86-i*size*leading,t)
+        for part,part_color in runs(t):
+            c.setFillColor(HexColor(part_color));c.setFont(font,size)
+            c.drawString(tx,(H-y)*MM-size*0.86-i*size*leading,part)
+            tx+=pdfmetrics.stringWidth(part,font,size)
     tb=slide.shapes.add_textbox(Mm(x),Mm(y),Mm(w),Mm(height+4))
     tf=tb.text_frame;tf.clear();tf.word_wrap=False
     tf.margin_left=tf.margin_right=tf.margin_top=tf.margin_bottom=0
@@ -105,12 +113,14 @@ def text(x,y,w,value,size=28,bold=False,color=INK,leading=1.22,mono=False,align=
     from pptx.enum.text import PP_ALIGN
     for i,t in enumerate(lines):
         p=tf.paragraphs[0] if i==0 else tf.add_paragraph()
-        p.text=t;p.font.name='DejaVu Sans Mono' if mono else 'DejaVu Sans'
-        p.font.size=Pt(size);p.font.bold=bold;p.font.color.rgb=rgb(color)
+        p.font.name='Comic Neue' if heading else ('DejaVu Sans Mono' if mono else 'Open Sans')
+        for part,part_color in runs(t):
+            r=p.add_run();r.text=part;r.font.color.rgb=rgb(part_color)
+        p.font.size=Pt(size);p.font.bold=bold or heading;p.font.color.rgb=rgb(color)
         p.space_before=Pt(0);p.space_after=Pt(0);p.line_spacing=Pt(size*leading)
         p.alignment={'left':PP_ALIGN.LEFT,'center':PP_ALIGN.CENTER,'right':PP_ALIGN.RIGHT}[align]
     audit.append({'text':value,'x':x,'y':y,'width':w,'height':height,'size_pt':size})
-    html.text(x,y,w,lines,size,bold,color,leading,mono,align)
+    html.text(x,y,w,lines,size,bold or heading,color,leading,mono,align,heading=heading,colored_lines=[runs(t) for t in lines])
     return height
 
 def image(file,x,y,w,h):
@@ -129,13 +139,6 @@ def arrow(x1,y,x2,color=TEAL):
     line(x1,y,x2,y,color,3)
     line(x2-4,y-3,x2,y,color,3);line(x2-4,y+3,x2,y,color,3)
 
-def card(x,y,w,h):rect(x,y,w,h,WHITE,radius=4)
-
-def section(x,y,num,title,w=781):
-    text(x,y+2,23,num,24,True,TEAL)
-    text(x+31,y,w-31,title,STYLE['section_title_font_size'],True,NAVY,max_h=17)
-    line(x,y+21,x+w,y+21,LINE,1.2)
-
 def logo_placeholder(key,x,y,w,h):
     file=CFG.get(key+'_file')
     if file and (ROOT/file).is_file():
@@ -147,70 +150,20 @@ def logo_placeholder(key,x,y,w,h):
         rect(x,y,w,h,'#1C3B56','#55748B',2)
         text(x+3,y+9,w-6,CFG[key+'_label'],18,True,'#D8E5ED',align='center',max_h=h-10)
 
-# Rebuild the user's AI mockup with native gradients, cards and scientific content.
-import math
-
-def gradient_box(x,y,w,h,left=TOKENS['gradient_start'],right=TOKENS['gradient_end'],radius=9):
-    html.gradient(x,y,w,h,left,right,radius)
-    c.saveState()
-    path=c.beginPath();path.roundRect(x*MM,(H-y-h)*MM,w*MM,h*MM,radius*MM)
-    c.clipPath(path,stroke=0)
-    c.linearGradient(x*MM,0,(x+w)*MM,0,[HexColor(left),HexColor(right)],extend=True)
-    c.restoreState()
-    sh=slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,Mm(x),Mm(y),Mm(w),Mm(h))
-    sh.adjustments[0]=min(radius/min(w,h),.2)
-    sh.fill.gradient();sh.fill.gradient_angle=0
-    stops=sh.fill.gradient_stops
-    stops[0].position=0;stops[0].color.rgb=rgb(left)
-    stops[1].position=1;stops[1].color.rgb=rgb(right)
-    sh.line.fill.background()
-
-def badge(kind,cx,cy,r=18):
-    if kind!='bulb':circle(cx,cy,r,'#006B7C','#006B7C')
-    if kind=='bulb':
-        circle(cx,cy-1,8,'#F6CF42','#F6CF42')
-        rect(cx-4,cy+6,8,6,'#F6CF42',radius=1)
-        line(cx-3,cy+14,cx+3,cy+14,'#F6CF42',3)
-        for a in range(0,360,45):
-            ang=math.radians(a);line(cx+12*math.cos(ang),cy-1+12*math.sin(ang),cx+16*math.cos(ang),cy-1+16*math.sin(ang),'#F6CF42',2)
-    elif kind=='target':
-        for rad in [12,8,4]:circle(cx,cy,rad,'#006B7C',WHITE)
-        line(cx,cy,cx+13,cy-14,WHITE,4)
-        line(cx+8,cy-14,cx+13,cy-14,WHITE,3);line(cx+13,cy-14,cx+13,cy-9,WHITE,3)
-    elif kind=='gear':
-        for a in range(0,360,45):
-            ang=math.radians(a);line(cx+8*math.cos(ang),cy+8*math.sin(ang),cx+13*math.cos(ang),cy+13*math.sin(ang),WHITE,7)
-        circle(cx,cy,9,WHITE,WHITE);circle(cx,cy,3.4,'#006B7C','#006B7C')
-    elif kind=='clipboard':
-        rect(cx-9,cy-11,18,23,'#006B7C',WHITE,2,lw=2.5)
-        rect(cx-5,cy-13,10,5,WHITE,radius=1)
-        for dy in [-4,2,8]:
-            line(cx-4,cy+dy,cx+6,cy+dy,WHITE,2)
-            circle(cx-6.5,cy+dy,.7,WHITE,WHITE)
-    else:
-        line(cx-11,cy+11,cx-11,cy-10,WHITE,3);line(cx-11,cy+11,cx+12,cy+11,WHITE,3)
-        for x1,y1,x2,y2 in [(-7,5,-1,-3),(-1,-3,5,1),(5,1,11,-9)]:line(cx+x1,cy+y1,cx+x2,cy+y2,WHITE,3)
-        for dx,dy in [(-7,5),(-1,-3),(5,1),(11,-9)]:circle(cx+dx,cy+dy,1.6,WHITE,WHITE)
-
 def panel(x,y,w,h,title,kind,size=34):
-    rect(x,y,w,h,WHITE,'#BDE5E7',10,lw=1)
-    gradient_box(x,y,w,43,radius=10)
-    rect(x+.7,y+33,w-1.4,h-33.7,WHITE,radius=10)
-    # Smaller contained marks keep all module headings aligned.
-    text(x+18,y+7,w-30,title,min(size,34),True,WHITE,max_h=19)
+    rect(x,y,w,29,TEAL)
+    text(x+6,y+3,w-12,title,46 if w>500 else 42,color=WHITE,heading=True,align='center',max_h=25)
 
 rect(0,0,W,H,WHITE)
-image(ROOT/'assets/rio-wave-background.png',0,0,W,H)
-# Header is quieter in all variants; compact versions return space to evidence.
-compact=True
-text(22,10,550,'RoboPIN',112 if compact else 138,True,'#00576B')
-text(24,57 if compact else 70,590,'Grounded Embodied Reasoning\nvia Pinned Chain-of-Thought',36 if compact else 41,True,NAVY,leading=1.07,max_h=35)
-text(24,91 if compact else 109,610,'Yaoting Huang* · Yifu Yuan*† · Linqi Han · Chengwen Li · Shuoheng Zhang',23,color=INK)
-text(24,104 if compact else 122,610,'Xianze Yao · Hongyao Tang · Yan Zheng · Jianye Hao†',23,color=INK)
-text(24,120 if compact else 139,612,'Tianjin University · ACM Multimedia 2026 · Rio de Janeiro, Brazil',23,True,TEAL)
-text(24,135 if compact else 154,612,'quark404@tju.edu.cn · yuanyf@tju.edu.cn   |   * Equal contribution   † Corresponding authors',18,color=GRAY)
+# Plain white canvas follows the supplied SDO typography/layout reference.
+text(22,12,568,'RoboPIN: Grounded Embodied Reasoning\nvia Pinned Chain-of-Thought',67,color=TEAL,heading=True,leading=1.16,max_h=60)
+text(24,76,568,'Yaoting Huang* · Yifu Yuan*† · Linqi Han · Chengwen Li',27,True)
+text(24,90,568,'Shuoheng Zhang · Xianze Yao · Hongyao Tang · Yan Zheng · Jianye Hao†',25,True)
+text(24,108,568,'Tianjin University · ACM Multimedia 2026 · Rio de Janeiro, Brazil',25)
+text(24,125,568,'quark404@tju.edu.cn · yuanyf@tju.edu.cn',24)
+text(24,138,568,'* Equal contribution   † Corresponding authors',18,color=GRAY)
 logo_placeholder('mm_logo',596,16,227,47)
-seal_y=73 if compact else 91
+seal_y=73
 from PIL import Image
 with Image.open(ROOT/CFG['tju_logo_file']) as seal: seal_h=64*seal.height/seal.width
 seal_top=seal_y+(64-seal_h)/2
@@ -219,51 +172,45 @@ c.drawImage(str(ROOT/CFG['tju_logo_file']),647*MM,(H-seal_top-seal_h)*MM,64*MM,s
 seal_pic=slide.shapes.add_picture(str(ROOT/CFG['tju_logo_file']),Mm(647),Mm(seal_top),Mm(64),Mm(seal_h))
 seal_pic._pic.spPr.prstGeom.set('prst','ellipse')
 html.image(ROOT/CFG['tju_logo_file'],647,seal_top,64,seal_h,round_image=True)
-text(718,90 if compact else 108,111,'Tianjin University',26,True,NAVY)
+text(718,90,111,'Tianjin University',26,True,NAVY)
 
-panel(14,153,434,328,'Motivation','bulb',36)
-image(ROOT/'assets/figure-1-cot-comparison.png',39,195,384,384*180.96/335.60)
-for yy,num,title,desc in [
-    (413,'1','Reference drift','Entity references can switch between similar objects across reasoning steps.'),
-    (445,'2','Reasoning–answer misalignment','The final answer can point to a different entity from the one analyzed.'),
-]:
-    gradient_box(26,yy,410,27,'#EFF8FA','#F4F9FB',radius=4)
-    circle(43,yy+13.5,9,TEAL,TEAL)
-    text(34,yy+5,18,num,25,True,WHITE,align='center')
-    text(62,yy+2,361,title,25,True,TEAL)
-    text(62,yy+17,361,desc,21,max_h=10)
+panel(14,153,414,328,'Motivation','',42)
+image(ROOT/'assets/figure-1-cot-comparison.png',22,190,398,398*180.96/335.60)
+text(22,412,398,
+     '1. Text-based references can drift between similar objects. Coordinate-only grounding lacks explicit identity tracking.',
+     28,True,leading=1.18,max_h=37,highlights=('drift','explicit identity tracking'))
+text(22,452,398,
+     '2. A model may correctly analyze object A, then silently point to object B. This reasoning-to-answer misalignment breaks reliable visual grounding.',
+     28,True,leading=1.18,max_h=37,highlights=('object A','object B','reasoning-to-answer misalignment'))
 
-panel(456,153,371,328,'Key Insight: Persistent Identity','target',32)
-for file,x,px,py in [('view-0.png',469,.634,.576),('view-1.png',665,.844,.706)]:
-    text(x,198,148,'VIEW 0' if x==469 else 'VIEW 1',22,True,TEAL,align='center')
-    image(ROOT/'assets'/file,x,214,148,113)
-    circle(x+148*px,214+113*py,3.8)
-    rect(x+5,219,69,13,TEAL,radius=1)
-    text(x+7,220,65,'obj_01',23,True,WHITE,align='center')
-arrow(627,269,653)
-gradient_box(468,337,347,61,'#EDF8FA','#F3F8FB',radius=5)
-text(479,345,325,'Same entity. Same ID. Different views.',27,True,TEAL)
-text(479,366,325,'Anchor = name + ID + view + point.',25,True)
-text(479,385,325,'Keep identity stable across steps and viewpoints.',21)
-gradient_box(468,406,264,65,'#EDF8F3','#F4FAF7',radius=5)
-text(480,414,240,'Our insight',27,True,TEAL)
-text(480,436,240,'Persistent IDs connect visual evidence, intermediate steps and the final answer.',23,max_h=30)
+panel(442,153,385,328,'Key Insight: Persistent Identity','',42)
+for file,x,px,py in [('view-0.png',452,.634,.576),('view-1.png',665,.844,.706)]:
+    text(x,191,148,'View 0' if x==452 else 'View 1',24,True,align='center')
+    image(ROOT/'assets'/file,x,207,148,113)
+    circle(x+148*px,207+113*py,3.8,fill='#007E87')
+    rect(x+5,212,69,13,'#007E87')
+    text(x+7,213,65,'obj_01',23,True,WHITE,align='center')
+arrow(617,263,648,color=INK)
+text(452,328,365,'From isolated grounding to persistent anchors',29,True,align='center')
+text(454,350,360,
+     '• Spatial references are usually isolated annotations, without explicit identity tracking during reasoning.',
+     28,True,leading=1.16,max_h=36,highlights=('isolated annotations','identity tracking'))
+text(454,389,360,
+     '• PinCoT binds each entity to a name, ID, view and point. Later steps reuse the same ID.',
+     28,True,leading=1.16,max_h=36,highlights=('name, ID, view and point','same ID'))
+text(454,428,280,
+     '• Our insight: visual anchors act as persistent reasoning variables, making each step traceable to visual evidence.',
+     28,True,leading=1.16,max_h=48,highlights=('Our insight:','persistent reasoning','variables'))
 qr=CFG.get('qr_file')
-if qr and (ROOT/qr).is_file():image(ROOT/qr,751,407,60,60)
+if qr and (ROOT/qr).is_file():image(ROOT/qr,758,429,52,52)
 else:
-    rect(746,407,70,60,WHITE,LINE,4)
-    text(751,430,60,'QR\nPLACEHOLDER',17,True,GRAY,align='center',leading=1.3)
-text(742,470,78,'PAPER / CODE',17,True,NAVY,align='center')
+    rect(758,429,52,42,WHITE,'#BAC2C8',lw=1.2)
+    text(762,441,44,'QR\nPLACEHOLDER',16,True,GRAY,align='center')
+text(750,475,68,'PAPER / CODE',17,True,align='center')
 
 panel(14,491,813,234,'Our Method: RoboPIN / PinCoT','gear',35)
-image(ROOT/'assets/figure-2-data-pipeline.png',70,532,700,700*110.12/493.65)
-text(37,696,137,'Three-stage\npost-training',25,True,TEAL,leading=1.1)
-for i,(name,desc) in enumerate([('SFT','Embodied knowledge'),('CoT-SFT','Structured reasoning'),('RFT / GRPO','Process alignment')]):
-    xx=[190,403,624][i]
-    gradient_box(xx,692,186,28,'#E1F5F6','#EEF9FA',radius=4)
-    text(xx+4,694,178,name,25,True,TEAL,align='center')
-    text(xx+4,708,178,desc,21,color=INK,align='center')
-    if i<2:arrow(xx+192,706,xx+207)
+image(ROOT/'assets/figure-2-data-pipeline.png',51,527,739,739*110.12/493.65)
+text(24,699,793,'We propose PinCoT, which pins every reasoning step to visual evidence through persistent identity-aware anchors.\nRoboPIN learns this representation through SFT, CoT-SFT and process-supervised RFT / GRPO.',30,True,align='center',leading=1.16,max_h=28,highlights=('PinCoT','visual evidence','persistent identity-aware anchors','RoboPIN','process-supervised RFT / GRPO'))
 
 panel(14,735,400,420,'Experimental Results','clipboard',33)
 # Preserve the actual published plot, including its original legend and labels.
@@ -272,8 +219,8 @@ text(26,1021,376,'Ablation studies',29,True,TEAL)
 # Two compact, editable tables. Values come from Tables 5 and 6, not Table 7.
 text(26,1044,179,'Reward design',25,True,NAVY)
 text(222,1044,180,'Training stages',25,True,NAVY)
-rect(26,1060,178,15,'#EDF5F6',radius=2)
-rect(222,1060,180,15,'#EDF5F6',radius=2)
+rect(26,1060,178,15,'#FFF0F3',radius=2)
+rect(222,1060,180,15,'#FFF0F3',radius=2)
 text(31,1063,112,'Setting',20,True)
 text(148,1063,51,'EmbSpatial',17,True,align='right')
 text(227,1063,70,'Stage',20,True)
@@ -299,14 +246,15 @@ for i,(label,val) in enumerate([('Spatial','20 / 20'),('Multi-view','14 / 20'),(
     text(xx,984,119,val,29,True,TEAL,align='center')
     text(xx,1000,119,label,21,align='center')
 image(ROOT/'assets/figure-4-two-examples.png',463,1015,323,323*96.68/240.25)
-text(45,1170,751,'Persistent visual anchors make embodied reasoning traceable.',27,True,WHITE,align='center')
+rect(14,1167,813,18,TEAL)
+text(20,1168,801,'Persistent Visual Anchors · Consistent Reasoning · Grounded Answers',29,True,WHITE,align='center')
 
 for item in audit:
     if item['x']<0 or item['y']<0 or item['x']+item['width']>W+.01 or item['y']+item['height']>H:
         raise ValueError(f'Content outside page: {item}')
 c.showPage();c.save()
 slide.notes_slide.notes_text_frame.text=(
-    'A0 portrait 841 × 1189 mm. HTML/CSS and native PowerPoint share the same layout. '
+    'A0 portrait 841 × 1189 mm. SDO reference restyle: Comic Neue Bold headings, Open Sans body, coral bars, white background. HTML/CSS and native PowerPoint share the same layout. '
     'Performance is the untouched plot cropped from paper Figure 1. Robot visualization includes all three rows of Figure 3. '
     'Reward ablation: Table 5, controlled EmbSpatial setting (84.7 / 82.0 / 82.7). '
     'Cumulative training: Table 6, Spatial 57.0 / 62.0 / 67.7, Point 66.0 / 63.6 / 67.9. '
@@ -316,6 +264,6 @@ slide.notes_slide.notes_text_frame.text=(
 )
 prs.save(str(OUT/'RoboPIN_A0_editable.pptx'))
 html.save(OUT/'RoboPIN_A0.html',font_dir)
-(OUT/'layout-metadata.json').write_text(json.dumps({'variant':VARIANT,'chart_region':[14,735,414,1155],'qualitative_asset':'assets/figure-4-two-examples.png','performance_asset':'assets/performance-original.png','robot_asset':'assets/robot-three-rows.png'},indent=2))
+(OUT/'layout-metadata.json').write_text(json.dumps({'variant':'reference-typography','chart_region':[14,735,414,1155],'qualitative_asset':'assets/figure-4-two-examples.png','performance_asset':'assets/performance-original.png','robot_asset':'assets/robot-three-rows.png'},indent=2))
 (OUT/'layout-audit.json').write_text(json.dumps(audit,indent=2,ensure_ascii=False))
 print(f'Built {OUT}/RoboPIN_A0_portrait.pdf and RoboPIN_A0_editable.pptx ({len(audit)} text blocks).')
