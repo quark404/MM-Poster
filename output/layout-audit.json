@@ -66,7 +66,7 @@
   {
     "text": "1. Text-based references can drift between similar objects. Coordinate-only grounding lacks explicit identity tracking.",
     "x": 22,
-    "y": 412,
+    "y": 386,
     "width": 398,
     "height": 23.311555555555554,
     "size_pt": 28
@@ -74,7 +74,7 @@
   {
     "text": "2. A model may correctly analyze object A, then silently point to object B. This reasoning-to-answer misalignment breaks reliable visual grounding.",
     "x": 22,
-    "y": 452,
+    "y": 416,
     "width": 398,
     "height": 23.311555555555554,
     "size_pt": 28
@@ -88,49 +88,81 @@
     "size_pt": 42
   },
   {
-    "text": "View 0",
-    "x": 452,
+    "text": "Implicit references",
+    "x": 454,
     "y": 191,
-    "width": 148,
-    "height": 10.329333333333333,
-    "size_pt": 24
+    "width": 360,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "a cup",
+    "x": 457,
+    "y": 215,
+    "width": 98,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "it",
+    "x": 583,
+    "y": 215,
+    "width": 98,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "the target",
+    "x": 709,
+    "y": 215,
+    "width": 98,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Which instance is carried forward?",
+    "x": 454,
+    "y": 240,
+    "width": 360,
+    "height": 9.468555555555554,
+    "size_pt": 22
+  },
+  {
+    "text": "PinCoT: persistent identity",
+    "x": 454,
+    "y": 261,
+    "width": 360,
+    "height": 11.19011111111111,
+    "size_pt": 26
   },
   {
     "text": "obj_01",
-    "x": 459,
-    "y": 213,
-    "width": 65,
-    "height": 9.898944444444442,
-    "size_pt": 23
-  },
-  {
-    "text": "View 1",
-    "x": 665,
-    "y": 191,
-    "width": 148,
-    "height": 10.329333333333333,
-    "size_pt": 24
+    "x": 457,
+    "y": 285,
+    "width": 98,
+    "height": 10.759722222222221,
+    "size_pt": 25
   },
   {
     "text": "obj_01",
-    "x": 672,
-    "y": 213,
-    "width": 65,
-    "height": 9.898944444444442,
-    "size_pt": 23
+    "x": 583,
+    "y": 285,
+    "width": 98,
+    "height": 10.759722222222221,
+    "size_pt": 25
   },
   {
-    "text": "From isolated grounding to persistent anchors",
-    "x": 452,
-    "y": 328,
-    "width": 365,
-    "height": 12.481277777777777,
-    "size_pt": 29
+    "text": "obj_01",
+    "x": 709,
+    "y": 285,
+    "width": 98,
+    "height": 10.759722222222221,
+    "size_pt": 25
   },
   {
     "text": "• Spatial references are usually isolated annotations, without explicit identity tracking during reasoning.",
     "x": 454,
-    "y": 350,
+    "y": 316,
     "width": 360,
     "height": 22.91644444444444,
     "size_pt": 28
@@ -138,7 +170,7 @@
   {
     "text": "• PinCoT binds each entity to a name, ID, view and point. Later steps reuse the same ID.",
     "x": 454,
-    "y": 389,
+    "y": 349,
     "width": 360,
     "height": 22.91644444444444,
     "size_pt": 28
@@ -146,7 +178,7 @@
   {
     "text": "• Our insight: visual anchors act as persistent reasoning variables, making each step traceable to visual evidence.",
     "x": 454,
-    "y": 428,
+    "y": 382,
     "width": 280,
     "height": 34.37466666666666,
     "size_pt": 28
@@ -154,7 +186,7 @@
   {
     "text": "QR\nPLACEHOLDER",
     "x": 762,
-    "y": 441,
+    "y": 403,
     "width": 44,
     "height": 13.772444444444442,
     "size_pt": 16
@@ -162,7 +194,7 @@
   {
     "text": "PAPER / CODE",
     "x": 750,
-    "y": 475,
+    "y": 437,
     "width": 68,
     "height": 7.31661111111111,
     "size_pt": 17
@@ -170,23 +202,207 @@
   {
     "text": "Our Method: RoboPIN / PinCoT",
     "x": 20,
-    "y": 494,
+    "y": 454,
     "width": 801,
     "height": 19.797888888888885,
     "size_pt": 46
   },
   {
-    "text": "We propose PinCoT, which pins every reasoning step to visual evidence through persistent identity-aware anchors.\nRoboPIN learns this representation through SFT, CoT-SFT and process-supervised RFT / GRPO.",
-    "x": 24,
-    "y": 699,
+    "text": "A. How PinCoT Reasons",
+    "x": 22,
+    "y": 487,
     "width": 793,
-    "height": 24.553333333333327,
+    "height": 13.772444444444442,
+    "size_pt": 32
+  },
+  {
+    "text": "1. Observe",
+    "x": 22,
+    "y": 508,
+    "width": 185,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "2. Introduce an anchor",
+    "x": 225,
+    "y": 508,
+    "width": 185,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "3. Reuse identity",
+    "x": 428,
+    "y": 508,
+    "width": 185,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "4. Ground the answer",
+    "x": 631,
+    "y": 508,
+    "width": 185,
+    "height": 11.620499999999998,
+    "size_pt": 27
+  },
+  {
+    "text": "How did the camera rotate\nbetween the two views?",
+    "x": 22,
+    "y": 526,
+    "width": 185,
+    "height": 18.17511111111111,
+    "size_pt": 23
+  },
+  {
+    "text": "View 0",
+    "x": 22,
+    "y": 619,
+    "width": 86,
+    "height": 8.177388888888888,
+    "size_pt": 19
+  },
+  {
+    "text": "View 1",
+    "x": 117,
+    "y": 619,
+    "width": 86,
+    "height": 8.177388888888888,
+    "size_pt": 19
+  },
+  {
+    "text": "<obj name=\"microwave\"\n id=\"obj_01\" img_idx=\"0\"\n point=\"[634,576]\">",
+    "x": 230,
+    "y": 533,
+    "width": 175,
+    "height": 30.479999999999993,
+    "size_pt": 24
+  },
+  {
+    "text": "Introduce the entity once\nwith identity, view and point.\nThen refer to it by obj_01.",
+    "x": 225,
+    "y": 581,
+    "width": 185,
+    "height": 30.956249999999997,
+    "size_pt": 25
+  },
+  {
+    "text": "Same obj_01, new view:",
+    "x": 428,
+    "y": 531,
+    "width": 185,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "View 0: [634,576]\nView 1: [844,706]",
+    "x": 428,
+    "y": 550,
+    "width": 185,
+    "height": 20.990277777777777,
+    "size_pt": 25
+  },
+  {
+    "text": "Its x-coordinate increases\nfrom 634 to 844: the object\nappears to shift right.",
+    "x": 428,
+    "y": 584,
+    "width": 185,
+    "height": 30.956249999999997,
+    "size_pt": 25
+  },
+  {
+    "text": "In this example, apparent\nobject motion is opposite\nto camera motion.",
+    "x": 631,
+    "y": 531,
+    "width": 185,
+    "height": 30.956249999999997,
+    "size_pt": 25
+  },
+  {
+    "text": "Answer",
+    "x": 637,
+    "y": 586,
+    "width": 173,
+    "height": 9.038166666666665,
+    "size_pt": 21
+  },
+  {
+    "text": "Movement left",
+    "x": 637,
+    "y": 600,
+    "width": 173,
+    "height": 12.911666666666665,
     "size_pt": 30
+  },
+  {
+    "text": "B. Data Construction & Training",
+    "x": 22,
+    "y": 640,
+    "width": 793,
+    "height": 13.772444444444442,
+    "size_pt": 32
+  },
+  {
+    "text": "Learning to reason with anchors",
+    "x": 535,
+    "y": 662,
+    "width": 275,
+    "height": 11.19011111111111,
+    "size_pt": 26
+  },
+  {
+    "text": "SFT",
+    "x": 535,
+    "y": 686,
+    "width": 100,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Embodied knowledge",
+    "x": 642,
+    "y": 686,
+    "width": 174,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "CoT-SFT",
+    "x": 535,
+    "y": 710,
+    "width": 100,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Learn PinCoT traces",
+    "x": 642,
+    "y": 710,
+    "width": 174,
+    "height": 9.898944444444442,
+    "size_pt": 23
+  },
+  {
+    "text": "RFT / GRPO",
+    "x": 535,
+    "y": 734,
+    "width": 100,
+    "height": 10.759722222222221,
+    "size_pt": 25
+  },
+  {
+    "text": "Align reasoning and answers",
+    "x": 642,
+    "y": 734,
+    "width": 174,
+    "height": 9.898944444444442,
+    "size_pt": 23
   },
   {
     "text": "Experimental Results",
     "x": 20,
-    "y": 738,
+    "y": 778,
     "width": 388,
     "height": 18.07633333333333,
     "size_pt": 42
@@ -194,7 +410,7 @@
   {
     "text": "Ablation studies",
     "x": 26,
-    "y": 1021,
+    "y": 1028,
     "width": 376,
     "height": 12.481277777777777,
     "size_pt": 29
@@ -386,7 +602,7 @@
   {
     "text": "Qualitative Results",
     "x": 428,
-    "y": 738,
+    "y": 778,
     "width": 393,
     "height": 18.07633333333333,
     "size_pt": 42
@@ -394,7 +610,7 @@
   {
     "text": "Zero-shot xArm · successes / 20",
     "x": 435,
-    "y": 966,
+    "y": 986,
     "width": 379,
     "height": 10.329333333333333,
     "size_pt": 24
@@ -402,7 +618,7 @@
   {
     "text": "20 / 20",
     "x": 435,
-    "y": 984,
+    "y": 1003,
     "width": 119,
     "height": 12.481277777777777,
     "size_pt": 29
@@ -410,7 +626,7 @@
   {
     "text": "Spatial",
     "x": 435,
-    "y": 1000,
+    "y": 1020,
     "width": 119,
     "height": 9.038166666666665,
     "size_pt": 21
@@ -418,7 +634,7 @@
   {
     "text": "14 / 20",
     "x": 563,
-    "y": 984,
+    "y": 1003,
     "width": 119,
     "height": 12.481277777777777,
     "size_pt": 29
@@ -426,7 +642,7 @@
   {
     "text": "Multi-view",
     "x": 563,
-    "y": 1000,
+    "y": 1020,
     "width": 119,
     "height": 9.038166666666665,
     "size_pt": 21
@@ -434,7 +650,7 @@
   {
     "text": "11 / 20",
     "x": 691,
-    "y": 984,
+    "y": 1003,
     "width": 119,
     "height": 12.481277777777777,
     "size_pt": 29
@@ -442,7 +658,7 @@
   {
     "text": "Long-horizon",
     "x": 691,
-    "y": 1000,
+    "y": 1020,
     "width": 119,
     "height": 9.038166666666665,
     "size_pt": 21

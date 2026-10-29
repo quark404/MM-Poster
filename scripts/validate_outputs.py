@@ -59,9 +59,13 @@ boxes=[s for s in slide.shapes if s.has_text_frame and s.text.strip()]
 native_text = '\n'.join(s.text for s in boxes)
 for item in ['Motivation', 'Key Insight: Persistent Identity', 'Our Method: RoboPIN / PinCoT', 'Experimental Results', 'Qualitative Results', 'Spatial', 'SFT', 'CoT-SFT', 'RFT / GRPO', 'Reward design', 'Training stages', 'w/o Pin', 'w/o Consistency', '+ CoT-SFT', '+ RFT']:
     assert item in native_text, f'Expected editable content is missing: {item}'
+method_text=page.get_text(clip=fitz.Rect(*(v*72/25.4 for v in meta['method_region'])))
+for item in ['A. How PinCoT Reasons','B. Data Construction & Training','obj_01','[634,576]','[844,706]','Movement left']:
+    assert item in method_text, f'Missing method evidence: {item}'
+assert method_text.count('<obj')==1, 'Show one full anchor tag, then reuse its identity'
 config = json.loads((root / 'poster_config.json').read_text())
 embedded = {hashlib.sha256(s.image.blob).hexdigest() for s in slide.shapes if s.shape_type == 13}
-paper_figures=['assets/figure-1-cot-comparison.png','assets/figure-2-data-pipeline.png',meta['qualitative_asset'],meta['performance_asset'],meta['robot_asset']]
+paper_figures=['assets/figure-1-cot-comparison.png','assets/figure-2-data-pipeline.png','assets/view-0.png','assets/view-1.png',meta['qualitative_asset'],meta['performance_asset'],meta['robot_asset']]
 for asset in paper_figures:
     assert hashlib.sha256((root/asset).read_bytes()).hexdigest() in embedded, f'Original paper figure missing: {asset}'
     from PIL import Image
@@ -69,6 +73,8 @@ for asset in paper_figures:
         ratio=im.width/im.height
     matching=[s for s in slide.shapes if s.shape_type == 13 and hashlib.sha256(s.image.blob).hexdigest()==hashlib.sha256((root/asset).read_bytes()).hexdigest()]
     assert all(abs((s.width/s.height)/ratio-1)<.005 for s in matching), f'Figure stretched: {asset}'
+    if asset in ['assets/view-0.png','assets/view-1.png']:
+        assert len(matching)==1 and 451<=matching[0].top/36000<633, 'Worked example should appear only in Method'
 logo_assets=[]
 for key in ['mm_logo_file', 'tju_logo_file']:
     asset = config.get(key)
@@ -89,6 +95,7 @@ with ZipFile(out / 'RoboPIN_A0_editable.pptx') as z:
 page.get_pixmap(matrix=fitz.Matrix(.62,.62)).save(out / 'RoboPIN_preview.png')
 mm=72/25.4
 for name, bounds in [
+    ('detail-method.png', meta['method_region']),
     ('detail-results.png', (14,meta['chart_region'][1]-7,827,1160)),
     ('detail-original-figures.png', (14,146 if meta['variant']!='clean' else 168,827,meta['chart_region'][1]-7)),
     ('detail-performance.png', (14,meta['chart_region'][1]-7,414,1160)),
@@ -106,6 +113,7 @@ report={
     'paper_figure_aspect_ratios': 'preserved',
     'performance_chart': 'Original paper crop; no redrawn bars',
     'robot_rows': 3,
+    'method': 'Published CoT example with one full anchor tag; data construction and training separated',
     'ablation_source': 'Tables 5 and 6; editable table text',
     'aggregate_chart_values': 'Original Figure 1 image retained',
     'old_metric_cards': 'removed',

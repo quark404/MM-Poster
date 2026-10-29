@@ -1,8 +1,14 @@
 {
-  "variant": "reference-typography",
+  "variant": "reasoning-first",
+  "method_region": [
+    14,
+    451,
+    827,
+    768
+  ],
   "chart_region": [
     14,
-    735,
+    775,
     414,
     1155
   ],

@@ -15,13 +15,17 @@ GitHub 不直接运行 HTML；在文件页面点击 **Download raw file**，保�
 
 ![Latest HTML poster](output/RoboPIN_HTML_preview.png)
 
-## 本轮修改：按 SDO 参考图重排
+## 本轮修改：先讲推理，再讲数据与训练
 
-- 白底、珊瑚红平直标题条、居中手写感标题；去掉大号品牌字、Rio 背景和圆角卡片。
-- 标题采用 **Comic Neue Bold**，正文采用 **Open Sans**；黑色加粗正文中的关键短语用珊瑚红强调。
-- Motivation 改为原图下两段编号说明，直接阐述引用漂移和“分析对象 A，却指向对象 B”。
-- Key Insight 改为“图示 → 一句概括 → 三条论述”，Our insight 融入最后一条，不再重复成独立卡片。
-- 原文依据见 [本轮设计与文案映射](design/reference_typography.md)。
+[查看 Our Method 局部大图](output/detail-method.png)
+
+- **A. How PinCoT Reasons**：用论文中的微波炉跨视角案例，按“观察 → 建立锚点 → 复用身份 → 得到答案”呈现具体 CoT。保留原始照片、`obj_01`、两组坐标和论文结论，完整 XML 标签只展示一次。
+- **B. Data Construction & Training**：下方保留原始数据构造图，旁边独立介绍 SFT、CoT-SFT、RFT / GRPO。
+- **Key Insight**：改为“隐式引用 / 持续保留 ID”的概念示意，不重复放 Method 的照片。
+- 方法区从 234 mm 增加到 314 mm；压缩上方和结果区的布局，保留完整三行真机图、原始性能图及两组消融表。
+- 延续参考图的白底、珊瑚红平直标题条、Comic Neue Bold 标题和 Open Sans 正文。重排后的 CoT 文案及箭头在 PPT 中可编辑。
+
+[方法与原文对应说明](design/method_revision.md) · [字体与文案设计依据](design/reference_typography.md)
 
 ### 保留的论文证据
 

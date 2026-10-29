@@ -111,3 +111,9 @@ Three rendered versions now exist: clean, balanced and mechanism (previous defau
 ## Current SDO typography / prose revision
 
 The latest user request explicitly returns to the SDO screenshot's typography and paragraph structure. It overrides the earlier Rio-card style. Current output uses white, coral flat bars, Comic Neue Bold headings and Open Sans body. The short prose beneath Motivation, Key Insight and Method is condensed from Introduction and Sections 2.2, 3.1 and 3.3; exact supporting excerpts are mapped in [design/reference_typography.md](design/reference_typography.md). No new scientific result is introduced. Licenses and font files are in `assets/fonts`.
+
+## Current Method: concrete CoT followed by data/training
+
+The Method is now grounded in **both halves** of Figure 2 on PDF page 3. Its first part recomposes the microwave camera-motion example with original views and editable, condensed prose. The anchor `obj_01`, coordinates [634,576] and [844,706], the increase in x, and the answer “movement left” all come directly from that example. The camera-motion explanation is explicitly limited to this example. A complete source crop is retained as `assets/figure-2-reasoning-example.png`; its bounds are recorded in crop provenance.
+
+The original upper data-construction pipeline is displayed separately in Part B; SFT / CoT-SFT / RFT roles follow Section 3.3. Key Insight now uses a conceptual reference-chain schematic, not a new empirical comparison. Details and exact source mapping: [design/method_revision.md](design/method_revision.md).

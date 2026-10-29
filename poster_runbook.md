@@ -2,7 +2,7 @@
 
 ## Current output
 
-Default `source` layout generates HTML, PPTX and PDF with original performance artwork, all three robot execution rows, reward ablations and cumulative training-stage results. Archived earlier variants remain in `output/variants`; rebuild them from historical Git commits if needed. `--output-dir` selects the output folder for all current generation and validation scripts.
+Default `source` layout generates HTML, PPTX and PDF with a reasoning-first Method section, separate data/training band, original performance artwork, all three robot execution rows, reward ablations and cumulative training-stage results. Archived earlier variants remain in `output/variants`; rebuild them from historical Git commits if needed. `--output-dir` selects the output folder for all current generation and validation scripts.
 
 ## Current visual target
 
@@ -54,6 +54,7 @@ Upstream YAML precedence also deserves attention: the current implementation rea
 - Inspect the source figures and chart details at larger scale.
 - Validate the actual one-page PDF dimensions and font embedding.
 - Validate the original Figure 1 performance crop and all three Figure 3 robot rows by image identity and visual inspection.
+- Verify the Method example against Figure 2 lower: source photos, obj_01, [634,576], [844,706], and Movement left. Show exactly one full anchor tag.
 - Compare editable ablation text with Tables 5 and 6; preserve the Point dip at CoT-SFT.
 - Check logo and original-figure bytes in the PPTX.
 - Render HTML offline in Chromium, check text bounds and image loading, print one A0 page and inspect its preview.

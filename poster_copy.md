@@ -15,14 +15,26 @@ From isolated grounding to persistent anchors
 - PinCoT binds each entity to a name, ID, view and point. Later steps reuse the same ID.
 - Our insight: visual anchors act as persistent reasoning variables, making each step traceable to visual evidence.
 
-Visual: source microwave views with obj_01 in both views. QR remains a placeholder. There is no separate Our insight card.
+Visual: conceptual implicit-reference chain (a cup / it / the target) versus a persistent obj_01 chain. This is an explanatory schematic, not a new experiment. The source microwave views now appear only in Method. QR remains a placeholder.
 
 ## Our Method: RoboPIN / PinCoT
 
-We propose PinCoT, which pins every reasoning step to visual evidence through persistent identity-aware anchors.
-RoboPIN learns this representation through SFT, CoT-SFT and process-supervised RFT / GRPO.
+### A. How PinCoT Reasons
 
-Visual: original Figure 2 upper pipeline.
+1. Observe: How did the camera rotate between the two views?
+2. Introduce an anchor: `<obj name="microwave" id="obj_01" img_idx="0" point="[634,576]">`. Introduce the entity once with identity, view and point; then refer to it by obj_01.
+3. Reuse identity: same obj_01, new view. View 0 [634,576]; view 1 [844,706]. Its x-coordinate increases from 634 to 844: the object appears to shift right.
+4. Ground the answer: in this example, apparent object motion is opposite to camera motion. Answer: Movement left.
+
+This is a condensed explanatory reconstruction of the supplied paper's Figure 2 lower example, not a newly generated model trace or a verbatim quotation. Only one full tag is displayed; the second view uses a compact coordinate line. The source's case-specific camera-motion explanation is preserved.
+
+### B. Data Construction & Training
+
+Visual: original Figure 2 upper data pipeline, ending in PIN-170K.
+
+- SFT: Embodied knowledge.
+- CoT-SFT: Learn PinCoT traces.
+- RFT / GRPO: Align reasoning and answers.
 
 ## Experimental Results
 

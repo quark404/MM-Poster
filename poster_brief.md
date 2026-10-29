@@ -12,3 +12,5 @@
 - Implementation: shared local renderer, lightweight Paper2Poster skill workflow; full API-based PosterAgent unexecuted.
 
 The latest request prioritizes representative original-paper prose beneath Motivation and Key Insight. The prior card-based Rio styling is superseded.
+
+Latest method priority: distinguish how PinCoT reasons from how its supervision is constructed. Present the original microwave example as a four-step editable explanation; keep data construction and training in a separate lower band. Key Insight remains conceptual to avoid duplicate imagery.
